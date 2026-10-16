@@ -585,6 +585,30 @@ section.block{padding-top:38px}
 .nexus-personal-empty{line-height:1.7}
 @media(max-width:700px){.nexus-discovery-controls{padding:12px;gap:12px}.nexus-discovery-controls label{min-width:0;flex-wrap:wrap}.nexus-discovery-controls select{width:100%;max-width:none}.nexus-tool-btn{min-height:44px}.nexus-journey-card .nexus-tool-btn{min-height:44px}.nexus-home-metrics{gap:8px}}
 @media(prefers-reduced-motion:reduce){.nexus-home-metric,.nexus-journey-card,.nexus-personal-pick,.nexus-list-stat{transition:none}}
+  .nexus-airing{margin:18px 0;padding:16px;border:1px solid var(--line-strong);border-radius:14px;background:var(--bg-alt)}
+  .nexus-airing h3{margin:0 0 12px;color:var(--gold);font-size:1rem}
+  .nexus-airing p{margin:7px 0;line-height:1.5}
+  .nexus-airing small{display:block;margin-top:12px;color:var(--text-dim);line-height:1.5}
+  .nexus-episode-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:7px;max-height:300px;overflow-y:auto}
+  .nexus-episode-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 11px;border:1px solid var(--line-strong);border-radius:9px;font-size:.9rem}
+  .nexus-episode-list time{color:var(--text-dim);text-align:right}
+  .nexus-episode-list li.next{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .nexus-episode-list li.upcoming{opacity:.85}
+  .nexus-episode-list li.aired{opacity:.72}
+  .nexus-airing h4{margin:16px 0 8px;color:var(--gold)}
+  @media(max-width:460px){.nexus-episode-list li{align-items:flex-start;flex-direction:column;gap:4px}.nexus-episode-list time{text-align:left}}
+
+/* NEXUS 6.4 — compact responsive seven-day broadcast calendar */
+.nexus-week-calendar{margin-top:18px;border-top:1px solid rgba(212,175,55,.25);padding-top:14px}
+.nexus-week-calendar h4{color:#e4c56a;margin:0 0 6px}
+.nexus-week-calendar p,.nexus-week-calendar small{color:#aaa;font-size:.8rem;line-height:1.5}
+.nexus-week-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:12px 0}
+.nexus-week-day{border:1px solid rgba(255,255,255,.13);border-radius:9px;padding:8px 6px;min-height:86px;overflow-wrap:anywhere}
+.nexus-week-day.has-episode{border-color:rgba(212,175,55,.65);background:rgba(212,175,55,.07)}
+.nexus-week-day-label{font-size:.7rem;font-weight:700;color:#e4c56a;margin-bottom:7px}
+.nexus-week-day ul{list-style:none;padding:0;margin:0;font-size:.73rem;line-height:1.55}
+.nexus-week-empty{color:#888;font-size:.68rem}
+@media(max-width:750px){.nexus-week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nexus-week-day{min-height:65px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -2410,6 +2434,37 @@ function weightedSampleWithoutReplacement(items, weightFn, count){
   return picked;
 }
 
+// Diversity-aware weighted draw: penalize genres/artists already represented
+// in this batch, without ever removing the possibility of a wildcard.
+function diverseSurpriseSample(items, count, alreadyPicked = []){
+  const pool = [...items];
+  const picked = [...alreadyPicked];
+  const newPicks = [];
+  const genreCounts = new Map();
+  const artistCounts = new Map();
+  const register = s => {
+    (Array.isArray(s.item.genres) ? s.item.genres : []).forEach(g => genreCounts.set(g, (genreCounts.get(g) || 0) + 1));
+    const artist = s.item.artist;
+    if (artist) artistCounts.set(artist, (artistCounts.get(artist) || 0) + 1);
+  };
+  picked.forEach(register);
+  while (pool.length && newPicks.length < count){
+    const weights = pool.map(s => {
+      const overlap = (Array.isArray(s.item.genres) ? s.item.genres : []).reduce((n,g) => n + (genreCounts.get(g) || 0), 0);
+      const artistOverlap = s.item.artist ? (artistCounts.get(s.item.artist) || 0) : 0;
+      const score = Number.isFinite(s.score) ? s.score : 0.02;
+      return Math.max(0.02, score) / (1 + overlap * 0.55 + artistOverlap * 1.5);
+    });
+    const total = weights.reduce((a,b) => a+b, 0);
+    let roll = Math.random() * total, index = pool.length - 1;
+    for(let i=0;i<weights.length;i++){ roll -= weights[i]; if(roll <= 0){ index=i; break; } }
+    const [choice] = pool.splice(index,1);
+    newPicks.push(choice);
+    register(choice);
+  }
+  return newPicks;
+}
+
 // Taste profile used by Surprise Me's scorer below. Reuses whatever's already
 // on each liked/disliked item for free — genres always exist on every
 // provider, and tags/collaborators come pre-attached on anime/manga items
@@ -2784,6 +2839,11 @@ function setMode(newMode){
   }, 350);
 }
 function executeModeChange(newMode) { 
+  // Invalidate in-flight Surprise Me fetches when changing the active category.
+  surpriseRequestVersion++;
+  // A cancelled shuffle's finally block is deliberately ignored. Restore
+  // the button here so switching categories cannot leave it disabled.
+  restoreSurpriseButton();
   mode = newMode; 
   document.querySelectorAll("#typeToggle .seg-btn").forEach(b=>{ const isActive = b.dataset.mode === mode; b.classList.toggle("active", isActive); b.setAttribute("aria-pressed", String(isActive)); }); 
   let ph = "anime"; 
@@ -3304,20 +3364,68 @@ function toggleLikedMasterpiece(item) {
 
 clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => b.classList.remove("selected")); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
+const SURPRISE_PICK_COUNT = 9;
+const SURPRISE_RECENT_LIMIT = 45;
+const surpriseRecentByMode = new Map();
+let surpriseRequestVersion = 0;
+const SURPRISE_BUTTON_IDLE_HTML = surpriseBtn.innerHTML;
+function restoreSurpriseButton(){
+  surpriseBtn.disabled = false;
+  surpriseBtn.removeAttribute("aria-busy");
+  surpriseBtn.innerHTML = SURPRISE_BUTTON_IDLE_HTML;
+}
+
 surpriseBtn.addEventListener("click", async ()=>{
-  surpriseBtn.disabled = true; 
+  if (surpriseBtn.disabled) return;
+  surpriseBtn.disabled = true;
+  surpriseBtn.setAttribute("aria-busy", "true");
   surpriseBtn.innerHTML = `<span>Shuffling...</span>`;
   searchBox.value = "";
-  renderPoolSkeletons(3);
+  // Surprise Me always shows its own nine picks; unrelated Discovery filters
+  // must not silently hide some of them after the shuffle.
+  document.getElementById("nexusDiscoverScore").value = "0";
+  document.getElementById("nexusDiscoverYear").value = "all";
+  document.getElementById("nexusDiscoverSort").value = "default";
+  document.getElementById("nexusDiscoverHideDisliked").checked = true;
+  const pickCount = SURPRISE_PICK_COUNT;
+  const requestedMode = mode;
+  const requestVersion = ++surpriseRequestVersion;
+  renderPoolSkeletons(pickCount);
   try{
-    const pool = applyModernFilter(await resolveOngoingFlags(await getSurprisePoolByMode(mode)));
-    const profile = buildSurpriseTasteProfile(mode);
+    const fetchedPool = await getSurprisePoolByMode(requestedMode);
+    if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
+    const resolvedPool = await resolveOngoingFlags(fetchedPool);
+    if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
+    const pool = applyModernFilter(resolvedPool);
+    const profile = buildSurpriseTasteProfile(requestedMode);
     // Score every pool item, then hard-drop anything hitting a disliked
     // collaborator/artist (see scoreSurpriseCandidate) — a "surprise" should
     // never mean resurfacing something from a director/artist you already
     // told the app you don't like.
     const scored = pool.map(item => ({ item, ...scoreSurpriseCandidate(item, profile) })).filter(s => !s.rejected);
-    const picked = weightedSampleWithoutReplacement(scored, s => s.score, 3);
+    // Keep frequent shuffles fresh without making a disliked title reappear.
+    // Session-only history avoids persisting extra personal data or affecting cloud sync.
+    const recent = surpriseRecentByMode.get(requestedMode) || [];
+    const unique = [...new Map(scored.filter(s => s.item && s.item.uid != null).map(s => [s.item.uid, s])).values()];
+    const recentIds = new Set(recent);
+    const eligible = unique.filter(s => !recentIds.has(s.item.uid) && !votedDislikes.has(s.item.uid));
+    // Prefer unseen titles first; only recycle earlier picks when the pool
+    // cannot fill the requested batch. Never repeat within the same batch.
+    const picked = diverseSurpriseSample(eligible, pickCount);
+    if (picked.length < pickCount) {
+      const pickedIds = new Set(picked.map(s => s.item.uid));
+      const fallback = unique.filter(s => !votedDislikes.has(s.item.uid) && !pickedIds.has(s.item.uid));
+      picked.push(...diverseSurpriseSample(fallback, pickCount - picked.length, picked));
+    }
+    surpriseRecentByMode.set(requestedMode, [...recent, ...picked.map(s => s.item.uid)].slice(-Math.max(SURPRISE_RECENT_LIMIT, pickCount * 2)));
+    if (!picked.length) {
+      poolGrid.innerHTML = '<div class="error-note" role="status">No matching surprise picks right now. Try another category or adjust your filters.</div>';
+      poolCount.textContent = "0 surprise picks";
+      poolCount.setAttribute("role", "status");
+      poolCount.setAttribute("aria-live", "polite");
+      loadMoreBtn.style.display = "none";
+      return;
+    }
     picked.forEach(s => {
       if (s.matchedCollaborator) s.item._surpriseReason = `Because you like ${s.matchedCollaborator}`;
       else if (s.matchedGenres.length) s.item._surpriseReason = `Because you like ${s.matchedGenres.join(" & ")}`;
@@ -3325,12 +3433,22 @@ surpriseBtn.addEventListener("click", async ()=>{
     });
     renderSearchResults(picked.map(s => s.item), false);
     indexItems(picked.map(s => s.item));
-    poolCount.textContent = "Surprise picks";
+    poolCount.textContent = `${picked.length} surprise picks`;
+    poolCount.setAttribute("role", "status");
+    poolCount.setAttribute("aria-live", "polite");
   }catch(e){
-    poolGrid.innerHTML = '<div class="error-note">Could not fetch surprise picks — try again.</div>'; loadMoreBtn.style.display = "none";
+    if (requestVersion === surpriseRequestVersion && requestedMode === mode) {
+      poolGrid.innerHTML = '<div class="error-note" role="alert">Could not fetch surprise picks — try again.</div>';
+      poolCount.textContent = "0 surprise picks";
+      poolCount.setAttribute("role", "status");
+      poolCount.setAttribute("aria-live", "polite");
+      loadMoreBtn.style.display = "none";
+    }
   }finally{
-    surpriseBtn.disabled = false; 
-    surpriseBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg><span>Surprise me</span>`;
+    // An older request must never unlock a newer in-flight shuffle.
+    if (requestVersion === surpriseRequestVersion) {
+    restoreSurpriseButton();
+    }
   }
 });
 
@@ -3486,11 +3604,27 @@ async function getDetailExtras(item){
       });
     }
     if (item.provider === "anime" || item.provider === "manga") {
-      return withCache(`detail-extras-anilist-v1:${item.provider}:${item.id}`, async () => {
-        const query = `query($id:Int){ Media(id:$id){ trailer{ id site } bannerImage staff(sort:RELEVANCE, perPage:6){ edges{ role node{ name{full} image{medium} } } } characters(sort:ROLE, perPage:8){ edges{ voiceActors(language:JAPANESE, sort:RELEVANCE){ name{full} image{medium} } node{ name{full} image{medium} } } } } }`;
+      return withCache(`detail-extras-anilist-airing-v2:${item.provider}:${item.id}:${Math.floor(Date.now()/300000)}`, async () => {
+        const query = `query($id:Int){ Media(id:$id){ startDate{year month day} endDate{year month day} episodes status nextAiringEpisode{episode airingAt timeUntilAiring} airingSchedule(page:1,perPage:50){pageInfo{hasNextPage} nodes{episode airingAt}} trailer{ id site } bannerImage staff(sort:RELEVANCE, perPage:6){ edges{ role node{ name{full} image{medium} } } } characters(sort:ROLE, perPage:8){ edges{ voiceActors(language:JAPANESE, sort:RELEVANCE){ name{full} image{medium} } node{ name{full} image{medium} } } } } }`;
         const data = await anilistQuery(query, { id: item.id });
         const m = data && data.data && data.data.Media;
         if (!m) return { trailerUrl: null, trailerWatchUrl: null, cast: [], backdrop: null };
+        // AniList provides at most 50 schedule entries per page. Load up to 150
+        // confirmed entries, bounded to avoid excessive network requests.
+        const schedule = [...((m.airingSchedule && m.airingSchedule.nodes) || [])];
+        let hasMoreSchedule = !!(m.airingSchedule && m.airingSchedule.pageInfo && m.airingSchedule.pageInfo.hasNextPage);
+        if (item.provider === "anime") {
+          const scheduleQuery = `query($id:Int,$page:Int){ Media(id:$id){ airingSchedule(page:$page,perPage:50){pageInfo{hasNextPage} nodes{episode airingAt}} } }`;
+          for(let page=2;page<=3 && hasMoreSchedule;page++) {
+            try {
+              const extraPage = await anilistQuery(scheduleQuery,{id:item.id,page});
+              const pageData = extraPage && extraPage.data && extraPage.data.Media && extraPage.data.Media.airingSchedule;
+              if (!pageData || !Array.isArray(pageData.nodes)) break;
+              schedule.push(...pageData.nodes);
+              hasMoreSchedule = !!(pageData.pageInfo && pageData.pageInfo.hasNextPage);
+            } catch(e) { break; } // Retain valid first-page data on partial failures.
+          }
+        }
         const isYoutube = m.trailer && m.trailer.site === "youtube";
         const trailerUrl = isYoutube ? `https://www.youtube.com/embed/${m.trailer.id}?origin=${YT_EMBED_ORIGIN}` : null;
         const trailerWatchUrl = isYoutube ? `https://www.youtube.com/watch?v=${m.trailer.id}` : null;
@@ -3498,7 +3632,8 @@ async function getDetailExtras(item){
           const va = e.voiceActors && e.voiceActors[0];
           return { name: e.node && e.node.name && e.node.name.full, photo: e.node && e.node.image && e.node.image.medium, role: va ? va.name.full + " (VA)" : null };
         }).filter(c => c.name);
-        return { trailerUrl, trailerWatchUrl, cast, backdrop: m.bannerImage || null };
+        return { trailerUrl, trailerWatchUrl, cast, backdrop: m.bannerImage || null,
+          airing: item.provider === "anime" ? { startDate:m.startDate, endDate:m.endDate, episodes:m.episodes, status:m.status, next:m.nextAiringEpisode, schedule, hasMoreSchedule, fetchedAt:Date.now() } : null };
       });
     }
     return { trailerUrl: null, trailerWatchUrl: null, cast: [], backdrop: null };
@@ -3571,6 +3706,94 @@ function buildTasteConnectionHtml(item){
   return `<div class="detail-taste-connection"><div class="detail-taste-connection-label">Your Taste Connection</div>${positiveHtml}${cautionHtml}</div>`;
 }
 
+function formatAniDate(parts){
+  if (!parts || !Number.isInteger(parts.year) || !Number.isInteger(parts.month) || !Number.isInteger(parts.day)) return null;
+  const d = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
+  if (d.getUTCFullYear() !== parts.year || d.getUTCMonth() !== parts.month - 1 || d.getUTCDate() !== parts.day) return null;
+  return new Intl.DateTimeFormat(undefined,{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"}).format(d);
+}
+// NEXUS 6.4: Seven-day anime broadcast calendar, built only from verified AniList timestamps.
+// No weekly recurrence is inferred. The selected title is highlighted if saved.
+function buildAnimeWeekCalendarHtml(item, airing){
+  if(item.provider !== "anime" || !airing) return "";
+  const now = Date.now();
+  const dayMs = 86400000;
+  const start = new Date(now); start.setHours(0,0,0,0);
+  const startMs = start.getTime();
+  const end = new Date(startMs); end.setDate(end.getDate()+7);
+  const endMs = end.getTime();
+  const verified = new Map();
+  for(const ep of (Array.isArray(airing.schedule) ? airing.schedule : [])){
+    if(ep && Number.isInteger(ep.episode) && ep.episode > 0 && Number.isInteger(ep.airingAt) && ep.airingAt > 0){
+      verified.set(ep.episode, ep.airingAt * 1000);
+    }
+  }
+  const next = airing.next;
+  if(next && Number.isInteger(next.episode) && next.episode > 0 && Number.isInteger(next.airingAt) && next.airingAt > 0){
+    verified.set(next.episode, next.airingAt * 1000);
+  }
+  const events = [...verified.entries()].filter(([,ms]) => ms >= startMs && ms < endMs).sort((a,b)=>a[1]-b[1]);
+  const saved = watchlist.has(item.uid);
+  const days = Array.from({length:7},(_,i)=>{
+    const date = new Date(startMs); date.setDate(date.getDate()+i);
+    const following = new Date(date); following.setDate(following.getDate()+1);
+    const dayEvents = events.filter(([,ms])=>ms >= date.getTime() && ms < following.getTime());
+    const label = new Intl.DateTimeFormat(undefined,{weekday:"short",month:"short",day:"numeric"}).format(date);
+    const entries = dayEvents.map(([ep,ms])=>`<li><strong>EP ${ep}</strong> · <time datetime="${new Date(ms).toISOString()}">${escapeHtml(new Intl.DateTimeFormat(undefined,{hour:"numeric",minute:"2-digit"}).format(new Date(ms)))}</time>${saved ? ' · In Watchlist' : ''}</li>`).join("");
+    return `<div class="nexus-week-day${dayEvents.length ? ' has-episode' : ''}"><div class="nexus-week-day-label">${escapeHtml(label)}</div>${dayEvents.length ? `<ul>${entries}</ul>` : `<span class="nexus-week-empty">No confirmed broadcast</span>`}</div>`;
+  }).join("");
+  return `<section class="nexus-week-calendar" aria-label="Seven day anime broadcast calendar"><h4>Next 7 days · Broadcast calendar</h4><p>Confirmed airings for this anime${saved ? ' · Saved in your Watchlist' : ''}. Times are shown in your local time zone.</p><div class="nexus-week-grid">${days}</div><small>Source: AniList. Blank days mean no confirmed timestamp in the available data, not necessarily no episode.</small></section>`;
+}
+function buildAnimeAiringHtml(item, airing){
+  if(item.provider !== "anime") return "";
+  if(!airing) return `<section class="nexus-airing" aria-label="Anime broadcast details"><h3>Broadcast schedule</h3><p>Schedule currently unavailable. Check AniList for updates.</p></section>`;
+  const start = formatAniDate(airing.startDate);
+  const end = formatAniDate(airing.endDate);
+  const total = Number.isInteger(airing.episodes) && airing.episodes > 0 ? airing.episodes : null;
+  const next = airing.next;
+  const future = next && Number.isInteger(next.airingAt) && next.airingAt * 1000 > Date.now();
+  const date = future ? new Intl.DateTimeFormat(undefined,{year:"numeric",month:"long",day:"numeric",weekday:"long",hour:"numeric",minute:"2-digit",timeZoneName:"short"}).format(new Date(next.airingAt * 1000)) : null;
+  const nextEp = future && Number.isInteger(next.episode) && next.episode > 0 ? next.episode : null;
+  const countdown = future && nextEp ? (()=>{
+    const remaining = Math.max(0, next.airingAt * 1000 - Date.now());
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining % 86400000) / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    return days ? `${days}d ${hours}h` : hours ? `${hours}h ${minutes}m` : `${minutes}m`;
+  })() : null;
+  const lines = [
+    start ? `<p><strong>First aired:</strong> ${escapeHtml(start)}</p>` : `<p><strong>First aired:</strong> Date not confirmed</p>`,
+    `<p><strong>Status:</strong> ${escapeHtml(String(airing.status || "Unknown").replaceAll("_"," "))}</p>`,
+    `<p><strong>Episodes:</strong> ${total || "Not confirmed"}</p>`,
+    date && nextEp ? `<p><strong>Next episode:</strong> EP ${nextEp} · ${escapeHtml(date)} (your local time) · In ${escapeHtml(countdown)}</p>` : `<p><strong>Next episode:</strong> No confirmed upcoming broadcast date</p>`
+  ];
+  if(end) lines.push(`<p><strong>Final air date:</strong> ${escapeHtml(end)}</p>`);
+  // Only show explicit AniList broadcast timestamps: never infer weekly dates.
+  const known = new Map();
+  for(const ep of (Array.isArray(airing.schedule) ? airing.schedule : [])){
+    if(!ep || !Number.isInteger(ep.episode) || ep.episode < 1 || !Number.isInteger(ep.airingAt) || ep.airingAt <= 0) continue;
+    known.set(ep.episode, ep.airingAt);
+  }
+  if(nextEp && next && Number.isInteger(next.airingAt)) known.set(nextEp, next.airingAt);
+  const now = Date.now();
+  const timeline = [...known.entries()].sort((a,b)=>a[0]-b[0]).slice(0,150);
+  if(timeline.length){
+    const rows = timeline.map(([ep,seconds])=>{
+      const millis = seconds * 1000;
+      const state = nextEp === ep ? "next" : millis <= now ? "aired" : "upcoming";
+      const label = state === "next" ? "Next" : state === "aired" ? "Aired" : "Scheduled";
+      const time = new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(millis));
+      return `<li class="${state}"><strong>EP ${ep} · ${label}</strong><time datetime="${new Date(millis).toISOString()}">${escapeHtml(time)}</time></li>`;
+    }).join("");
+    lines.push(`<h4>Episode timeline</h4><ol class="nexus-episode-list" aria-label="Confirmed episode broadcast dates">${rows}</ol>`);
+    if(total && timeline.length < total) lines.push(`<p>Confirmed broadcast dates: ${timeline.length} of ${total} episodes. Missing dates are not estimated.</p>`);
+    if(airing.hasMoreSchedule) lines.push(`<p>Additional episodes may exist beyond the first 150 schedule entries.</p>`);
+  } else {
+    lines.push(`<p>Episode timeline: No episode-by-episode broadcast dates confirmed in the available data.</p>`);
+  }
+  const weekCalendar = buildAnimeWeekCalendarHtml(item, airing);
+  return `<section class="nexus-airing" aria-label="Anime broadcast details"><h3>Broadcast schedule</h3>${lines.join("")}${weekCalendar}<small>Source: AniList · Episode dates are reported broadcast times, not streaming availability. Up to 150 schedule entries are requested; some episodes may be missing. Countdown is calculated when details open. Times follow your device's time zone.</small></section>`;
+}
 function buildDetailModalHtml(item, extras){
   const backdrop = extras.backdrop || item.image;
   const castHtml = extras.cast.length ? `<div class="detail-cast-row">${extras.cast.map(c => `<div class="detail-cast-item">${c.photo ? `<img src="${escapeHtml(c.photo)}" alt="${escapeHtml(c.name || "")}" loading="lazy">` : `<div class="detail-cast-photo-fallback"></div>`}<span class="detail-cast-name">${escapeHtml(c.name || "")}</span>${c.role ? `<span class="detail-cast-role">${escapeHtml(c.role)}</span>` : ""}</div>`).join("")}</div>` : "";
@@ -3602,8 +3825,9 @@ function buildDetailModalHtml(item, extras){
     <button type="button" class="action-btn ${isInWatchlist ? 'active-watch' : ''}" data-action="watch" ${hasDisliked ? "disabled" : ""} aria-label="${hasDisliked ? `Can't watchlist a disliked title` : (isInWatchlist ? 'Remove' : 'Add') + ' ' + escapeHtml(item.title) + ' ' + (isInWatchlist ? 'from' : 'to') + ' watchlist'}" title="${hasDisliked ? "Disliked titles can't be watchlisted" : ""}" aria-pressed="${isInWatchlist}">${watchIcon}</button>
   </div>`;
   const tasteConnectionHtml = buildTasteConnectionHtml(item);
+  const airingHtml = buildAnimeAiringHtml(item, extras.airing);
 
-  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
+  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
 }
 // titleIndex (populated by indexItems, see below) is the shared lookup so the
 // modal can be opened from a plain uid string in an inline onclick handler —
@@ -5384,6 +5608,16 @@ function nexusValidateBackup(data){
     }
   }
   const keys = NEXUS_BACKUP_KEYS.filter(key => Object.prototype.hasOwnProperty.call(data.entries, key));
+  // Reject inconsistent progress before any persistent data is modified.
+  if (data.version === 2 && data.listProgress && Object.keys(data.listProgress).length) {
+    const saved = data.entries["rm-watchlist"];
+    if (!Array.isArray(saved)) throw new Error("Backup progress requires a watchlist.");
+    const savedIds = new Set(saved.map(item => item && item.uid));
+    if (savedIds.size !== saved.length) throw new Error("Backup watchlist contains duplicate titles.");
+    if (Object.keys(data.listProgress).some(uid => !savedIds.has(uid))) {
+      throw new Error("Backup progress refers to titles not in the watchlist.");
+    }
+  }
   if (!keys.length) throw new Error("No taste-profile data was found.");
   const itemKeys = ["rm-liked-titles", "rm-voted-likes", "rm-voted-dislikes", "rm-dislikes-categorized", "rm-watchlist"];
   for (const key of keys) {
@@ -5444,6 +5678,7 @@ async function nexusRestoreBackup(file){
     if (file.size > 5 * 1024 * 1024) throw new Error("Backup file is too large (max 5 MB).");
     const data = JSON.parse(await file.text());
     const keys = nexusValidateBackup(data);
+    // An empty or malformed JSON file must never begin a restore transaction.
     const syncNote = currentUser ? " Your restored selections will be synced to your signed-in cloud account." : "";
     if (!confirm("Restore " + keys.length + " preference groups? This replaces the matching data in this browser." + syncNote + " Export your current backup first.")) {
       nexusBackupMessage("Restore cancelled."); return;
@@ -5473,6 +5708,13 @@ async function nexusRestoreBackup(file){
       }
       try { localStorage.setItem(nexusProgressStorageKey(),JSON.stringify(clean)); }
       catch (_) { nexusBackupMessage("Preferences restored, but progress could not be saved locally."); }
+    }
+    // A partial backup must not silently erase unrelated cloud preferences.
+    // Cloud sync requires the complete set of account-backed groups.
+    const cloudKeys = ["rm-liked-titles", "rm-voted-likes", "rm-dislikes-categorized", "rm-watchlist"];
+    if (currentUser && supabaseClient && !cloudKeys.every(key => keys.includes(key))) {
+      nexusBackupMessage("Partial backup restored locally. Cloud sync was skipped to protect existing account data. Sign out before reloading, or restore a complete backup.");
+      return;
     }
     // Reloading alone would re-pull the previous cloud profile and overwrite
     // this restore. Update the signed-in profile first, then reload.
