@@ -7,6 +7,7 @@
      attributes in the script below) — some environments don't fully honor a
      per-iframe referrerpolicy alone, so this sets the same policy page-wide. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="nexus-version" content="7.1">
 <title>NEXUS — Movies, Series, Anime &amp; Music</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -598,7 +599,30 @@ section.block{padding-top:38px}
   .nexus-airing h4{margin:16px 0 8px;color:var(--gold)}
   @media(max-width:460px){.nexus-episode-list li{align-items:flex-start;flex-direction:column;gap:4px}.nexus-episode-list time{text-align:left}}
 
-/* NEXUS 6.4 — compact responsive seven-day broadcast calendar */
+/* NEXUS 6.8 — portable episode progress and timeline actions */
+.nexus-mark-episode{min-height:44px;padding:8px 10px;border:1px solid var(--gold);border-radius:8px;background:var(--bg-alt);color:var(--gold);cursor:pointer;font:inherit}
+.nexus-mark-episode:disabled{opacity:.45;cursor:default}
+.nexus-mark-episode:focus-visible,.nexus-episode-list li:focus{outline:2px solid var(--gold);outline-offset:2px}
+.nexus-episode-list li{flex-wrap:wrap}
+@media(max-width:600px){.nexus-mark-episode{width:100%}}
+
+.nexus-episode-progress{width:100%;margin:12px 0;padding:12px;border:1px solid var(--line-strong);border-radius:10px;box-sizing:border-box}
+.nexus-episode-progress small{display:block;margin-top:8px;color:var(--text-dim);font-size:.75rem;line-height:1.5}
+.nexus-episode-stepper{display:flex;align-items:center;gap:12px;margin-top:8px}
+.nexus-episode-stepper button{min-width:44px;min-height:44px;border:1px solid var(--gold);border-radius:9px;background:var(--bg-alt);color:var(--gold);font-size:1.3rem;cursor:pointer}
+.nexus-episode-stepper button:disabled{opacity:.4;cursor:default}
+.nexus-episode-stepper button:focus-visible,.nexus-timeline-filter select:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.nexus-episode-stepper output{flex:1;text-align:center;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+@media(max-width:600px){.nexus-week-grid{gap:10px}.nexus-week-day{padding:12px 9px}.nexus-week-day-label{font-size:.8rem}.nexus-week-day ul{font-size:.85rem}.nexus-week-empty{font-size:.75rem}.nexus-calendar-export{width:100%;justify-content:center}.nexus-timeline-filter select{width:100%}.detail-content{overflow-wrap:anywhere}}
+@media(max-width:360px){.nexus-week-grid{grid-template-columns:1fr}}
+
+.nexus-week-day.is-today{outline:2px solid var(--gold);outline-offset:2px}
+.nexus-calendar-export{display:inline-flex;align-items:center;min-height:44px;margin:8px 0;padding:10px 14px;border:1px solid var(--gold);border-radius:9px;background:transparent;color:var(--gold);cursor:pointer;font:inherit}
+.nexus-calendar-export:focus-visible,.p-poster:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.nexus-episode-list li[hidden]{display:none}
+.nexus-timeline-filter{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0}
+.nexus-timeline-filter select{min-height:44px;max-width:100%;background:var(--bg-alt);color:var(--text);border:1px solid var(--line-strong);border-radius:8px;padding:8px}
+.nexus-calendar-note{font-size:.8rem;color:var(--text-dim)}
 .nexus-week-calendar{margin-top:18px;border-top:1px solid rgba(212,175,55,.25);padding-top:14px}
 .nexus-week-calendar h4{color:#e4c56a;margin:0 0 6px}
 .nexus-week-calendar p,.nexus-week-calendar small{color:#aaa;font-size:.8rem;line-height:1.5}
@@ -609,6 +633,17 @@ section.block{padding-top:38px}
 .nexus-week-day ul{list-style:none;padding:0;margin:0;font-size:.73rem;line-height:1.55}
 .nexus-week-empty{color:#888;font-size:.68rem}
 @media(max-width:750px){.nexus-week-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nexus-week-day{min-height:65px}}
+
+/* NEXUS 7.0: on-demand watchlist broadcast dashboard */
+.nexus-airing-dashboard{border:1px solid rgba(195,154,75,.32);border-radius:16px;padding:18px;margin:0 0 20px;background:rgba(184,142,57,.045)}
+.nexus-airing-dashboard-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.nexus-airing-dashboard-head h3{margin:0 0 5px;font-size:1.1rem}
+.nexus-airing-dashboard-head p,.nexus-airing-dashboard-status{color:var(--text-dim);font-size:.84rem;margin:4px 0 12px}
+.nexus-airing-dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:10px}
+.nexus-airing-card{border:1px solid rgba(195,154,75,.24);border-radius:12px;padding:13px;background:rgba(0,0,0,.12);text-align:left;color:inherit;cursor:pointer}
+.nexus-airing-card:focus-visible{outline:2px solid #d4ae61;outline-offset:2px}
+.nexus-airing-card strong,.nexus-airing-card span{display:block}
+.nexus-airing-card span{color:var(--text-dim);font-size:.8rem;margin-top:5px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1100,6 +1135,15 @@ button:disabled{opacity:.48;cursor:not-allowed}
       <h2>My list</h2>
       <span class="count" id="watchlistCount"></span>
     </div>
+    <section class="nexus-airing-dashboard" aria-label="Saved anime airing dashboard">
+      <div class="nexus-airing-dashboard-head"><div><h3>Anime · Upcoming & unwatched</h3><p>Confirmed AniList broadcasts for saved anime. Refresh on demand.</p></div><button type="button" class="nexus-tool-btn" id="nexusAiringRefresh">↻ Check airings</button></div>
+      <div class="nexus-airing-dashboard-status" id="nexusAiringStatus" role="status" aria-live="polite">Select “Check airings” to see the next broadcasts.</div>
+      <label>Show broadcasts <select id="nexusAiringFilter"><option value="all">All upcoming</option><option value="today">Today</option><option value="week">Next 7 days</option><option value="unwatched">Aired · Not yet watched</option></select></label>
+      <p id="nexusAiringSummary" role="status"></p>
+      <button type="button" class="nexus-tool-btn" id="nexusAiringRestart">Refresh from first batch</button>
+      <p class="nexus-airing-dashboard-status">Device time zone. Backlog counts use up to 50 latest confirmed aired episodes per title; counts may be incomplete. Open a title for episode actions.</p>
+      <div id="nexusAiringCards" class="nexus-airing-dashboard-grid"></div>
+    </section>
     <div class="nexus-list-overview" id="nexusListOverview" aria-label="My List progress"></div>
     <div class="nexus-vault-controls" role="search" aria-label="Filter saved titles">
       <input id="nexusVaultSearch" type="search" placeholder="Find a saved title or artist…" aria-label="Search saved titles" autocomplete="off">
@@ -2838,7 +2882,23 @@ function setMode(newMode){
     setTimeout(() => { top.style.transform = "translateY(-100%)"; bottom.style.transform = "translateY(100%)"; }, 120);
   }, 350);
 }
-function executeModeChange(newMode) { 
+const nexusDiscoveryByMode = new Map();
+function nexusCaptureDiscovery(){
+  return {query:searchBox.value,score:document.getElementById("nexusDiscoverScore").value,year:document.getElementById("nexusDiscoverYear").value,sort:document.getElementById("nexusDiscoverSort").value,hide:document.getElementById("nexusDiscoverHideDisliked").checked};
+}
+function nexusRestoreDiscovery(state){
+  searchBox.value=state?.query || "";
+  document.getElementById("nexusDiscoverScore").value=state?.score || "0";
+  document.getElementById("nexusDiscoverYear").value=state?.year || "all";
+  document.getElementById("nexusDiscoverSort").value=state?.sort || "default";
+  document.getElementById("nexusDiscoverHideDisliked").checked=state?.hide ?? true;
+  nexusRefreshSearchClear();
+}
+function executeModeChange(newMode) {
+  nexusDiscoveryByMode.set(mode,nexusCaptureDiscovery());
+  clearTimeout(debounceTimer);
+  ++searchRequestSeq;
+  searchSpinner.classList.remove("active");
   // Invalidate in-flight Surprise Me fetches when changing the active category.
   surpriseRequestVersion++;
   // A cancelled shuffle's finally block is deliberately ignored. Restore
@@ -2853,7 +2913,7 @@ function executeModeChange(newMode) {
   else if (mode === "manga") ph = "manga";
   else if (mode === "music") ph = "tracks or songs";
   searchBox.placeholder = `Search ${ph}...`; 
-  searchBox.value = ""; 
+  nexusRestoreDiscovery(nexusDiscoveryByMode.get(mode));
   hideSuggestions();
   stopPreview(); 
   // The year-cutoff filter only applies to movie/series/anime/etc metadata
@@ -2862,7 +2922,7 @@ function executeModeChange(newMode) {
   // results.
   const yearFilterWrap = document.getElementById("yearFilterWrap");
   if (yearFilterWrap) yearFilterWrap.style.display = mode === "music" ? "none" : "";
-  loadColdStart(); 
+  if(searchBox.value.trim().length >= 2) runSearch(searchBox.value.trim()); else loadColdStart();
   resultsSection.style.display = "none"; 
   renderRatings(); 
   renderAnalytics(); 
@@ -3007,18 +3067,18 @@ searchBox.addEventListener("keydown", (e) => {
 searchBox.addEventListener("blur", () => { setTimeout(hideSuggestions, 150); });
 
 async function loadColdStart(){
-  searchRequestSeq++; // any runSearch already in flight is now stale and must not render over this
+  const coldToken = ++searchRequestSeq; // any runSearch already in flight is now stale and must not render over this
   renderPoolSkeletons(); loadMoreBtn.style.display = "none";
   const myMode = mode;
   try{
     let items = await getPopularByMode(myMode);
-    if(myMode !== mode) return;
+    if(myMode !== mode || coldToken !== searchRequestSeq) return;
     items = await resolveOngoingFlags(items);
-    if(myMode !== mode) return;
+    if(myMode !== mode || coldToken !== searchRequestSeq) return;
     indexItems(items);
     renderSearchResults(items, true);
   }catch(e){
-    if(myMode !== mode) return;
+    if(myMode !== mode || coldToken !== searchRequestSeq) return;
     poolGrid.innerHTML = '<div class="error-note">Couldn\'t load titles right now — check your connection and try searching directly.</div>'; loadMoreBtn.style.display = "none";
   }
 }
@@ -3268,7 +3328,7 @@ function renderSearchResults(items, isPopular, isLoadMore = false){
     const isSelected = selected.has(item.uid); const hasLiked = votedLikes.has(item.uid); const hasDisliked = votedDislikes.has(item.uid);
     const el = document.createElement("div");
     el.className = "pool-item" + (isSelected ? " selected" : ""); el.setAttribute("data-uid", item.uid);
-    el.setAttribute("role", "button"); el.setAttribute("tabindex", "0");
+    el.setAttribute("role", "button"); el.setAttribute("tabindex", "0"); el.setAttribute("aria-pressed", String(isSelected));
     let label = item.provider; if (item.provider === "series") label = "TV Series"; else if (item.provider === "kdrama") label = "K-Drama"; else if (item.provider === "music") label = "Music Track";
     
     let metaContent = `${label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
@@ -3286,11 +3346,11 @@ function renderSearchResults(items, isPopular, isLoadMore = false){
     // Surprise Me all used this pool-item card instead, which had no way to
     // listen at all until you'd already gone through "find similar" once.
     const poolAudioBtn = (item.provider === "music" && item.preview) ? `<button type="button" class="action-btn audio-preview-btn" onclick="event.stopPropagation(); togglePreview('${item.preview}', this, '${item.url}')" aria-label="Preview ${escapeHtml(item.title)}">▶</button>` : "";
-    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><div class="p-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><div class="p-check">✓</div></div>`;
+    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><div class="p-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><div class="p-check">✓</div></div>`;
     el.querySelector('[data-action="like"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'like'); refreshPoolCardVoteState(item); });
     el.querySelector('[data-action="dislike"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'dislike'); refreshPoolCardVoteState(item); });
     el.addEventListener("click", ()=> toggleSelect(item));
-    el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSelect(item); } });
+    el.addEventListener("keydown", (e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSelect(item); } });
     fragment.appendChild(el);
   });
   poolGrid.appendChild(fragment);
@@ -3332,7 +3392,7 @@ function toggleSelect(item){
   }
   if (capHint) capHint.textContent = "";
   const targetBtn = poolGrid.querySelector(`[data-uid="${item.uid}"]`);
-  if(targetBtn) targetBtn.classList.toggle("selected", selected.has(item.uid));
+  if(targetBtn) { targetBtn.classList.toggle("selected", selected.has(item.uid)); targetBtn.setAttribute("aria-pressed", String(selected.has(item.uid))); }
   renderSelectedStrip(); saveState(); renderAnalytics(); resultsSection.style.display = "none";
 }
 
@@ -3362,7 +3422,7 @@ function toggleLikedMasterpiece(item) {
   saveState(); renderRatings(); renderAnalytics(); computeRecommendations();
 }
 
-clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => b.classList.remove("selected")); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
+clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); b.setAttribute("aria-pressed", "false"); }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
 const SURPRISE_PICK_COUNT = 9;
 const SURPRISE_RECENT_LIMIT = 45;
@@ -3706,6 +3766,31 @@ function buildTasteConnectionHtml(item){
   return `<div class="detail-taste-connection"><div class="detail-taste-connection-label">Your Taste Connection</div>${positiveHtml}${cautionHtml}</div>`;
 }
 
+function isValidAnimeAiringTimestamp(value){
+  return Number.isSafeInteger(value) && value > 0 && Number.isFinite(new Date(value * 1000).getTime());
+}
+function buildAnimeEpisodeCalendar(item, next, now = Date.now()){
+  if(item.provider !== "anime" || !Number.isSafeInteger(next?.episode) || next.episode < 1 || !Number.isSafeInteger(next?.airingAt)) return null;
+  const date = new Date(next.airingAt * 1000);
+  if(!Number.isFinite(date.getTime()) || date.getTime() <= now) return null;
+  const text = value => String(value).replace(/\\/g,"\\\\").replace(/\r\n|\r|\n/g,"\\n").replace(/;/g,"\\;").replace(/,/g,"\\,");
+  const stamp = d => d.toISOString().replace(/[-:]/g,"").replace(/\.\d{3}Z$/,"Z");
+  // Fold at 75 UTF-8 octets without splitting Unicode code points (RFC 5545).
+  const fold = line => { let out="", part="", bytes=0; for(const char of line){const size=new TextEncoder().encode(char).length;if(bytes+size>75){out+=part+"\r\n";part=" ";bytes=1;}part+=char;bytes+=size;}return out+part; };
+  const uid = encodeURIComponent(String(item.uid || item.id || item.title));
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NEXUS//Anime Broadcast//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+    "UID:"+uid+"-ep"+next.episode+"@nexus.local","DTSTAMP:"+stamp(new Date(now)),"DTSTART:"+stamp(date),
+    "SUMMARY:"+text(item.title+" · EP "+next.episode),"DESCRIPTION:"+text("AniList broadcast timestamp. Streaming availability may differ. This is a one-time export; check NEXUS for schedule changes."),
+    "TRANSP:TRANSPARENT","END:VEVENT","END:VCALENDAR"].map(fold).join("\r\n")+"\r\n";
+}
+function downloadAnimeEpisodeCalendar(item, next){
+  const content = buildAnimeEpisodeCalendar(item,next);
+  if(!content) return;
+  const url = URL.createObjectURL(new Blob([content],{type:"text/calendar;charset=utf-8"}));
+  const link = document.createElement("a"); link.href=url; link.download="nexus-episode-"+next.episode+".ics";
+  document.body.appendChild(link); link.click(); link.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
 function formatAniDate(parts){
   if (!parts || !Number.isInteger(parts.year) || !Number.isInteger(parts.month) || !Number.isInteger(parts.day)) return null;
   const d = new Date(Date.UTC(parts.year, parts.month - 1, parts.day));
@@ -3717,19 +3802,19 @@ function formatAniDate(parts){
 function buildAnimeWeekCalendarHtml(item, airing){
   if(item.provider !== "anime" || !airing) return "";
   const now = Date.now();
-  const dayMs = 86400000;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "Device local time";
   const start = new Date(now); start.setHours(0,0,0,0);
   const startMs = start.getTime();
   const end = new Date(startMs); end.setDate(end.getDate()+7);
   const endMs = end.getTime();
   const verified = new Map();
   for(const ep of (Array.isArray(airing.schedule) ? airing.schedule : [])){
-    if(ep && Number.isInteger(ep.episode) && ep.episode > 0 && Number.isInteger(ep.airingAt) && ep.airingAt > 0){
+    if(ep && Number.isInteger(ep.episode) && ep.episode > 0 && isValidAnimeAiringTimestamp(ep.airingAt)){
       verified.set(ep.episode, ep.airingAt * 1000);
     }
   }
   const next = airing.next;
-  if(next && Number.isInteger(next.episode) && next.episode > 0 && Number.isInteger(next.airingAt) && next.airingAt > 0){
+  if(next && Number.isInteger(next.episode) && next.episode > 0 && isValidAnimeAiringTimestamp(next.airingAt)){
     verified.set(next.episode, next.airingAt * 1000);
   }
   const events = [...verified.entries()].filter(([,ms]) => ms >= startMs && ms < endMs).sort((a,b)=>a[1]-b[1]);
@@ -3739,11 +3824,12 @@ function buildAnimeWeekCalendarHtml(item, airing){
     const following = new Date(date); following.setDate(following.getDate()+1);
     const dayEvents = events.filter(([,ms])=>ms >= date.getTime() && ms < following.getTime());
     const label = new Intl.DateTimeFormat(undefined,{weekday:"short",month:"short",day:"numeric"}).format(date);
-    const entries = dayEvents.map(([ep,ms])=>`<li><strong>EP ${ep}</strong> · <time datetime="${new Date(ms).toISOString()}">${escapeHtml(new Intl.DateTimeFormat(undefined,{hour:"numeric",minute:"2-digit"}).format(new Date(ms)))}</time>${saved ? ' · In Watchlist' : ''}</li>`).join("");
-    return `<div class="nexus-week-day${dayEvents.length ? ' has-episode' : ''}"><div class="nexus-week-day-label">${escapeHtml(label)}</div>${dayEvents.length ? `<ul>${entries}</ul>` : `<span class="nexus-week-empty">No confirmed broadcast</span>`}</div>`;
+    const entries = dayEvents.map(([ep,ms])=>`<li><strong>EP ${ep}</strong> · <time datetime="${new Date(ms).toISOString()}">${escapeHtml(new Intl.DateTimeFormat(undefined,{hour:"numeric",minute:"2-digit"}).format(new Date(ms)))}</time><span data-airing-saved${saved ? '' : ' hidden'}> · In Watchlist</span></li>`).join("");
+    return `<div class="nexus-week-day${dayEvents.length ? ' has-episode' : ''}${i === 0 ? ' is-today' : ''}"${i === 0 ? ' aria-current="date"' : ''}><div class="nexus-week-day-label">${i === 0 ? 'Today · ' : ''}${escapeHtml(label)}</div>${dayEvents.length ? `<ul>${entries}</ul>` : `<span class="nexus-week-empty">No confirmed broadcast</span>`}</div>`;
   }).join("");
-  return `<section class="nexus-week-calendar" aria-label="Seven day anime broadcast calendar"><h4>Next 7 days · Broadcast calendar</h4><p>Confirmed airings for this anime${saved ? ' · Saved in your Watchlist' : ''}. Times are shown in your local time zone.</p><div class="nexus-week-grid">${days}</div><small>Source: AniList. Blank days mean no confirmed timestamp in the available data, not necessarily no episode.</small></section>`;
+  return `<section class="nexus-week-calendar" aria-label="Seven day anime broadcast calendar"><h4>Next 7 days · Broadcast calendar</h4><p>Confirmed airings for this anime<span data-airing-saved${saved ? '' : ' hidden'}> · Saved in your Watchlist</span>. Time zone: ${escapeHtml(timezone)}.</p><div class="nexus-week-grid">${days}</div><small>Source: AniList. Blank days mean no confirmed timestamp in the available data, not necessarily no episode.</small></section>`;
 }
+const nexusTimelineFilterByTitle = new Map();
 function buildAnimeAiringHtml(item, airing){
   if(item.provider !== "anime") return "";
   if(!airing) return `<section class="nexus-airing" aria-label="Anime broadcast details"><h3>Broadcast schedule</h3><p>Schedule currently unavailable. Check AniList for updates.</p></section>`;
@@ -3751,7 +3837,7 @@ function buildAnimeAiringHtml(item, airing){
   const end = formatAniDate(airing.endDate);
   const total = Number.isInteger(airing.episodes) && airing.episodes > 0 ? airing.episodes : null;
   const next = airing.next;
-  const future = next && Number.isInteger(next.airingAt) && next.airingAt * 1000 > Date.now();
+  const future = next && isValidAnimeAiringTimestamp(next.airingAt) && next.airingAt * 1000 > Date.now();
   const date = future ? new Intl.DateTimeFormat(undefined,{year:"numeric",month:"long",day:"numeric",weekday:"long",hour:"numeric",minute:"2-digit",timeZoneName:"short"}).format(new Date(next.airingAt * 1000)) : null;
   const nextEp = future && Number.isInteger(next.episode) && next.episode > 0 ? next.episode : null;
   const countdown = future && nextEp ? (()=>{
@@ -3767,11 +3853,12 @@ function buildAnimeAiringHtml(item, airing){
     `<p><strong>Episodes:</strong> ${total || "Not confirmed"}</p>`,
     date && nextEp ? `<p><strong>Next episode:</strong> EP ${nextEp} · ${escapeHtml(date)} (your local time) · In ${escapeHtml(countdown)}</p>` : `<p><strong>Next episode:</strong> No confirmed upcoming broadcast date</p>`
   ];
+  if(date && nextEp) lines.push(`<button type="button" class="nexus-calendar-export" data-action="export-episode">Save EP ${nextEp} to calendar</button><p class="nexus-calendar-note">Downloads a calendar file. Import it into your calendar app; schedule changes do not sync automatically.</p>`);
   if(end) lines.push(`<p><strong>Final air date:</strong> ${escapeHtml(end)}</p>`);
   // Only show explicit AniList broadcast timestamps: never infer weekly dates.
   const known = new Map();
   for(const ep of (Array.isArray(airing.schedule) ? airing.schedule : [])){
-    if(!ep || !Number.isInteger(ep.episode) || ep.episode < 1 || !Number.isInteger(ep.airingAt) || ep.airingAt <= 0) continue;
+    if(!ep || !Number.isInteger(ep.episode) || ep.episode < 1 || !isValidAnimeAiringTimestamp(ep.airingAt)) continue;
     known.set(ep.episode, ep.airingAt);
   }
   if(nextEp && next && Number.isInteger(next.airingAt)) known.set(nextEp, next.airingAt);
@@ -3783,9 +3870,9 @@ function buildAnimeAiringHtml(item, airing){
       const state = nextEp === ep ? "next" : millis <= now ? "aired" : "upcoming";
       const label = state === "next" ? "Next" : state === "aired" ? "Aired" : "Scheduled";
       const time = new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(millis));
-      return `<li class="${state}"><strong>EP ${ep} · ${label}</strong><time datetime="${new Date(millis).toISOString()}">${escapeHtml(time)}</time></li>`;
+      return `<li class="${state}" data-episode="${ep}" data-airing-at="${seconds}" tabindex="-1"><strong>EP ${ep} · ${label}</strong><time datetime="${new Date(millis).toISOString()}">${escapeHtml(time)}</time><button type="button" class="nexus-mark-episode" data-mark-episode="${ep}" ${!watchlist.has(item.uid) || millis > now ? "disabled" : ""} aria-label="Mark watched through episode ${ep}">Watched through EP ${ep}</button></li>`;
     }).join("");
-    lines.push(`<h4>Episode timeline</h4><ol class="nexus-episode-list" aria-label="Confirmed episode broadcast dates">${rows}</ol>`);
+    lines.push(`<h4>Episode timeline</h4><p class="nexus-calendar-note">For saved anime, mark all episodes through the selected episode as watched. Future broadcasts cannot be marked watched.</p>${nextEp ? '<button type="button" class="nexus-calendar-export" data-action="jump-next-episode">Jump to next broadcast</button>' : ''}<label class="nexus-timeline-filter">Show episodes <select aria-label="Filter episode timeline" data-action="timeline-filter"><option value="all">All confirmed episodes</option><option value="upcoming">Upcoming only</option><option value="aired">Already aired</option><option value="unwatched">Aired · Not yet watched</option></select></label><p class="nexus-timeline-empty" role="status" hidden>No episodes match this filter in the available data.</p><ol class="nexus-episode-list" aria-label="Confirmed episode broadcast dates">${rows}</ol>`);
     if(total && timeline.length < total) lines.push(`<p>Confirmed broadcast dates: ${timeline.length} of ${total} episodes. Missing dates are not estimated.</p>`);
     if(airing.hasMoreSchedule) lines.push(`<p>Additional episodes may exist beyond the first 150 schedule entries.</p>`);
   } else {
@@ -3826,8 +3913,9 @@ function buildDetailModalHtml(item, extras){
   </div>`;
   const tasteConnectionHtml = buildTasteConnectionHtml(item);
   const airingHtml = buildAnimeAiringHtml(item, extras.airing);
+  const episodeProgressHtml = nexusEpisodeProgressHtml(item);
 
-  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
+  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}<div data-detail-episode-progress>${episodeProgressHtml}</div>${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
 }
 // titleIndex (populated by indexItems, see below) is the shared lookup so the
 // modal can be opened from a plain uid string in an inline onclick handler —
@@ -3850,11 +3938,15 @@ function refreshDetailModalActions(item){
     watchBtn.classList.toggle("active-watch", isInWatchlist);
     watchBtn.setAttribute("aria-pressed", isInWatchlist);
     watchBtn.disabled = hasDisliked;
+    watchBtn.setAttribute("aria-label", hasDisliked ? "Cannot save a disliked title" : (isInWatchlist ? "Remove " : "Add ") + item.title + (isInWatchlist ? " from watchlist" : " to watchlist"));
     watchBtn.title = hasDisliked ? "Disliked titles can't be watchlisted" : "";
     watchBtn.innerHTML = isInWatchlist
       ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`
       : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
   }
+  const episodeProgress = detailModalBody.querySelector("[data-detail-episode-progress]");
+  if(episodeProgress){episodeProgress.innerHTML=nexusEpisodeProgressHtml(item);nexusWireEpisodeProgress(episodeProgress,item);}
+  detailModalBody.querySelectorAll("[data-airing-saved]").forEach(badge=>{badge.hidden = !isInWatchlist;});
   // Liking/disliking this item can't change ITS OWN overlap with your other
   // liked/disliked titles, but liking/disliking something else while this
   // modal happens to still be open theoretically could — cheap enough to
@@ -3862,9 +3954,44 @@ function refreshDetailModalActions(item){
   const connectionEl = detailModalBody.querySelector(".detail-taste-connection");
   const freshConnectionHtml = buildTasteConnectionHtml(item);
   if (connectionEl) { if (freshConnectionHtml) connectionEl.outerHTML = freshConnectionHtml; else connectionEl.remove(); }
+  nexusRefreshTimelineProgress(item);
   wireTasteChips();
 }
 
+function nexusRefreshTimelineProgress(item){
+  detailModalBody.querySelectorAll("[data-mark-episode]").forEach(button=>{
+    const row=button.closest("li"),seconds=Number(row.dataset.airingAt),episode=Number(button.dataset.markEpisode);
+    button.disabled=!watchlist.has(item.uid) || !isValidAnimeAiringTimestamp(seconds) || seconds*1000>Date.now() || episode<=nexusWatchedEpisodes(item);
+    button.textContent=(watchlist.has(item.uid) && episode<=nexusWatchedEpisodes(item) ? "✓ Watched through EP " : "Watched through EP ")+episode;
+  });
+}
+function nexusWireTimeline(item){
+  const filter=detailModalBody.querySelector('[data-action="timeline-filter"]');
+  if(!filter)return;
+  const apply=()=>{
+    let shown=0;
+    detailModalBody.querySelectorAll(".nexus-episode-list li").forEach(row=>{
+      row.hidden=filter.value==="upcoming" ? row.classList.contains("aired") : filter.value==="aired" ? !row.classList.contains("aired") : filter.value==="unwatched" ? (!row.classList.contains("aired") || Number(row.dataset.episode)<=nexusWatchedEpisodes(item)) : false;
+      if(!row.hidden)shown++;
+    });
+    detailModalBody.querySelector(".nexus-timeline-empty").hidden=shown>0;
+  };
+  filter.value=nexusTimelineFilterByTitle.get(item.uid) || "all";
+  filter.addEventListener("change",()=>{nexusTimelineFilterByTitle.set(item.uid,filter.value);apply();});apply();
+  const jump=detailModalBody.querySelector('[data-action="jump-next-episode"]');
+  if(jump)jump.addEventListener("click",()=>{
+    const row=detailModalBody.querySelector(".nexus-episode-list li.next");if(!row)return;
+    filter.value="upcoming";nexusTimelineFilterByTitle.set(item.uid,"upcoming");apply();
+    row.scrollIntoView({block:"nearest",behavior:"auto"});row.focus({preventScroll:true});
+  });
+  detailModalBody.querySelectorAll("[data-mark-episode]").forEach(button=>button.addEventListener("click",()=>{
+    const row=button.closest("li"),seconds=Number(row.dataset.airingAt),episode=Number(button.dataset.markEpisode);
+    if(!isValidAnimeAiringTimestamp(seconds) || seconds*1000>Date.now())return;
+    if(episode<=nexusWatchedEpisodes(item))return;
+    if(!nexusSetWatchedEpisodes(item,episode))return;
+    refreshDetailModalActions(item);apply();renderWatchlist();showToast("Watched through episode "+episode);
+  }));
+}
 async function openDetailModal(uid, onBack){
   const item = titleIndex.get(uid);
   if (!item) return;
@@ -3882,8 +4009,17 @@ async function openDetailModal(uid, onBack){
   // genre overlap for movie/series/kdrama titles opened straight from search
   // or the vault, silently missing the collaborator signal that's usually
   // the strongest one.
-  const [extras] = await Promise.all([getDetailExtras(item), ensureCollaborators(item)]);
+  let extras;
+  try {
+    [extras] = await Promise.all([getDetailExtras(item), ensureCollaborators(item)]);
+  } catch (_) {
+    if(detailModal.style.display === "none" || detailRequestId !== nexusDetailRequestId) return;
+    detailModalBody.innerHTML = '<div class="detail-modal-loading" role="alert">Could not load details. <button type="button" class="nexus-calendar-export" data-action="retry-details">Try again</button></div>';
+    detailModalBody.querySelector('[data-action="retry-details"]').addEventListener("click",()=>openDetailModal(uid,onBack));
+    return;
+  }
   if (detailModal.style.display === "none" || detailRequestId !== nexusDetailRequestId) return; // stale or closed request
+  if(item.provider === "anime" && Number.isSafeInteger(extras.airing?.episodes) && extras.airing.episodes > 0){item.episodes=extras.airing.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
   const backBtnHtml = onBack ? `<button type="button" class="detail-back-btn" id="detailBackBtn">← Back to Taste Map</button>` : "";
   detailModalBody.innerHTML = backBtnHtml + buildDetailModalHtml(item, extras);
   if (onBack) document.getElementById("detailBackBtn").addEventListener("click", onBack);
@@ -3893,6 +4029,11 @@ async function openDetailModal(uid, onBack){
   if (likeBtn) likeBtn.addEventListener("click", () => { handleVote(item, 'like'); refreshDetailModalActions(item); });
   if (dislikeBtn) dislikeBtn.addEventListener("click", () => { handleVote(item, 'dislike'); refreshDetailModalActions(item); });
   if (watchBtn) watchBtn.addEventListener("click", () => { handleWatchlist(item); refreshDetailModalActions(item); });
+  nexusWireEpisodeProgress(detailModalBody.querySelector("[data-detail-episode-progress]"),item);
+  nexusWireTimeline(item);
+  nexusRefreshTimelineProgress(item);
+  const calendarBtn = detailModalBody.querySelector('[data-action="export-episode"]');
+  if(calendarBtn) calendarBtn.addEventListener("click",()=>downloadAnimeEpisodeCalendar(item,extras.airing?.next));
   wireTasteChips();
 }
 
@@ -5361,11 +5502,135 @@ function nexusSetListStatus(uid,status){
   try{localStorage.setItem(nexusProgressStorageKey(),JSON.stringify(obj));}
   catch(_){showToast("Progress could not be saved on this device");}
 }
+// Episode counts are separate from planned/in-progress/completed and scoped to this device/account.
+function nexusEpisodeStorageKey(){return "nexus-episode-progress:"+(currentUser?.id || "guest");}
+function nexusEpisodeMap(){
+  try {const value=JSON.parse(localStorage.getItem(nexusEpisodeStorageKey()) || "{}");return value && typeof value === "object" && !Array.isArray(value) ? value : {};}catch(_){return {};}
+}
+function nexusEpisodeTotal(item){return Number.isSafeInteger(item.episodes) && item.episodes > 0 ? item.episodes : null;}
+function nexusWatchedEpisodes(item){
+  const value=nexusEpisodeMap()[item.uid];
+  const count=Number.isSafeInteger(value) && value >= 0 ? value : 0;
+  const total=nexusEpisodeTotal(item);return total ? Math.min(count,total) : count;
+}
+function nexusSetWatchedEpisodes(item,value){
+  if(item.provider !== "anime" || !watchlist.has(item.uid) || !Number.isSafeInteger(value) || value < 0 || value > 1000000)return false;
+  const total=nexusEpisodeTotal(item);if(total && value > total)return false;
+  const counts=nexusEpisodeMap();if(value===0)delete counts[item.uid];else counts[item.uid]=value;
+  try{localStorage.setItem(nexusEpisodeStorageKey(),JSON.stringify(counts));return true;}catch(_){showToast("Episode progress could not be saved on this device");return false;}
+}
+function nexusEpisodeProgressHtml(item){
+  if(item.provider !== "anime" || !watchlist.has(item.uid))return "";
+  const count=nexusWatchedEpisodes(item),total=nexusEpisodeTotal(item);
+  return '<div class="nexus-episode-progress" role="group" aria-label="Episode progress for '+escapeHtml(item.title)+'"><strong>Episodes watched</strong><div class="nexus-episode-stepper"><button type="button" data-episode-step="-1" aria-label="One fewer episode watched" '+(count===0?'disabled':'')+'>−</button><output aria-live="polite">'+count+' / '+(total || 'total unknown')+'</output><button type="button" data-episode-step="1" aria-label="One more episode watched" '+((total && count>=total)||count>=1000000?'disabled':'')+'>+</button></div><small>Saved on this device · episode counts are included in backups, not cloud sync.</small></div>';
+}
+function nexusWireEpisodeProgress(root,item){
+  if(!root)return;
+  root.querySelectorAll('[data-episode-step]').forEach(button=>button.addEventListener("click",()=>{
+    const step=Number(button.dataset.episodeStep);
+    if(!nexusSetWatchedEpisodes(item,nexusWatchedEpisodes(item)+step))return;
+    const group=button.closest('.nexus-episode-progress');
+    if(root.hasAttribute("data-detail-episode-progress")){renderWatchlist();nexusRefreshTimelineProgress(item);}
+    group.outerHTML=nexusEpisodeProgressHtml(item);
+    const fresh=root.querySelector('.nexus-episode-progress');
+    nexusWireEpisodeProgress(fresh,item);
+    const preferred=fresh.querySelector('[data-episode-step="'+step+'"]');
+    (preferred && !preferred.disabled ? preferred : fresh.querySelector('button:not(:disabled)'))?.focus({preventScroll:true});
+  }));
+}
+
 function nexusPurgeOrphanProgress(){
   // Do not destructively prune here: renderWatchlist can run while cloud data is
   // still loading or a conflict is being resolved. Unmatched statuses are inert
   // until the matching watchlist item reappears.
 }
+// NEXUS 7.1: bounded manual batches, confirmed backlog, local-day filters.
+const nexusAiringDashboard = {version:0,cache:new Map(),attempted:new Set(),loading:false,scope:null};
+function nexusAiringScope(){return currentUser?.id || "guest";}
+function nexusAiringSyncScope(){
+  const scope=nexusAiringScope();
+  if(scope!==nexusAiringDashboard.scope){
+    nexusAiringDashboard.scope=scope;nexusAiringDashboard.version++;
+    nexusAiringDashboard.cache.clear();nexusAiringDashboard.attempted.clear();
+  }
+  for(const key of nexusAiringDashboard.cache.keys())if(!watchlist.has(key))nexusAiringDashboard.cache.delete(key);
+  for(const key of nexusAiringDashboard.attempted)if(!watchlist.has(key))nexusAiringDashboard.attempted.delete(key);
+}
+function nexusAiringDashboardData(item, media, now=Date.now()){
+  if(!media)return null;
+  const watched=nexusWatchedEpisodes(item),known=new Map();
+  for(const ep of media.airingSchedule?.nodes || []){
+    if(Number.isSafeInteger(ep?.episode)&&ep.episode>0&&isValidAnimeAiringTimestamp(ep.airingAt)&&ep.airingAt*1000<=now&&ep.episode>watched)known.set(ep.episode,ep.airingAt*1000);
+  }
+  const next=media.nextAiringEpisode;
+  const valid=Number.isSafeInteger(next?.episode)&&next.episode>0&&isValidAnimeAiringTimestamp(next.airingAt)&&next.airingAt*1000>now;
+  return {item,watched,unwatched:known.size,partial:!!media.airingSchedule?.pageInfo?.hasNextPage,episode:valid?next.episode:null,at:valid?next.airingAt*1000:null};
+}
+function nexusAiringMatches(entry,filter,now=Date.now()){
+  if(filter==="unwatched")return entry.unwatched>0;
+  if(!entry.at)return false;
+  const start=new Date(now);start.setHours(0,0,0,0);
+  const end=new Date(start);end.setDate(end.getDate()+(filter==="week"?7:1));
+  return filter==="all" || (entry.at>=now&&entry.at>=start.getTime()&&entry.at<end.getTime());
+}
+function nexusRenderAiringDashboard(){
+  nexusAiringSyncScope();
+  const root=document.getElementById("nexusAiringCards"),status=document.getElementById("nexusAiringStatus");
+  if(!root||!status)return;
+  root.replaceChildren();
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime");
+  const all=anime.map(item=>{const e=nexusAiringDashboard.cache.get(String(item.uid));return e?nexusAiringDashboardData(item,e.media):null;}).filter(Boolean);
+  const filter=document.getElementById("nexusAiringFilter")?.value || "all";
+  const entries=all.filter(e=>nexusAiringMatches(e,filter)).sort((a,b)=>(a.at??Infinity)-(b.at??Infinity)||a.item.title.localeCompare(b.item.title));
+  const count=all.reduce((n,e)=>n+e.unwatched,0),titles=all.filter(e=>e.unwatched>0).length;
+  document.getElementById("nexusAiringSummary").textContent=count+" confirmed unwatched aired episodes across "+titles+" titles · "+all.length+" / "+anime.length+" schedules available"+(all.some(e=>e.partial)?" · Some histories are incomplete":"");
+  for(const entry of entries){
+    const btn=document.createElement("button");btn.type="button";btn.className="nexus-airing-card";
+    const title=document.createElement("strong");title.textContent=entry.item.title;
+    const when=document.createElement("span");when.textContent=entry.at?"Next EP "+entry.episode+" · "+new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(entry.at)):"No confirmed upcoming broadcast";
+    const progress=document.createElement("span");progress.textContent=entry.unwatched+" confirmed aired · not watched"+(entry.partial?" (partial history)":"")+" · Watched through EP "+entry.watched;
+    btn.append(title,when,progress);btn.addEventListener("click",()=>openDetailModal(entry.item.uid));root.append(btn);
+  }
+  const remaining=anime.filter(i=>Number.isSafeInteger(Number(i.id))&&Number(i.id)>0&&!nexusAiringDashboard.attempted.has(String(i.uid))).length;
+  const button=document.getElementById("nexusAiringRefresh");
+  button.disabled=nexusAiringDashboard.loading;button.textContent=remaining?"Check next batch ("+Math.min(12,remaining)+")":"Refresh schedules";
+  if(!nexusAiringDashboard.loading)status.textContent=!anime.length?"Save anime to your Watchlist to track broadcasts.":entries.length+" matching titles · "+remaining+" eligible titles left to check. Missing schedules are unknown, not zero episodes. Refresh to retry or update checked data.";
+}
+async function nexusRefreshAiringDashboard(restart=false){
+  if(nexusAiringDashboard.loading)return;
+  nexusAiringSyncScope();
+  const eligible=[...watchlist.values()].filter(i=>i.provider==="anime"&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
+  if(restart===true||eligible.every(i=>nexusAiringDashboard.attempted.has(String(i.uid)))){nexusAiringDashboard.attempted.clear();nexusAiringDashboard.cache.clear();}
+  const anime=eligible.filter(i=>!nexusAiringDashboard.attempted.has(String(i.uid))).slice(0,12);
+  if(!anime.length){nexusRenderAiringDashboard();return;}
+  const button=document.getElementById("nexusAiringRefresh"),status=document.getElementById("nexusAiringStatus");
+  nexusAiringDashboard.loading=true;const version=++nexusAiringDashboard.version,scope=nexusAiringScope();
+  button.disabled=true;button.setAttribute("aria-busy","true");let failed=0;
+  const query="query($id:Int){ Media(id:$id,type:ANIME){ nextAiringEpisode{episode airingAt} } Page(page:1,perPage:50){pageInfo{hasNextPage} airingSchedules(mediaId:$id,notYetAired:false,sort:TIME_DESC){episode airingAt}} }";
+  try{
+    for(const [index,item] of anime.entries()){
+      if(version!==nexusAiringDashboard.version||scope!==nexusAiringScope())break;
+      if(!watchlist.has(item.uid))continue;
+      status.textContent="Checking schedules "+(index+1)+"/"+anime.length+"…";
+      try{
+        const result=await anilistQuery(query,{id:Number(item.id)});
+        if(version!==nexusAiringDashboard.version||scope!==nexusAiringScope())break;
+        if(!watchlist.has(item.uid))continue;
+        if(result?.errors?.length||!result?.data?.Media||!Array.isArray(result?.data?.Page?.airingSchedules))throw Error("Schedule unavailable");
+        nexusAiringDashboard.cache.set(String(item.uid),{media:{...result.data.Media,airingSchedule:{nodes:result.data.Page.airingSchedules,pageInfo:result.data.Page.pageInfo}}});
+      }catch(e){failed++;}
+      nexusAiringDashboard.attempted.add(String(item.uid));
+    }
+  }finally{
+    nexusAiringDashboard.loading=false;button.disabled=false;button.removeAttribute("aria-busy");
+    nexusRenderAiringDashboard();
+    if(failed)status.textContent+=" "+failed+" requests failed. Use Refresh from first batch to retry.";
+  }
+}
+document.getElementById("nexusAiringRefresh")?.addEventListener("click",()=>nexusRefreshAiringDashboard());
+document.getElementById("nexusAiringRestart")?.addEventListener("click",()=>nexusRefreshAiringDashboard(true));
+document.getElementById("nexusAiringFilter")?.addEventListener("change",nexusRenderAiringDashboard);
+
 function renderWatchlist(){
   nexusPurgeOrphanProgress();
   indexItems([...watchlist.values()]);
@@ -5423,14 +5688,20 @@ function renderWatchlist(){
     card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn active-watch" data-action="unwatch" aria-label="Remove ${escapeHtml(item.title)} from watchlist">${unwatchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div></div><div class="perf"></div><div class="ticket-bottom"><div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div><a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
     const progressRow=document.createElement("label");progressRow.className="nexus-list-progress";
     const progressLabel=document.createElement("span");progressLabel.textContent="Progress";
-    const progressSelect=document.createElement("select");progressSelect.setAttribute("aria-label","Progress for "+item.title);
+    const progressSelect=document.createElement("select");progressSelect.dataset.uid=item.uid;progressSelect.setAttribute("aria-label","Progress for "+item.title);
     [["planned","Want to watch / read"],["progress","In progress"],["done","Completed"]].forEach(([value,text])=>{
       const opt=document.createElement("option");opt.value=value;opt.textContent=text;progressSelect.appendChild(opt);
     });
     progressSelect.value=nexusGetListStatus(item.uid);
-    progressSelect.addEventListener("change",()=>{nexusSetListStatus(item.uid,progressSelect.value);renderWatchlist();showToast("Progress updated");});
+    progressSelect.addEventListener("change",()=>{
+      nexusSetListStatus(item.uid,progressSelect.value);renderWatchlist();showToast("Progress updated");
+      const controls = [...watchlistGrid.querySelectorAll(".nexus-list-progress select")];
+      const replacement = controls.find(control=>control.dataset.uid === item.uid);
+      (replacement || document.getElementById("nexusVaultStatus"))?.focus({preventScroll:true});
+    });
     progressRow.append(progressLabel,progressSelect);
     card.querySelector(".ticket-bottom")?.prepend(progressRow);
+    if(item.provider === "anime"){const episodes=document.createElement("div");episodes.innerHTML=nexusEpisodeProgressHtml(item);card.querySelector(".ticket-bottom")?.appendChild(episodes);nexusWireEpisodeProgress(episodes,item);}
     card.querySelector(".ticket-poster")?.addEventListener("click", () => openDetailModal(item.uid));
     card.querySelector(".ticket-poster")?.setAttribute("tabindex", "0");
     card.querySelector(".ticket-poster")?.setAttribute("role", "button");
@@ -5438,6 +5709,7 @@ function renderWatchlist(){
     card.querySelector('[data-action="unwatch"]').addEventListener("click", () => handleWatchlist(item)); watchlistGrid.appendChild(card);
   });
   wireHoverPreview(watchlistGrid);
+  nexusRenderAiringDashboard();
 }
 
 for (const id of ["nexusVaultSearch", "nexusVaultCategory", "nexusVaultSort", "nexusVaultStatus"]) {
@@ -5595,12 +5867,12 @@ function nexusBackupMessage(message){
   if (nexusBackupStatus) nexusBackupStatus.textContent = message;
 }
 function nexusValidateBackup(data){
-  if (!data || data.format !== "nexus-taste-backup" || ![1, 2].includes(data.version) ||
+  if (!data || data.format !== "nexus-taste-backup" || ![1, 2, 3].includes(data.version) ||
       !data.entries || typeof data.entries !== "object" || Array.isArray(data.entries)) {
     throw new Error("This is not a supported NEXUS backup file.");
   }
   // v2 adds per-title progress. Validate before writing any IndexedDB values.
-  if (data.version === 2 && data.listProgress !== undefined) {
+  if (data.version >= 2 && data.listProgress !== undefined) {
     if (!data.listProgress || typeof data.listProgress !== "object" || Array.isArray(data.listProgress) ||
         Object.keys(data.listProgress).length > 10000 ||
         Object.entries(data.listProgress).some(([uid,status]) => uid.length > 250 || !["progress","done"].includes(status))) {
@@ -5609,7 +5881,7 @@ function nexusValidateBackup(data){
   }
   const keys = NEXUS_BACKUP_KEYS.filter(key => Object.prototype.hasOwnProperty.call(data.entries, key));
   // Reject inconsistent progress before any persistent data is modified.
-  if (data.version === 2 && data.listProgress && Object.keys(data.listProgress).length) {
+  if (data.version >= 2 && data.listProgress && Object.keys(data.listProgress).length) {
     const saved = data.entries["rm-watchlist"];
     if (!Array.isArray(saved)) throw new Error("Backup progress requires a watchlist.");
     const savedIds = new Set(saved.map(item => item && item.uid));
@@ -5632,7 +5904,30 @@ function nexusValidateBackup(data){
       throw new Error("Invalid preferences in " + key);
     }
   }
+  if(data.version === 3){
+    const progress=data.episodeProgress;
+    if(!progress || typeof progress !== "object" || Array.isArray(progress) || Object.keys(progress).length>10000)throw new Error("Invalid episode progress in backup.");
+    const saved=data.entries["rm-watchlist"];
+    if(!Array.isArray(saved))throw new Error("Episode backup requires a watchlist.");
+    const titles=new Map(saved.map(item=>[item.uid,item]));
+    if(titles.size!==saved.length)throw new Error("Backup watchlist contains duplicate titles.");
+    for(const [uid,count] of Object.entries(progress)){
+      const item=titles.get(uid);
+      if(!item || item.provider!=="anime" || !Number.isSafeInteger(count) || count<0 || count>1000000 || (nexusEpisodeTotal(item) && count>nexusEpisodeTotal(item)))throw new Error("Invalid watched episode count in backup.");
+    }
+  }
   return keys;
+}
+async function nexusRestoreEpisodeTransaction(data,writePreferences){
+  if(data.version!==3)return writePreferences();
+  const key=nexusEpisodeStorageKey(),previous=localStorage.getItem(key);
+  // Check local storage before changing preferences; roll back counts if IndexedDB fails.
+  localStorage.setItem(key,JSON.stringify(data.episodeProgress));
+  try{return await writePreferences();}catch(error){
+    try{if(previous===null)localStorage.removeItem(key);else localStorage.setItem(key,previous);}
+    catch(_){throw new Error("Preference restore failed and episode counts could not be rolled back. Keep your backup and retry before reloading.");}
+    throw error;
+  }
 }
 async function nexusExportBackup(){
   const btn = document.getElementById("nexusExportBtn");
@@ -5658,8 +5953,10 @@ async function nexusExportBackup(){
       } catch (_) { /* Storage can be disabled by privacy settings. */ }
     }
     let listProgress = {};
-    try { listProgress = nexusProgressMap(); } catch (_) {}
-    const payload = { format: "nexus-taste-backup", version: 2, exportedAt: new Date().toISOString(), entries, settings, listProgress };
+    try { listProgress = Object.fromEntries(Object.entries(nexusProgressMap()).filter(([uid])=>watchlist.has(uid))); } catch (_) {}
+    const episodeProgress=Object.fromEntries([...watchlist.values()].filter(item=>item.provider==="anime").map(item=>[item.uid,nexusWatchedEpisodes(item)]).filter(([,count])=>count>0));
+    const payload = { format: "nexus-taste-backup", version: 3, exportedAt: new Date().toISOString(), entries, settings, listProgress, episodeProgress };
+    nexusValidateBackup(payload);
     const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
     const a = document.createElement("a");
     a.href = url; a.download = "nexus-taste-backup-" + new Date().toISOString().slice(0,10) + ".json";
@@ -5683,6 +5980,7 @@ async function nexusRestoreBackup(file){
     if (!confirm("Restore " + keys.length + " preference groups? This replaces the matching data in this browser." + syncNote + " Export your current backup first.")) {
       nexusBackupMessage("Restore cancelled."); return;
     }
+    await nexusRestoreEpisodeTransaction(data,async()=>{
     const db = await getDB();
     await new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
@@ -5692,6 +5990,7 @@ async function nexusRestoreBackup(file){
       tx.onerror = () => reject(tx.error || new Error("Restore transaction failed"));
       tx.onabort = () => reject(tx.error || new Error("Restore transaction aborted"));
     });
+    });
     if (data.settings && typeof data.settings === "object" && !Array.isArray(data.settings)) {
       for (const key of NEXUS_BACKUP_LOCAL_KEYS) {
         if (typeof data.settings[key] === "string" && data.settings[key].length < 1000) {
@@ -5700,7 +5999,7 @@ async function nexusRestoreBackup(file){
       }
     }
     // Restore list progress only from validated own-backup entries, not arbitrary storage keys.
-    if (data.listProgress && typeof data.listProgress === "object" && !Array.isArray(data.listProgress)) {
+    if (data.version >= 2 && data.listProgress && typeof data.listProgress === "object" && !Array.isArray(data.listProgress)) {
       const clean = {};
       const savedIds = new Set((await idbGet("rm-watchlist") || []).map(item=>String(item.uid)));
       for (const [uid,status] of Object.entries(data.listProgress)) {
