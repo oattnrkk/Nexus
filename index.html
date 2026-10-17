@@ -7,7 +7,6 @@
      attributes in the script below) — some environments don't fully honor a
      per-iframe referrerpolicy alone, so this sets the same policy page-wide. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="nexus-version" content="7.1">
 <title>NEXUS — Movies, Series, Anime &amp; Music</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -641,9 +640,66 @@ section.block{padding-top:38px}
 .nexus-airing-dashboard-head p,.nexus-airing-dashboard-status{color:var(--text-dim);font-size:.84rem;margin:4px 0 12px}
 .nexus-airing-dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr));gap:10px}
 .nexus-airing-card{border:1px solid rgba(195,154,75,.24);border-radius:12px;padding:13px;background:rgba(0,0,0,.12);text-align:left;color:inherit;cursor:pointer}
-.nexus-airing-card:focus-visible{outline:2px solid #d4ae61;outline-offset:2px}
+.nexus-airing-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:10px;font-size:.85rem}.nexus-airing-controls select{background:#151515;color:inherit;border:1px solid rgba(195,154,75,.45);padding:8px;border-radius:8px}.nexus-airing-card:focus-visible{outline:2px solid #d4ae61;outline-offset:2px}
 .nexus-airing-card strong,.nexus-airing-card span{display:block}
 .nexus-airing-card span{color:var(--text-dim);font-size:.8rem;margin-top:5px}
+
+.nexus-preview-diagnostics{font-size:.78rem;padding:9px 12px;border:1px solid rgba(201,167,92,.3);border-radius:8px;margin:8px 0;color:var(--muted,#b9b3a9)}
+.nexus-preview-diagnostics[data-state="error"]{border-color:#ba685c;color:#f3a79b}
+.nexus-preview-diagnostics[data-state="playing"]{border-color:#7ca887;color:#a6d3b0}
+.nexus-airing-daily{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+.nexus-airing-day{border:1px solid rgba(201,167,92,.3);border-radius:9px;padding:7px 10px;font-size:.78rem;min-width:112px;flex:1}
+.nexus-airing-day strong,.nexus-airing-day span{display:block}
+.nexus-airing-day{cursor:pointer;text-align:left;background:rgba(15,15,15,.55);color:inherit}
+.nexus-airing-day.selected,.nexus-airing-day[aria-pressed="true"]{border-color:#d7b46d;background:rgba(201,167,92,.2)}
+.nexus-airing-day:focus-visible{outline:2px solid #d7b46d;outline-offset:2px}
+.nexus-airing-day-details{display:block;font-size:.73rem;opacity:.83;overflow-wrap:anywhere;margin-top:6px}
+.nexus-preview-progress{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:.8rem}
+.nexus-preview-progress[hidden]{display:none}
+.nexus-preview-progress input[type="range"]{width:min(220px,55vw);accent-color:#d7b46d;touch-action:pan-y}
+.nexus-airing-week-nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%;margin-bottom:8px}
+.nexus-airing-week-nav button{border:1px solid rgba(201,167,92,.5);border-radius:8px;background:#181818;color:inherit;padding:8px 10px;cursor:pointer;min-height:40px}
+.nexus-airing-week-nav button:disabled{opacity:.4;cursor:not-allowed}
+.nexus-airing-week-nav button:focus-visible{outline:2px solid #d7b46d}
+.nexus-preview-volume-label{font-size:.78rem}
+#nexusPreviewVolume{width:min(110px,28vw);accent-color:#d7b46d;touch-action:pan-y}
+#nexusPreviewMute{min-height:38px;min-width:42px;border:1px solid rgba(201,167,92,.5);border-radius:8px;background:#181818;color:inherit;cursor:pointer}
+#nexusPreviewMute:focus-visible{outline:2px solid #d7b46d}
+#nexusPreviewDiagnostics .nexus-tool-btn{margin-left:8px;min-height:36px}
+@media(max-width:600px){.nexus-airing-day{min-width:calc(50% - 8px)}.audio-preview-btn{min-width:38px;min-height:38px}}
+.nexus-detail-facts{margin:16px 0;padding:14px;border:1px solid rgba(203,168,90,.32);border-radius:12px;background:rgba(170,131,57,.06)}
+.nexus-detail-facts h3{margin:0 0 10px;font-size:1rem}
+.nexus-detail-facts dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:9px;margin:0}
+.nexus-fact{min-width:0}.nexus-fact dt{font-size:.75rem;opacity:.75}.nexus-fact dd{margin:3px 0 0;font-size:.92rem;overflow-wrap:anywhere}
+.nexus-detail-facts small{display:block;opacity:.7;margin-top:10px}
+@media(max-width:480px){.nexus-detail-facts{padding:11px}.nexus-detail-facts dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.nexus-manga-dashboard{border:1px solid rgba(201,167,92,.32);border-radius:12px;padding:14px;margin:14px 0;background:rgba(201,167,92,.05)}
+.nexus-manga-dashboard p{margin:7px 0 10px;font-size:.88rem}
+.nexus-manga-dashboard-list{display:flex;flex-wrap:wrap;gap:8px}
+.nexus-manga-dashboard-list button{background:#171717;border:1px solid rgba(201,167,92,.4);border-radius:9px;color:inherit;padding:8px;cursor:pointer;text-align:left}
+.nexus-manga-dashboard-list button:focus-visible{outline:2px solid #d7b46d}
+.nexus-progress-meter{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.8rem;margin-top:8px}
+.nexus-progress-meter progress{width:110px;max-width:100%;accent-color:#d7b46d}
+.nexus-season-progress,.nexus-manga-progress{margin-top:12px}
+.nexus-season-progress{padding:12px;border:1px solid rgba(204,171,100,.25);border-radius:12px}
+.nexus-season-progress h3{font-size:1rem;margin:0 0 5px}
+.nexus-season-progress p{font-size:.8rem;opacity:.8}
+.nexus-season-progress ul{margin:8px 0 0;padding-left:22px;display:grid;gap:5px}
+@media(max-width:560px){.nexus-season-progress{padding:10px}.nexus-list-overview{flex-wrap:wrap}}
+.nexus-season-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0;padding:6px 0;border-bottom:1px solid rgba(200,170,90,.2)}
+.nexus-season-row span{flex:1;min-width:140px}
+.nexus-season-row button,.nexus-manga-filter select{min-height:38px;padding:6px 12px;background:#191919;color:inherit;border:1px solid #9d7f45;border-radius:8px}
+.nexus-season-row button:disabled{opacity:.4}
+.nexus-manga-filter{margin:8px 0}
+
+/* NEXUS 8.9: search actions should be unambiguous on touch and keyboard. */
+.nexus-search-detail-title{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;font-weight:inherit;cursor:pointer}
+.nexus-search-detail-title:hover,.nexus-search-detail-title:focus-visible{text-decoration:underline;text-underline-offset:3px}
+.nexus-search-select{border:1px solid rgba(212,175,55,.55);background:transparent;color:inherit;border-radius:7px;padding:7px 10px;min-height:36px;cursor:pointer;font:inherit;font-size:12px;white-space:nowrap}
+.nexus-search-select[aria-pressed="true"]{background:rgba(212,175,55,.17)}
+.nexus-search-select:focus-visible,.suggestion-item:focus-visible{outline:2px solid #d4af37;outline-offset:2px}
+.nexus-suggestion-open{font-size:11px;opacity:.7;white-space:nowrap;margin-left:auto}
+@media(max-width:600px){.nexus-search-select{min-height:42px}.nexus-suggestion-open{font-size:10px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1125,6 +1181,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
       </select>
     </div>
     <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
+    <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
     <div class="filmstrip" id="filmstripWrap" style="display:none;">
       <div class="results-grid" id="resultsGrid"></div>
     </div>
@@ -1136,19 +1193,18 @@ button:disabled{opacity:.48;cursor:not-allowed}
       <span class="count" id="watchlistCount"></span>
     </div>
     <section class="nexus-airing-dashboard" aria-label="Saved anime airing dashboard">
-      <div class="nexus-airing-dashboard-head"><div><h3>Anime · Upcoming & unwatched</h3><p>Confirmed AniList broadcasts for saved anime. Refresh on demand.</p></div><button type="button" class="nexus-tool-btn" id="nexusAiringRefresh">↻ Check airings</button></div>
+      <div class="nexus-airing-dashboard-head"><div><h3>Anime · Upcoming & unwatched</h3><p>Confirmed AniList broadcasts and aired episodes you have not watched. Refresh on demand.</p></div><button type="button" class="nexus-tool-btn" id="nexusAiringRefresh">↻ Check airings</button></div>
+      <div class="nexus-airing-controls"><label for="nexusAiringWindow">Show broadcasts</label><select id="nexusAiringWindow" aria-label="Broadcast date filter"><option value="all">All upcoming</option><option value="today">Today</option><option value="week">Next 7 days</option><option value="unwatched">Unwatched aired EP</option></select><span id="nexusAiringBatch" aria-live="polite"></span></div>
+      <div class="nexus-airing-daily" id="nexusAiringDaily" aria-label="Upcoming anime broadcasts by day"></div>
       <div class="nexus-airing-dashboard-status" id="nexusAiringStatus" role="status" aria-live="polite">Select “Check airings” to see the next broadcasts.</div>
-      <label>Show broadcasts <select id="nexusAiringFilter"><option value="all">All upcoming</option><option value="today">Today</option><option value="week">Next 7 days</option><option value="unwatched">Aired · Not yet watched</option></select></label>
-      <p id="nexusAiringSummary" role="status"></p>
-      <button type="button" class="nexus-tool-btn" id="nexusAiringRestart">Refresh from first batch</button>
-      <p class="nexus-airing-dashboard-status">Device time zone. Backlog counts use up to 50 latest confirmed aired episodes per title; counts may be incomplete. Open a title for episode actions.</p>
       <div id="nexusAiringCards" class="nexus-airing-dashboard-grid"></div>
     </section>
     <div class="nexus-list-overview" id="nexusListOverview" aria-label="My List progress"></div>
+    <div id="nexusMangaDashboard" class="nexus-manga-dashboard" aria-live="polite"></div>
     <div class="nexus-vault-controls" role="search" aria-label="Filter saved titles">
       <input id="nexusVaultSearch" type="search" placeholder="Find a saved title or artist…" aria-label="Search saved titles" autocomplete="off">
       <select id="nexusVaultCategory" aria-label="Filter saved titles by category"><option value="all">All categories</option><option value="movie">Movies</option><option value="anime">Anime</option><option value="series">TV Series</option><option value="kdrama">K-Dramas</option><option value="manga">Manga</option><option value="music">Music</option></select>
-      <select id="nexusVaultStatus" aria-label="Filter by progress"><option value="all">All progress</option><option value="planned">Want to watch / read</option><option value="progress">In progress</option><option value="done">Completed</option></select>
+      <select id="nexusVaultStatus" aria-label="Filter by progress"><option value="all">All progress</option><option value="planned">Want to watch / read</option><option value="progress">In progress</option><option value="paused">Paused reading</option><option value="done">Completed</option><option value="unfinished">Not finished (count)</option></select>
       <select id="nexusVaultSort" aria-label="Sort saved titles"><option value="title">Title A–Z</option><option value="year">Newest first</option><option value="category">Category</option></select>
       <button type="button" id="nexusVaultClear" class="nexus-tool-btn">Clear filters</button>
       <button type="button" id="nexusVaultSurprise" class="nexus-tool-btn">✦ Pick for me</button>
@@ -1183,6 +1239,7 @@ const SUPABASE_URL = "https://dukotdsijhkatglcthwp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a290ZHNpamhrYXRnbGN0aHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5OTQwMjQsImV4cCI6MjA5OTU3MDAyNH0._V_kFEuZQdWcEIhhYr_wIROe_MZcoIU7tEhwQYebFHI";
 
 const POSTER_FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280'%3E%3Crect width='100%25' height='100%25' fill='%23151420'/%3E%3Ctext x='50%25' y='50%25' font-family='sans-serif' font-size='16' fill='%23555' text-anchor='middle' dy='.3em'%3ENo Image%3C/text%3E%3C/svg%3E";
+// Browser-visible TMDB/Last.fm keys and Supabase anon keys are public. Enforce quota, domain restrictions and Supabase RLS server-side.
 const TMDB_KEY = "35789b5e4acc07032c33bd6966465734";
 const TMDB_BASE = "https://api.themoviedb.org/3";
 const TMDB_IMG = "https://image.tmdb.org/t/p/w200";
@@ -1462,30 +1519,74 @@ async function maybeRunCacheCleanup(){
   } catch(e){}
 }
 
-const lastCallByHost = {}; const MIN_GAP = 500; const MAX_RETRIES = 6; const FETCH_TIMEOUT_MS = 12000;
+// 8.7: Serialize request-start slots per host to prevent concurrent bursts.
+const lastCallByHost = {}; const hostStartQueue = new Map();
+const MIN_GAP = 500; const MAX_RETRIES = 3; const FETCH_TIMEOUT_MS = 12000;
 function getHostKey(url){ try{ return new URL(url).hostname; }catch(e){ return "default"; } }
-
-async function fetchWithTimeout(url, options = {}, timeoutMs = FETCH_TIMEOUT_MS){
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try{ return await fetch(url, { ...options, signal: controller.signal }); }
-  finally{ clearTimeout(timer); }
+function nexusWait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+async function nexusHostSlot(host){
+  const prior=hostStartQueue.get(host)||Promise.resolve();
+  const turn=prior.catch(()=>{}).then(async()=>{
+    const delay=Math.max(0,(lastCallByHost[host]||0)+MIN_GAP-Date.now());
+    if(delay)await nexusWait(delay);
+    lastCallByHost[host]=Date.now();
+  });
+  hostStartQueue.set(host,turn);
+  try{await turn;}finally{if(hostStartQueue.get(host)===turn)hostStartQueue.delete(host);}
 }
-
-async function queuedFetch(url, options = {}, attempt = 0){
-  const hostKey = getHostKey(url);
-  const now = Date.now(); const lastCall = lastCallByHost[hostKey] || 0; const wait = Math.max(0, lastCall + MIN_GAP - now); if(wait > 0) await new Promise(r=>setTimeout(r, wait));
-  lastCallByHost[hostKey] = Date.now(); const finalUrl = USE_SERVERLESS_PROXY ? `${PROXY_BACKEND_URL}?url=${encodeURIComponent(url)}` : url;
+async function fetchWithTimeout(url,options={},timeoutMs=FETCH_TIMEOUT_MS){
+  const controller=new AbortController();
+  const upstream=options.signal;
+  if(upstream?.aborted)controller.abort();
+  const abort=()=>controller.abort();
+  upstream?.addEventListener?.("abort",abort,{once:true});
+  const timer=setTimeout(()=>controller.abort(),timeoutMs);
+  try{return await fetch(url,{...options,signal:controller.signal});}
+  finally{clearTimeout(timer);upstream?.removeEventListener?.("abort",abort);}
+}
+function nexusRetryDelay(attempt,retryAfter){
+  if(retryAfter){
+    const seconds=Number(retryAfter);
+    const parsed=Number.isFinite(seconds)?seconds*1000:Date.parse(retryAfter)-Date.now();
+    if(Number.isFinite(parsed))return Math.max(1000,Math.min(15000,parsed));
+  }
+  return Math.min(8000,1000*Math.pow(2,attempt));
+}
+async function queuedFetch(url,options={},attempt=0){
+  const host=getHostKey(url);
+  const finalUrl=USE_SERVERLESS_PROXY?`${PROXY_BACKEND_URL}?url=${encodeURIComponent(url)}`:url;
+  await nexusHostSlot(host);
   let res;
-  try{ res = await fetchWithTimeout(finalUrl, options); }catch(e){ if(attempt < MAX_RETRIES) return queuedFetch(url, options, attempt + 1); throw new Error("NETWORK_UNREACHABLE"); }
-  if(res.status === 429) { if(attempt >= MAX_RETRIES) throw new Error("RATE_LIMITED"); await new Promise(r=>setTimeout(r, 2500)); return queuedFetch(url, options, attempt + 1); }
-  if(!res.ok) throw new Error("API_ERROR"); return res.json();
+  try{res=await fetchWithTimeout(finalUrl,options);}
+  catch(error){
+    if(options.signal?.aborted)throw error;
+    if(attempt>=MAX_RETRIES)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
+    await nexusWait(nexusRetryDelay(attempt));return queuedFetch(url,options,attempt+1);
+  }
+  if(res.status===429||res.status===502||res.status===503||res.status===504){
+    if(attempt>=MAX_RETRIES)throw new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
+    await nexusWait(nexusRetryDelay(attempt,res.headers?.get?.("Retry-After")));
+    return queuedFetch(url,options,attempt+1);
+  }
+  if(!res.ok)throw new Error("API_ERROR_"+res.status);
+  try{return await res.json();}catch(_){throw new Error("INVALID_API_RESPONSE");}
 }
 
+function nexusPublicApiError(error){
+  const msg=String(error?.message||"").toLowerCase();
+  if(msg.includes("timed out")||msg.includes("timeout"))return "TIMEOUT";
+  if(msg.includes("invalid_api_response"))return "INVALID_RESPONSE";
+  if(msg.includes("api_unavailable"))return "SERVICE_UNAVAILABLE";
+  if(msg.includes("rate")||msg.includes("429"))return "RATE_LIMIT";
+  if(msg.includes("jsonp")||msg.includes("engine core"))return "SCRIPT_LOAD";
+  return "REQUEST_FAILED";
+}
 // 🪐 ระบบสคริปต์ Direct JSONP ดั้งเดิมของ Deezer สำหรับดึงข้อมูลแบบปลอดภัยข้าม Domain
+let nexusDeezerCallbackSequence=0;
+const nexusDeezerCallbackSalt=Math.random().toString(36).slice(2,10);
 function fetchDeezerAPI(endpoint) {
   return new Promise((resolve, reject) => {
-    const callbackName = 'deezer_callback_' + Math.round(100000 * Math.random());
+    const callbackName = 'deezer_callback_' + nexusDeezerCallbackSalt + '_' + (++nexusDeezerCallbackSequence);
     let settled = false;
     const cleanup = () => { delete window[callbackName]; if(script.parentNode) document.body.removeChild(script); clearTimeout(timer); };
     const timer = setTimeout(() => {
@@ -1493,7 +1594,7 @@ function fetchDeezerAPI(endpoint) {
     }, 10000);
     window[callbackName] = function(data) {
       if(settled) return; settled = true; cleanup();
-      if (data && data.error) reject(new Error(data.error.message));
+      if (data && data.error) reject(new Error(String(data.error.message||"Deezer API error")));
       else resolve(data);
     };
     const script = document.createElement('script');
@@ -1512,9 +1613,10 @@ function fetchDeezerAPI(endpoint) {
 // even reaches Last.fm's server). Last.fm's REST API officially supports a
 // `callback` param on format=json requests specifically for this — same JSONP
 // escape hatch already used for Deezer above.
+let nexusLastfmCallbackSequence=0;
 function fetchLastfmAPI(params) {
   return new Promise((resolve, reject) => {
-    const callbackName = 'lastfm_callback_' + Math.round(100000 * Math.random());
+    const callbackName = 'lastfm_callback_' + (++nexusLastfmCallbackSequence);
     let settled = false;
     const cleanup = () => { delete window[callbackName]; if(script.parentNode) document.body.removeChild(script); clearTimeout(timer); };
     const timer = setTimeout(() => {
@@ -1628,11 +1730,11 @@ function normalizeAniListMedia(m, provider){
   // studios-only exactly like before if either is missing.
   const staffNames = (m.staff && m.staff.edges) ? m.staff.edges.map(e => e.node && e.node.name && e.node.name.full).filter(Boolean) : [];
   const vaNames = (m.characters && m.characters.edges) ? m.characters.edges.flatMap(e => (e.voiceActors || []).map(va => va.name && va.name.full)).filter(Boolean) : [];
-  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji)) || "Untitled", image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: m.genres || [], url: m.siteUrl || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: (m.tags || []).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
+  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji || m.title.native)) || "Untitled", originalTitle: m.title?.romaji || m.title?.native || "", aliases: [...new Set([m.title?.english,m.title?.romaji,m.title?.native,...(m.synonyms||[])].filter(Boolean))], image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: m.genres || [], url: m.siteUrl || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: (m.tags || []).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
 }
 
-const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji } coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
-const ANILIST_RECS_QUERY = `query ($id: Int, $type: MediaType) { Media(id: $id, type: $type) { recommendations(sort: RATING_DESC, perPage: 25) { nodes { rating mediaRecommendation { id format title { english romaji } coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } } } }`;
+const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
+const ANILIST_RECS_QUERY = `query ($id: Int, $type: MediaType) { Media(id: $id, type: $type) { recommendations(sort: RATING_DESC, perPage: 25) { nodes { rating mediaRecommendation { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } } } }`;
 
 async function searchAniList(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).filter(m => !(provider === "anime" && m.format === "MOVIE")).map(m => normalizeAniListMedia(m, provider)); }); }
 async function getAniListRecommendations(id, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-recs:` + id, async () => { const data = await anilistQuery(ANILIST_RECS_QUERY, { id: Number(id), type }); return ((data.data?.Media?.recommendations?.nodes) || []).filter(n => n.mediaRecommendation && !(provider === "anime" && n.mediaRecommendation.format === "MOVIE")).map(n => ({ item: normalizeAniListMedia(n.mediaRecommendation, provider), weight: n.rating || 0 })); }); }
@@ -2135,8 +2237,8 @@ async function embedText(text){
   }, EMBED_CACHE_TTL_MS);
 }
 
-function normalizeMovieItem(d, genreMap){ return { uid: "movie:" + d.id, id: d.id, provider: "movie", title: d.title || d.original_title || "Untitled", image: d.poster_path ? (TMDB_IMG + d.poster_path) : "", year: d.release_date ? d.release_date.slice(0,4) : "—", score: d.vote_average ? Math.round(d.vote_average * 10) / 10 : null, genres: (d.genre_ids || []).map(id => genreMap[id]).filter(Boolean), url: `https://www.themoviedb.org/movie/${d.id}`, streams: [], overview: d.overview || "", collaborators: [] }; }
-function normalizeTVItem(d, genreMap, customProvider = "series"){ return { uid: customProvider + ":" + d.id, id: d.id, provider: customProvider, title: d.name || d.original_name || "Untitled", image: d.poster_path ? (TMDB_IMG + d.poster_path) : "", year: d.first_air_date ? d.first_air_date.slice(0,4) : "—", score: d.vote_average ? Math.round(d.vote_average * 10) / 10 : null, genres: (d.genre_ids || []).map(id => genreMap[id]).filter(Boolean), url: `https://www.themoviedb.org/tv/${d.id}`, streams: [], overview: d.overview || "", collaborators: [] }; }
+function normalizeMovieItem(d, genreMap){ return { uid: "movie:" + d.id, id: d.id, provider: "movie", title: d.title || d.original_title || "Untitled", originalTitle: d.original_title || "", aliases: [d.title,d.original_title].filter(Boolean), image: d.poster_path ? (TMDB_IMG + d.poster_path) : "", year: d.release_date ? d.release_date.slice(0,4) : "—", score: d.vote_average ? Math.round(d.vote_average * 10) / 10 : null, genres: (d.genre_ids || []).map(id => genreMap[id]).filter(Boolean), url: `https://www.themoviedb.org/movie/${d.id}`, streams: [], overview: d.overview || "", collaborators: [] }; }
+function normalizeTVItem(d, genreMap, customProvider = "series"){ return { uid: customProvider + ":" + d.id, id: d.id, provider: customProvider, title: d.name || d.original_name || "Untitled", originalTitle: d.original_name || "", aliases: [d.name,d.original_name].filter(Boolean), image: d.poster_path ? (TMDB_IMG + d.poster_path) : "", year: d.first_air_date ? d.first_air_date.slice(0,4) : "—", score: d.vote_average ? Math.round(d.vote_average * 10) / 10 : null, genres: (d.genre_ids || []).map(id => genreMap[id]).filter(Boolean), url: `https://www.themoviedb.org/tv/${d.id}`, streams: [], overview: d.overview || "", collaborators: [] }; }
 
 // No popularity re-sort on this or the TV/anime search functions below —
 // previously these all ended with .sort by raw popularity, which discarded
@@ -2245,7 +2347,11 @@ async function getLastfmArtistTags(artist){
   });
 }
 
+// Deezer search payloads may omit previews. Reject malformed, mixed-content and non-Deezer
+// media URLs rather than presenting a broken play button or trusting arbitrary media hosts.
+
 async function normalizeDeezerTrack(t) {
+  if(!t||typeof t!=="object"||!t.id||!t.title)return null;
   const imgUrl = t.album && t.album.cover_medium ? t.album.cover_medium : "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200";
   const artistName = t.artist ? t.artist.name : "Unknown Artist";
   let genres = await getDeezerAlbumGenres(t.album && t.album.id);
@@ -2263,21 +2369,34 @@ async function normalizeDeezerTrack(t) {
     url: t.link || `https://www.deezer.com/track/${t.id}`,
     streams: [{ name: "Listen on Deezer", url: t.link, logo: faviconFor("https://deezer.com") }],
     rank: t.rank || 0,
-    preview: t.preview || ""
+    preview: nexusDeezerPreviewUrl(t.preview)
   };
 }
 
+// Search diagnostics describe API payloads, not a claim that audio played successfully.
+const nexusMusicSearchAudit={query:"",received:0,valid:0,withPreview:0,withoutPreview:0,invalid:0,checkedAt:"",error:""};
+function nexusMusicAuditSummary(){
+  if(!nexusMusicSearchAudit.checkedAt)return "No Deezer search audited yet. Search for a song first.";
+  const a=nexusMusicSearchAudit;
+  return "Deezer search: "+a.valid+" valid tracks / "+a.received+" returned; "+a.withPreview+" preview URLs supplied, "+a.withoutPreview+" missing or rejected, "+a.invalid+" malformed records."+(a.error?" Search error: "+a.error:"")+" Preview URL availability does not guarantee playback.";
+}
+document.getElementById?.("nexusPreviewAudit")?.addEventListener?.("click",()=>nexusPreviewReport(nexusMusicAuditSummary(),"info"));
 async function searchMusic(query) {
-  return withCache("deezer-direct-search-v6:" + query.toLowerCase(), async () => {
+  return withCache("deezer-direct-search-v7:" + query.toLowerCase(), async () => {
     try {
       const data = await fetchDeezerAPI(`/search?q=${encodeURIComponent(query)}&limit=25`);
-      const results = data.data || [];
+      const results = Array.isArray(data?.data)?data.data:[];
       // Same reasoning as the movie/TV/anime search functions above — Deezer's
       // /search already returns results in relevance order, so this used to
       // discard that and re-rank by "rank" (a popularity/quality score) alone.
       const top = results.slice(0, 12);
-      return Promise.all(top.map(t => normalizeDeezerTrack(t)));
-    } catch (e) { return []; }
+      const normalized=(await Promise.all(top.map(t => normalizeDeezerTrack(t)))).filter(Boolean);
+      Object.assign(nexusMusicSearchAudit,{query:String(query).slice(0,100),received:results.length,valid:normalized.length,withPreview:normalized.filter(t=>!!t.preview).length,withoutPreview:normalized.filter(t=>!t.preview).length,invalid:top.length-normalized.length,checkedAt:new Date().toISOString(),error:""});
+      return normalized;
+    } catch (e) {
+      Object.assign(nexusMusicSearchAudit,{query:String(query).slice(0,100),received:0,valid:0,withPreview:0,withoutPreview:0,invalid:0,checkedAt:new Date().toISOString(),error:nexusPublicApiError(e)});
+      nexusPreviewReport("Deezer search unavailable: "+nexusPublicApiError(e),"warning"); return [];
+    }
   });
 }
 
@@ -2566,7 +2685,7 @@ function scoreSurpriseCandidate(item, profile){
 }
 
 // ---------------- POPULAR / TRENDING ----------------
-const ANILIST_TRENDING_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, sort: TRENDING_DESC) { id format title { english romaji } coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
+const ANILIST_TRENDING_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 
 async function getPopularMovies(page = 1){ const genreMap = await loadMovieGenres(); return withCache(`popular:movie:${page}`, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_KEY}&page=${page}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
 async function getPopularTVProvider(provider, page = 1){
@@ -2595,7 +2714,7 @@ async function getTVByGenreProvider(provider, genreId, page = 1){
 }
 async function getSeriesByGenre(genreId, page = 1){ return getTVByGenreProvider("series", genreId, page); }
 async function getKDramasByGenre(genreId, page = 1){ return getTVByGenreProvider("kdrama", genreId, page); }
-const ANILIST_BY_GENRE_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $genre: String, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, genre_in: [$genre], sort: TRENDING_DESC) { id format title { english romaji } coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
+const ANILIST_BY_GENRE_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $genre: String, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, genre_in: [$genre], sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 async function getAniListByGenre(provider, genreName, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`genre:${provider}:${genreName}:${page}`, async () => { try { const data = await anilistQuery(ANILIST_BY_GENRE_QUERY, { type, format_not: provider === "anime" ? "MOVIE" : null, genre: genreName, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); } catch(e) { return []; } }); }
 
 async function getPopularByMode(currentMode){
@@ -3042,6 +3161,7 @@ searchBox.addEventListener("input", (e) => {
   nexusRefreshSearchClear();
   const q = e.target.value.trim();
   clearTimeout(debounceTimer);
+  ++searchRequestSeq; // invalidate older results as soon as the query changes
   if (q.length < 2) {
     ++searchRequestSeq; // stop an older remote search replacing popular results
     loadColdStart();
@@ -3060,7 +3180,7 @@ searchBox.addEventListener("keydown", (e) => {
   if(!els.length || !searchSuggestions.classList.contains("active")) return;
   if(e.key === "ArrowDown"){ e.preventDefault(); suggestionIndex = Math.min(suggestionIndex + 1, els.length - 1); highlightSuggestion(suggestionIndex); }
   else if(e.key === "ArrowUp"){ e.preventDefault(); suggestionIndex = Math.max(suggestionIndex - 1, 0); highlightSuggestion(suggestionIndex); }
-  else if(e.key === "Enter" && suggestionIndex >= 0){ e.preventDefault(); els[suggestionIndex].dispatchEvent(new Event("mousedown")); }
+  else if(e.key === "Enter" && suggestionIndex >= 0){ e.preventDefault(); const idx=Number(els[suggestionIndex].dataset.idx);const item=nexusSuggestionItems[idx];if(item){hideSuggestions();openDetailModal(item.uid);} }
   else if(e.key === "Escape"){ hideSuggestions(); }
 });
 
@@ -3092,20 +3212,21 @@ async function runSearch(query){
   // front; if the global sequence has moved on by the time an await returns,
   // this call's result is stale and must not touch the DOM.
   const myToken = ++searchRequestSeq;
+  const searchMode = mode;
   searchSpinner.classList.add("active");
-  try { 
-    let items = await searchByMode(mode, query); 
-    if (myToken !== searchRequestSeq) return;
+  try {
+    let items = await searchByMode(searchMode, query); 
+    if (myToken !== searchRequestSeq || searchMode !== mode) return;
     items = await resolveOngoingFlags(items);
-    if (myToken !== searchRequestSeq) return;
+    if (myToken !== searchRequestSeq || searchMode !== mode) return;
     indexItems(items);
     const byUid = new Map(items.map(i => [i.uid, i]));
     localSearch(query, 20).forEach(i => { if(!byUid.has(i.uid)) byUid.set(i.uid, i); });
-    items = [...byUid.values()];
+    items = nexusRankSearchResults([...byUid.values()],query);
     renderSearchResults(items); 
     renderSuggestions(currentPoolItems.slice(0, 6));
   } catch(err) { 
-    if (myToken !== searchRequestSeq) return;
+    if (myToken !== searchRequestSeq || searchMode !== mode) return;
     const localMatches = localSearch(query, 20);
     if(localMatches.length){ renderSearchResults(localMatches); renderSuggestions(currentPoolItems.slice(0, 6)); }
     else {
@@ -3124,16 +3245,20 @@ async function runSearch(query){
 
 let suggestionIndex = -1;
 function hideSuggestions(){ searchSuggestions.classList.remove("active"); searchSuggestions.innerHTML = ""; suggestionIndex = -1; }
+let nexusSuggestionItems=[];
 function renderSuggestions(items){
+  nexusSuggestionItems=items;
+  indexItems(items);
   if(!items.length){ hideSuggestions(); return; }
   suggestionIndex = -1;
   searchSuggestions.innerHTML = items.map((item, i) => {
     const meta = item.provider === "music" ? (item.artist || "") : `${item.year}${item.score ? " · ★" + item.score : ""}`;
     const isSelected = selected.has(item.uid);
-    return `<div class="suggestion-item" data-idx="${i}" title="${escapeHtml(item.title)}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;"><div class="suggestion-text"><div class="suggestion-title">${escapeHtml(item.title)}</div><div class="suggestion-meta">${escapeHtml(meta)}</div></div>${isSelected ? '<span class="suggestion-check">✓</span>' : ''}</div>`;
+    return `<div class="suggestion-item" role="option" aria-selected="false" tabindex="-1" data-idx="${i}" title="View details: ${escapeHtml(item.title)}"><img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;"><div class="suggestion-text"><div class="suggestion-title">${escapeHtml(item.title)}</div><div class="suggestion-meta">${escapeHtml(meta)}</div></div>${isSelected ? '<span class="suggestion-check">✓</span>' : ''}<span class="nexus-suggestion-open">Details ↗</span></div>`;
   }).join("");
   searchSuggestions.querySelectorAll(".suggestion-item").forEach(el => {
-    el.addEventListener("mousedown", (e) => { e.preventDefault(); const i = parseInt(el.dataset.idx); toggleSelect(items[i]); hideSuggestions(); });
+    const open = (e) => { e.preventDefault(); const i = Number(el.dataset.idx); const item=items[i]; if(!item)return; hideSuggestions(); openDetailModal(item.uid); };
+    el.addEventListener("click",open);
   });
   searchSuggestions.classList.add("active");
 }
@@ -3146,7 +3271,7 @@ function highlightSuggestion(idx){
 // ⚡ ปรับปรุงฟังก์ชัน Render: แยกแยะเงื่อนไขการแกะ Meta Content ระหว่างช่วงค้นหาสด และการเปิดรับหน้า Popular ตอน Cold Start เพื่อป้องกันสคริปต์บั๊ก
 function applyModernFilter(items){
   return items.filter(item => {
-    if (mode === "music" || !STRICT_MODERN_MODE) return true;
+    if (searchBox.value.trim() || mode === "music" || !STRICT_MODERN_MODE) return true;
     if (item.isOngoing) return true;
     const y = parseInt(item.year);
     return isNaN(y) || y >= START_YEAR_CUTOFF;
@@ -3257,38 +3382,50 @@ function levenshtein(a, b){
 }
 
 function localSearch(query, limit = 6){
-  const q = query.toLowerCase();
-  const scored = [];
-  titleIndex.forEach(item => {
-    if (item.provider !== mode) return;
-    const title = item.title.toLowerCase();
-    const idx = title.indexOf(q);
-    if (idx === -1) return;
-    // Plain substring matching used to treat "starts with the query", "a word
-    // inside the title starts with it", and "query appears mid-word" all the
-    // same, ordered only by whatever happened to be indexed first. Rank those
-    // three tiers explicitly so the closest match actually surfaces first.
-    const rank = idx === 0 ? 0 : (title[idx - 1] === " " ? 1 : 2);
-    scored.push({ item, rank, idx });
+  const q=nexusNormalizeSearch(query);
+  if(!q)return [];
+  const scored=[];
+  titleIndex.forEach(item=>{
+    if(item.provider!==mode)return;
+    const rank=nexusSearchRank(item,q);
+    if(rank>0)scored.push({item,rank});
   });
-  // Typo fallback: only kicks in when literal substring matching found
-  // nothing, so it adds no cost on the common path. Compares the query
-  // against each word of each title rather than the whole title, since a
-  // typo'd short word ("intersteller") should still match "Interstellar"
-  // even inside a longer title.
-  if (scored.length === 0 && q.length >= 3) {
-    const threshold = q.length <= 4 ? 1 : 2;
-    titleIndex.forEach(item => {
-      if (item.provider !== mode) return;
-      const words = item.title.toLowerCase().split(/\s+/).filter(Boolean);
-      const bestDist = Math.min(...words.map(w => levenshtein(q, w)));
-      if (bestDist <= threshold) scored.push({ item, rank: 3, idx: bestDist });
+  if(!scored.length&&q.length>=3){
+    const threshold=q.length<=4?1:2;
+    titleIndex.forEach(item=>{
+      if(item.provider!==mode)return;
+      const aliases=[item.title,item.originalTitle,...(Array.isArray(item.aliases)?item.aliases:[])];
+      const words=aliases.flatMap(v=>nexusNormalizeSearch(v).split(" ")).filter(w=>w&&Math.abs(w.length-q.length)<=threshold);
+      if(words.some(w=>levenshtein(q,w)<=threshold))scored.push({item,rank:100});
     });
   }
-  scored.sort((a, b) => a.rank - b.rank || a.idx - b.idx || (b.item.score || 0) - (a.item.score || 0));
-  return scored.slice(0, limit).map(s => s.item);
+  scored.sort((a,b)=>b.rank-a.rank||(Number(b.item.score)||0)-(Number(a.item.score)||0));
+  return scored.slice(0,limit).map(x=>x.item);
 }
-
+function nexusNormalizeSearch(text){
+  return String(text||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim();
+}
+function nexusSearchRank(item,query){
+  const q=nexusNormalizeSearch(query);
+  if(!q)return 0;
+  const titles=[item.title,item.originalTitle,...(Array.isArray(item.aliases)?item.aliases:[])].map(nexusNormalizeSearch).filter(Boolean);
+  let best=0;
+  for(const title of titles){
+    if(title===q)best=Math.max(best,1000);
+    else if(title.startsWith(q))best=Math.max(best,850);
+    else if(title.split(" ").some(word=>word===q))best=Math.max(best,750);
+    else if(title.includes(" "+q))best=Math.max(best,650);
+    else if(title.includes(q))best=Math.max(best,500);
+  }
+  const artist=nexusNormalizeSearch(item.artist||"");
+  if(artist===q)best=Math.max(best,400);
+  else if(artist.includes(q))best=Math.max(best,250);
+  return best;
+}
+function nexusRankSearchResults(items,query){
+  return items.map((item,index)=>({item,index,rank:nexusSearchRank(item,query)}))
+    .sort((a,b)=>b.rank-a.rank||a.index-b.index).map(entry=>entry.item);
+}
 function renderSearchResults(items, isPopular, isLoadMore = false){
   if(!isLoadMore){
     nexusDiscoverRawItems = Array.isArray(items) ? items : [];
@@ -3301,7 +3438,7 @@ function renderSearchResults(items, isPopular, isLoadMore = false){
     document.getElementById("nexusDiscoverYear").value !== "all" ||
     document.getElementById("nexusDiscoverSort").value !== "default" ||
     (document.getElementById("nexusDiscoverHideDisliked").checked && nexusDiscoverRawItems.some(i => votedDislikes.has(i.uid)));
-  poolCount.textContent = `${currentPoolItems.length} shown${hasFilters ? " · filtered" : ""}${isPopular ? " · Popular" : ""}`; 
+  poolCount.textContent = `${currentPoolItems.length} shown${hasFilters ? " · filtered (reset filters to see more)" : ""}${isPopular ? " · Popular" : ""}`; 
   poolGrid.innerHTML = "";
   if(visibleItems.length===0){
     poolGrid.innerHTML = "";
@@ -3328,7 +3465,7 @@ function renderSearchResults(items, isPopular, isLoadMore = false){
     const isSelected = selected.has(item.uid); const hasLiked = votedLikes.has(item.uid); const hasDisliked = votedDislikes.has(item.uid);
     const el = document.createElement("div");
     el.className = "pool-item" + (isSelected ? " selected" : ""); el.setAttribute("data-uid", item.uid);
-    el.setAttribute("role", "button"); el.setAttribute("tabindex", "0"); el.setAttribute("aria-pressed", String(isSelected));
+    el.setAttribute("role", "group"); el.removeAttribute("tabindex");
     let label = item.provider; if (item.provider === "series") label = "TV Series"; else if (item.provider === "kdrama") label = "K-Drama"; else if (item.provider === "music") label = "Music Track";
     
     let metaContent = `${label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
@@ -3345,12 +3482,14 @@ function renderSearchResults(items, isPopular, isLoadMore = false){
     // results grid (ticket cards) — search results, popular browsing, and
     // Surprise Me all used this pool-item card instead, which had no way to
     // listen at all until you'd already gone through "find similar" once.
-    const poolAudioBtn = (item.provider === "music" && item.preview) ? `<button type="button" class="action-btn audio-preview-btn" onclick="event.stopPropagation(); togglePreview('${item.preview}', this, '${item.url}')" aria-label="Preview ${escapeHtml(item.title)}">▶</button>` : "";
-    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><div class="p-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><div class="p-check">✓</div></div>`;
+    const poolAudioBtn = (item.provider === "music" && item.preview) ? `<button type="button" class="action-btn audio-preview-btn" onclick="event.stopPropagation(); togglePreview(decodeURIComponent('${encodeURIComponent(item.preview)}'), this, decodeURIComponent('${encodeURIComponent(item.url)}'))" aria-label="Preview ${escapeHtml(item.title)}">▶</button>` : "";
+    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><button type="button" class="p-title nexus-search-detail-title${item.provider === "music" ? " music-title" : ""}" title="View details for ${escapeHtml(item.title)}" aria-label="View details for ${escapeHtml(item.title)}">${escapeHtml(item.title)}</button><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><button type="button" class="nexus-search-select" aria-label="${isSelected ? 'Remove' : 'Add'} ${escapeHtml(item.title)} ${isSelected ? 'from' : 'to'} selection" aria-pressed="${isSelected}">${isSelected ? '✓ Selected' : '+ Select'}</button><div class="p-check">✓</div></div>`;
+    el.querySelector(".nexus-search-detail-title")?.addEventListener("click",e=>{e.stopPropagation();openDetailModal(item.uid);});
     el.querySelector('[data-action="like"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'like'); refreshPoolCardVoteState(item); });
     el.querySelector('[data-action="dislike"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'dislike'); refreshPoolCardVoteState(item); });
-    el.addEventListener("click", ()=> toggleSelect(item));
-    el.addEventListener("keydown", (e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSelect(item); } });
+    el.querySelector(".nexus-search-select")?.addEventListener("click",e=>{e.stopPropagation();toggleSelect(item);const btn=e.currentTarget;const on=selected.has(item.uid);btn.textContent=on?"✓ Selected":"+ Select";btn.setAttribute("aria-pressed",String(on));btn.setAttribute("aria-label",(on?"Remove ":"Add ")+item.title+(on?" from selection":" to selection"));});
+    el.addEventListener("click", ()=> openDetailModal(item.uid));
+    el.addEventListener("keydown", (e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetailModal(item.uid); } });
     fragment.appendChild(el);
   });
   poolGrid.appendChild(fragment);
@@ -3392,7 +3531,12 @@ function toggleSelect(item){
   }
   if (capHint) capHint.textContent = "";
   const targetBtn = poolGrid.querySelector(`[data-uid="${item.uid}"]`);
-  if(targetBtn) { targetBtn.classList.toggle("selected", selected.has(item.uid)); targetBtn.setAttribute("aria-pressed", String(selected.has(item.uid))); }
+  if(targetBtn) {
+    const isSelected=selected.has(item.uid);
+    targetBtn.classList.toggle("selected",isSelected);
+    const selectBtn=targetBtn.querySelector(".nexus-search-select");
+    if(selectBtn){selectBtn.textContent=isSelected?"✓ Selected":"+ Select";selectBtn.setAttribute("aria-pressed",String(isSelected));selectBtn.setAttribute("aria-label",(isSelected?"Remove ":"Add ")+item.title+(isSelected?" from selection":" to selection"));}
+  }
   renderSelectedStrip(); saveState(); renderAnalytics(); resultsSection.style.display = "none";
 }
 
@@ -3422,7 +3566,7 @@ function toggleLikedMasterpiece(item) {
   saveState(); renderRatings(); renderAnalytics(); computeRecommendations();
 }
 
-clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); b.setAttribute("aria-pressed", "false"); }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
+clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
 const SURPRISE_PICK_COUNT = 9;
 const SURPRISE_RECENT_LIMIT = 45;
@@ -3616,7 +3760,7 @@ function renderResults(ranked, totalPicks){
 
     let audioPlayerHtml = "";
     if (item.provider === "music" && item.preview) {
-      audioPlayerHtml = `<button class="audio-preview-btn" onclick="togglePreview('${item.preview}', this, '${item.url}')">▶</button>`;
+      audioPlayerHtml = `<button type="button" class="audio-preview-btn" aria-label="Play song preview" onclick="togglePreview(decodeURIComponent('${encodeURIComponent(item.preview)}'), this, decodeURIComponent('${encodeURIComponent(item.url)}'))">▶</button>`;
     }
 
     const card = document.createElement("div"); card.className = "ticket";
@@ -3665,7 +3809,7 @@ async function getDetailExtras(item){
     }
     if (item.provider === "anime" || item.provider === "manga") {
       return withCache(`detail-extras-anilist-airing-v2:${item.provider}:${item.id}:${Math.floor(Date.now()/300000)}`, async () => {
-        const query = `query($id:Int){ Media(id:$id){ startDate{year month day} endDate{year month day} episodes status nextAiringEpisode{episode airingAt timeUntilAiring} airingSchedule(page:1,perPage:50){pageInfo{hasNextPage} nodes{episode airingAt}} trailer{ id site } bannerImage staff(sort:RELEVANCE, perPage:6){ edges{ role node{ name{full} image{medium} } } } characters(sort:ROLE, perPage:8){ edges{ voiceActors(language:JAPANESE, sort:RELEVANCE){ name{full} image{medium} } node{ name{full} image{medium} } } } } }`;
+        const query = `query($id:Int){ Media(id:$id){ startDate{year month day} endDate{year month day} format chapters volumes episodes status nextAiringEpisode{episode airingAt timeUntilAiring} airingSchedule(page:1,perPage:50){pageInfo{hasNextPage} nodes{episode airingAt}} trailer{ id site } bannerImage staff(sort:RELEVANCE, perPage:6){ edges{ role node{ name{full} image{medium} } } } characters(sort:ROLE, perPage:8){ edges{ voiceActors(language:JAPANESE, sort:RELEVANCE){ name{full} image{medium} } node{ name{full} image{medium} } } } } }`;
         const data = await anilistQuery(query, { id: item.id });
         const m = data && data.data && data.data.Media;
         if (!m) return { trailerUrl: null, trailerWatchUrl: null, cast: [], backdrop: null };
@@ -3693,6 +3837,7 @@ async function getDetailExtras(item){
           return { name: e.node && e.node.name && e.node.name.full, photo: e.node && e.node.image && e.node.image.medium, role: va ? va.name.full + " (VA)" : null };
         }).filter(c => c.name);
         return { trailerUrl, trailerWatchUrl, cast, backdrop: m.bannerImage || null,
+          manga: item.provider === "manga" ? {format:m.format,chapters:m.chapters,volumes:m.volumes,status:m.status,startDate:m.startDate,endDate:m.endDate,staff:(m.staff?.edges||[]).map(e=>({name:e.node?.name?.full,role:e.role})).filter(e=>e.name).slice(0,6)} : null,
           airing: item.provider === "anime" ? { startDate:m.startDate, endDate:m.endDate, episodes:m.episodes, status:m.status, next:m.nextAiringEpisode, schedule, hasMoreSchedule, fetchedAt:Date.now() } : null };
       });
     }
@@ -3706,7 +3851,16 @@ function extractTmdbDetailExtras(data){
   const trailerWatchUrl = trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
   const cast = ((data.credits && data.credits.cast) || []).slice(0, 8).map(c => ({ name: c.name, photo: c.profile_path ? `https://image.tmdb.org/t/p/w185${c.profile_path}` : null, role: c.character || null }));
   const backdrop = data.backdrop_path ? `https://image.tmdb.org/t/p/w1280${data.backdrop_path}` : null;
-  return { trailerUrl, trailerWatchUrl, cast, backdrop };
+  return { trailerUrl, trailerWatchUrl, cast, backdrop,
+    tmdb: {
+      seasons:Number.isSafeInteger(data.number_of_seasons)?data.number_of_seasons:null,
+      episodes:Number.isSafeInteger(data.number_of_episodes)?data.number_of_episodes:null,
+      seasonBreakdown:Array.isArray(data.seasons)?data.seasons.filter(season=>Number.isSafeInteger(season.season_number)&&season.season_number>0&&Number.isSafeInteger(season.episode_count)&&season.episode_count>0).map(season=>({number:season.season_number,episodes:season.episode_count})).sort((a,b)=>a.number-b.number):[],
+      runtime:Number.isSafeInteger(data.runtime)?data.runtime:(Array.isArray(data.episode_run_time)?data.episode_run_time.find(n=>Number.isSafeInteger(n)&&n>0):null),
+      firstAirDate:data.first_air_date||null,lastAirDate:data.last_air_date||null,
+      releaseDate:data.release_date||null,status:data.status||null
+    }
+  };
 }
 // A concrete, specific answer to "why might I like/dislike this" — built
 // entirely from data already sitting in memory (no extra fetches beyond the
@@ -3881,6 +4035,57 @@ function buildAnimeAiringHtml(item, airing){
   const weekCalendar = buildAnimeWeekCalendarHtml(item, airing);
   return `<section class="nexus-airing" aria-label="Anime broadcast details"><h3>Broadcast schedule</h3>${lines.join("")}${weekCalendar}<small>Source: AniList · Episode dates are reported broadcast times, not streaming availability. Up to 150 schedule entries are requested; some episodes may be missing. Countdown is calculated when details open. Times follow your device's time zone.</small></section>`;
 }
+// NEXUS 8.0: provider-aware detail facts; never substitute anime episodes for manga chapters.
+function nexusPublicationDate(parts){
+  if(!parts||!Number.isInteger(parts.year))return "Not announced";
+  const y=String(parts.year),m=Number.isInteger(parts.month)&&parts.month>=1&&parts.month<=12?String(parts.month).padStart(2,"0"):null;
+  const d=m&&Number.isInteger(parts.day)&&parts.day>=1&&parts.day<=31?String(parts.day).padStart(2,"0"):null;
+  return [y,m,d].filter(Boolean).join("-");
+}
+function nexusDetailFactsHtml(item,extras){
+  if(item.provider!=="manga" && item.provider!=="anime" && item.provider!=="movie" && item.provider!=="series" && item.provider!=="kdrama" && item.provider!=="music")return "";
+  const rows=[];
+  const add=(name,value)=>{if(value!==null&&value!==undefined&&String(value).trim()!=="")rows.push(`<div class="nexus-fact"><dt>${escapeHtml(name)}</dt><dd>${escapeHtml(String(value))}</dd></div>`);};
+  if(item.provider==="manga"){
+    const m=extras.manga;
+    add("Format",m?.format?.replaceAll("_"," ")||"Not confirmed");
+    add("Publication status",m?.status?.replaceAll("_"," ")||"Not confirmed");
+    add("Chapters",Number.isSafeInteger(m?.chapters)&&m.chapters>0?m.chapters:"Not confirmed");
+    add("Volumes",Number.isSafeInteger(m?.volumes)&&m.volumes>0?m.volumes:"Not confirmed");
+    add("First published",nexusPublicationDate(m?.startDate));
+    add("Last published",nexusPublicationDate(m?.endDate));
+    if(m?.staff?.length){
+      const roles=m.staff.map(x=>({name:x.name,role:x.role||"Contributor"}));
+      const writers=roles.filter(x=>/story|writer|author|script/i.test(x.role));
+      const artists=roles.filter(x=>/art|illustrat|draw/i.test(x.role));
+      if(writers.length)add("Writers",writers.map(x=>x.name).join(" · "));
+      if(artists.length)add("Artists",artists.map(x=>x.name).join(" · "));
+      add("Creators / staff",roles.map(x=>x.name+" ("+x.role+")").join(" · "));
+    }
+  }else if(item.provider==="anime"){
+    add("Category","Anime");add("First aired",nexusPublicationDate(extras.airing?.startDate));
+    add("Status",extras.airing?.status?.replaceAll("_"," ")||"Not confirmed");
+    add("Total episodes",Number.isSafeInteger(extras.airing?.episodes)&&extras.airing.episodes>0?extras.airing.episodes:"Not confirmed");
+  }else if(item.provider==="music"){
+    add("Artist",item.artist||"Not available");add("Release year",item.year&&item.year!=="—"?item.year:"Not available");
+    add("Preview",item.preview?"Sample available; playback depends on browser and source":"No sample provided by Deezer");
+  }else{
+    add("Category",item.provider==="movie"?"Movie":item.provider==="kdrama"?"K-Drama":"TV series");
+    add("Release year",item.year&&item.year!=="—"?item.year:"Not available");
+    if(item.provider==="series"||item.provider==="kdrama"){
+      add("Seasons",Number.isSafeInteger(extras.tmdb?.seasons)?extras.tmdb.seasons:"Not confirmed");
+      add("Episodes",Number.isSafeInteger(extras.tmdb?.episodes)?extras.tmdb.episodes:"Not confirmed");
+      if(extras.tmdb?.firstAirDate)add("First aired",extras.tmdb.firstAirDate);
+      if(extras.tmdb?.lastAirDate)add("Last aired",extras.tmdb.lastAirDate);
+      if(extras.tmdb?.status)add("Series status",extras.tmdb.status);
+    }else if(item.provider==="movie"){
+      if(extras.tmdb?.releaseDate)add("Release date",extras.tmdb.releaseDate);
+      if(extras.tmdb?.runtime)add("Runtime",extras.tmdb.runtime+" min");
+    }
+  }
+  if(item.score!==null&&item.score!==undefined)add("Rating",item.score);
+  return `<section class="nexus-detail-facts" aria-label="${escapeHtml(item.provider)} information"><h3>${item.provider==="manga"?"Manga publication details":"Title information"}</h3><dl>${rows.join("")}</dl><small>Source: ${item.provider==="manga"||item.provider==="anime"?"AniList":item.provider==="music"?"Deezer":"TMDB"}. Unknown values are not estimated.</small></section>`;
+}
 function buildDetailModalHtml(item, extras){
   const backdrop = extras.backdrop || item.image;
   const castHtml = extras.cast.length ? `<div class="detail-cast-row">${extras.cast.map(c => `<div class="detail-cast-item">${c.photo ? `<img src="${escapeHtml(c.photo)}" alt="${escapeHtml(c.name || "")}" loading="lazy">` : `<div class="detail-cast-photo-fallback"></div>`}<span class="detail-cast-name">${escapeHtml(c.name || "")}</span>${c.role ? `<span class="detail-cast-role">${escapeHtml(c.role)}</span>` : ""}</div>`).join("")}</div>` : "";
@@ -3913,9 +4118,10 @@ function buildDetailModalHtml(item, extras){
   </div>`;
   const tasteConnectionHtml = buildTasteConnectionHtml(item);
   const airingHtml = buildAnimeAiringHtml(item, extras.airing);
-  const episodeProgressHtml = nexusEpisodeProgressHtml(item);
+  const factsHtml = nexusDetailFactsHtml(item,extras);
+  const episodeProgressHtml = nexusEpisodeProgressHtml(item)+nexusMangaProgressHtml(item)+nexusSeriesProgressHtml(item)+nexusProgressMeterHtml(item)+nexusSeriesSeasonHtml(item,extras);
 
-  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}<div data-detail-episode-progress>${episodeProgressHtml}</div>${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
+  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${factsHtml}<div data-detail-episode-progress>${episodeProgressHtml}</div>${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
 }
 // titleIndex (populated by indexItems, see below) is the shared lookup so the
 // modal can be opened from a plain uid string in an inline onclick handler —
@@ -3945,7 +4151,7 @@ function refreshDetailModalActions(item){
       : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
   }
   const episodeProgress = detailModalBody.querySelector("[data-detail-episode-progress]");
-  if(episodeProgress){episodeProgress.innerHTML=nexusEpisodeProgressHtml(item);nexusWireEpisodeProgress(episodeProgress,item);}
+  if(episodeProgress){episodeProgress.innerHTML=nexusEpisodeProgressHtml(item)+nexusMangaProgressHtml(item)+nexusSeriesProgressHtml(item)+nexusProgressMeterHtml(item);nexusWireEpisodeProgress(episodeProgress,item);nexusWireMangaProgress(episodeProgress,item);nexusWireSeriesProgress(episodeProgress,item);}
   detailModalBody.querySelectorAll("[data-airing-saved]").forEach(badge=>{badge.hidden = !isInWatchlist;});
   // Liking/disliking this item can't change ITS OWN overlap with your other
   // liked/disliked titles, but liking/disliking something else while this
@@ -4019,6 +4225,8 @@ async function openDetailModal(uid, onBack){
     return;
   }
   if (detailModal.style.display === "none" || detailRequestId !== nexusDetailRequestId) return; // stale or closed request
+  if(["series","kdrama"].includes(item.provider)&&Number.isSafeInteger(extras.tmdb?.episodes)&&extras.tmdb.episodes>0){item.episodes=extras.tmdb.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
+  if(item.provider === "manga" && Number.isSafeInteger(extras.manga?.chapters) && extras.manga.chapters>0){item.chapters=extras.manga.chapters;const saved=watchlist.get(item.uid);if(saved)saved.chapters=item.chapters;}
   if(item.provider === "anime" && Number.isSafeInteger(extras.airing?.episodes) && extras.airing.episodes > 0){item.episodes=extras.airing.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
   const backBtnHtml = onBack ? `<button type="button" class="detail-back-btn" id="detailBackBtn">← Back to Taste Map</button>` : "";
   detailModalBody.innerHTML = backBtnHtml + buildDetailModalHtml(item, extras);
@@ -4030,6 +4238,9 @@ async function openDetailModal(uid, onBack){
   if (dislikeBtn) dislikeBtn.addEventListener("click", () => { handleVote(item, 'dislike'); refreshDetailModalActions(item); });
   if (watchBtn) watchBtn.addEventListener("click", () => { handleWatchlist(item); refreshDetailModalActions(item); });
   nexusWireEpisodeProgress(detailModalBody.querySelector("[data-detail-episode-progress]"),item);
+  nexusWireMangaProgress(detailModalBody.querySelector("[data-detail-episode-progress]"),item);
+  nexusWireSeriesProgress(detailModalBody.querySelector("[data-detail-episode-progress]"),item);
+  nexusWireSeasonProgress(detailModalBody.querySelector("[data-detail-episode-progress]"),item,extras);
   nexusWireTimeline(item);
   nexusRefreshTimelineProgress(item);
   const calendarBtn = detailModalBody.querySelector('[data-action="export-episode"]');
@@ -4083,62 +4294,196 @@ function wireHoverPreview(container){
   });
 }
 
-function togglePreview(url, btn, fallbackUrl) {
-  // Deezer's preview CDN sometimes hands back a plain http:// link; loading
-  // that from this https:// page gets silently blocked as mixed content —
-  // same symptom as every other failure mode here (button flips to
-  // "playing", total silence, nothing in the console a user would ever see).
-  // The CDN serves https fine, so just force it.
-  const safeUrl = url.startsWith("http://") ? "https://" + url.slice(7) : url;
-  if (currentAudio && currentAudio.src === safeUrl) {
-    if (currentAudio.paused) {
-      currentAudio.play().catch(() => handlePreviewFailure(btn, fallbackUrl));
-      btn.textContent = "⏸"; btn.classList.add("playing");
-    } else {
-      currentAudio.pause();
-      btn.textContent = "▶"; btn.classList.remove("playing");
-    }
-  } else {
-    stopPreview();
-    currentAudio = new Audio(safeUrl);
-    btn.textContent = "⏸"; btn.classList.add("playing");
-    // play() returns a promise that rejects on autoplay-policy blocks or the
-    // browser refusing a blocked/unsupported response — this was never
-    // checked before, so a failure here left the button stuck showing
-    // "playing" with no sound and no indication anything went wrong.
-    currentAudio.play().catch(() => handlePreviewFailure(btn, fallbackUrl));
-    currentAudio.onended = () => { btn.textContent = "▶"; btn.classList.remove("playing"); };
-    // Covers network failures, a 403 from hotlink protection, or any other
-    // case where the audio element itself reports an error after play()
-    // already resolved (or was never rejected) — the promise rejection above
-    // alone doesn't catch every failure mode.
-    currentAudio.onerror = () => handlePreviewFailure(btn, fallbackUrl);
-  }
+// NEXUS 7.3: never display a playing state until the media element confirms playback.
+let nexusPreviewAttempt=0;
+const NEXUS_PREVIEW_TIMEOUT_MS=12000;
+const nexusPreviewDiagnostics={attempts:0,played:0,failures:0,lastError:"",lastChecked:""};
+function nexusPreviewReport(message,kind="info"){
+  const panel=document.getElementById?.("nexusPreviewDiagnostics");
+  if(panel){panel.textContent=message;panel.dataset.state=kind;}
+}
+function nexusPreviewErrorCode(error){
+  if(error?.message==="No preview clip available")return "NO_CLIP";
+  if(error?.message==="Preview timed out")return "TIMEOUT";
+  if(error?.name==="NotAllowedError")return "BROWSER_BLOCK";
+  if(error?.name==="NotSupportedError")return "UNSUPPORTED";
+  if(error?.name==="AbortError")return "INTERRUPTED";
+  if(error?.name==="SecurityError")return "SECURITY";
+  if(error?.name==="EncodingError")return "DECODE_ERROR";
+  if(error?.mediaErrorCode===1)return "MEDIA_ABORTED";
+  if(error?.mediaErrorCode===2)return "NETWORK_OR_MEDIA";
+  if(error?.mediaErrorCode===3)return "DECODE_ERROR";
+  if(error?.mediaErrorCode===4)return "UNSUPPORTED";
+  return "NETWORK_OR_MEDIA";
 }
 
-// Deezer has been reported (independently of this app) to sometimes block or
-// strip CORS headers from third-party embeds of its 30s preview clips — when
-// that's what's happening, no amount of client-side fixing here restores
-// in-page playback. "Open in Deezer" is the practical fallback: the track
-// page always works since it's first-party, even when the embedded clip
-// doesn't.
-function handlePreviewFailure(btn, fallbackUrl){
-  if (btn) { btn.textContent = "▶"; btn.classList.remove("playing"); }
-  currentAudio = null;
-  if (fallbackUrl) {
-    showToast("Couldn't play preview here — Deezer may be blocking it for embedded playback", () => window.open(fallbackUrl, "_blank"), "Open in Deezer");
-  } else {
-    showToast("Couldn't play preview — Deezer may be blocking or rate-limiting this track");
+function nexusPreviewFailureReason(error){
+  const name=String(error?.name||"");
+  if(error?.message==="No preview clip available")return "Deezer did not provide a valid preview for this track. Open it in Deezer.";
+  if(error?.message==="Preview timed out")return "Preview took too long to start. Try again or open Deezer.";
+  if(name==="NotAllowedError")return "Your browser blocked autoplay. Tap Play again or open Deezer.";
+  if(name==="NotSupportedError")return "This preview format is unavailable in your browser.";
+  if(name==="AbortError")return "The preview was interrupted. Try playing again.";
+  if(name==="SecurityError")return "This browser or media source restricted playback.";
+  if(name==="EncodingError"||error?.mediaErrorCode===3)return "The browser could not decode this audio preview.";
+  if(error?.mediaErrorCode===4)return "The audio source or format is not supported.";
+  if(error?.mediaErrorCode===2)return "Network error while loading audio. Check your connection and retry.";
+  return "The audio preview could not be loaded. Check your connection or open Deezer.";
+}
+
+function nexusDeezerPreviewUrl(raw){
+  if(typeof raw!=="string"||!raw.trim())return "";
+  try{
+    const url=new URL(raw);
+    if(url.protocol!=="https:"||url.username||url.password)return "";
+    const host=url.hostname.toLowerCase();
+    if(host!=="dzcdn.net"&&!host.endsWith(".dzcdn.net")&&host!=="deezer.com"&&!host.endsWith(".deezer.com"))return "";
+    return url.href;
+  }catch(_){return "";}
+}
+function nexusSafePreviewUrl(raw){
+  try { const url=new URL(String(raw||""),location.href); if(url.protocol!=="https:"&&url.protocol!=="http:")return ""; url.protocol="https:";return url.href; } catch(e){return "";}
+}
+function nexusSafeMusicLink(raw){
+  try {const url=new URL(String(raw||""),location.href);return url.protocol==="https:"||url.protocol==="http:"?url.href:"";}catch(e){return "";}
+}
+let nexusPreviewLastFailed=null;
+let nexusPreviewProgressTimer=null;
+const nexusPreviewAudioSettings={volume:1,muted:false};
+function nexusPreviewApplyAudioSettings(audio){
+  if(!audio)return;
+  audio.volume=nexusPreviewAudioSettings.volume;
+  audio.muted=nexusPreviewAudioSettings.muted;
+}
+function nexusPreviewSyncMuteButton(){
+  const button=document.getElementById?.("nexusPreviewMute");
+  if(button){button.textContent=nexusPreviewAudioSettings.muted?"🔇":"🔊";button.setAttribute("aria-pressed",String(nexusPreviewAudioSettings.muted));button.setAttribute("aria-label",nexusPreviewAudioSettings.muted?"Unmute music preview":"Mute music preview");}
+}
+document.getElementById?.("nexusPreviewVolume")?.addEventListener?.("input",event=>{
+  const value=Number(event.target.value);
+  if(!Number.isFinite(value))return;
+  nexusPreviewAudioSettings.volume=Math.max(0,Math.min(1,value));
+  nexusPreviewAudioSettings.muted=nexusPreviewAudioSettings.volume===0;
+  nexusPreviewApplyAudioSettings(currentAudio);
+  nexusPreviewSyncMuteButton();
+});
+document.getElementById?.("nexusPreviewMute")?.addEventListener?.("click",()=>{
+  nexusPreviewAudioSettings.muted=!nexusPreviewAudioSettings.muted;
+  nexusPreviewApplyAudioSettings(currentAudio);
+  nexusPreviewSyncMuteButton();
+});
+function nexusPreviewProgressStop(){
+  if(nexusPreviewProgressTimer!==null){if(typeof clearInterval==="function")clearInterval(nexusPreviewProgressTimer);nexusPreviewProgressTimer=null;}
+}
+function nexusPreviewProgressUpdate(audio){
+  const panel=document.getElementById?.("nexusPreviewProgress");
+  if(!panel||audio!==currentAudio)return;
+  const elapsed=Number.isFinite(audio.currentTime)?audio.currentTime:0;
+  const duration=Number.isFinite(audio.duration)&&audio.duration>0?audio.duration:0;
+  const bar=panel.querySelector("#nexusPreviewSeek"),label=panel.querySelector("span");
+  if(bar){bar.disabled=!duration;bar.max=duration||1;if(!bar.matches(":active")&&document.activeElement!==bar)bar.value=Math.min(elapsed,duration||1);}
+  if(label){const fmt=n=>Math.floor(n/60)+":"+String(Math.floor(n%60)).padStart(2,"0");label.textContent=fmt(elapsed)+" / "+(duration?fmt(duration):"—");}
+}
+document.getElementById?.("nexusPreviewSeek")?.addEventListener?.("input",event=>{
+  const audio=currentAudio;
+  if(!audio||!Number.isFinite(audio.duration)||audio.duration<=0 )return;
+  const target=Number(event.target.value);
+  if(Number.isFinite(target)&&target>=0&&target<=audio.duration){
+    try{audio.currentTime=target;nexusPreviewProgressUpdate(audio);}catch(e){nexusPreviewReport("Seeking unavailable for this preview","error");}
   }
+});
+function nexusPreviewProgressStart(audio){
+  nexusPreviewProgressStop();
+  const panel=document.getElementById?.("nexusPreviewProgress");
+  if(panel)panel.hidden=false;
+  nexusPreviewProgressUpdate(audio);
+  if(typeof setInterval==="function")nexusPreviewProgressTimer=setInterval(()=>nexusPreviewProgressUpdate(audio),500);
+}
+document.getElementById?.("nexusPreviewHelp")?.addEventListener?.("click",()=>{
+  nexusPreviewReport("If preview fails: check your connection and sound, try another track, then use the song's external link. Some Deezer tracks have no playable 30-second clip or are restricted by region/browser. Error codes are browser-reported, not a live API test.","info");
+});
+function nexusPreviewRetry(){
+  const pending=nexusPreviewLastFailed;
+  if(!pending||!pending.btn?.isConnected)return;
+  nexusPreviewLastFailed=null;
+  togglePreview(pending.url,pending.btn,pending.fallback);
+}
+function nexusPreviewResetButton(btn){if(btn){btn.textContent="▶";btn.classList.remove("playing");btn.removeAttribute("aria-busy");btn.setAttribute("aria-label","Play song preview");}}
+async function togglePreview(url,btn,fallbackUrl){
+  const safeUrl=nexusSafePreviewUrl(url);
+  const safeFallback=nexusSafeMusicLink(fallbackUrl);
+  if(!safeUrl||!nexusDeezerPreviewUrl(safeUrl)){handlePreviewFailure(btn,safeFallback,new Error("No preview clip available"));return;}
+  if(currentAudio && currentAudio.src===safeUrl && !currentAudio.paused){
+    stopPreview();nexusPreviewReport("Preview stopped by user", "info");return;
+  }
+  nexusPreviewLastFailed=null;
+  nexusPreviewDiagnostics.attempts++;
+  nexusPreviewDiagnostics.lastChecked=new Date().toLocaleTimeString();
+  const switching=Boolean(currentAudio);
+  stopPreview();
+  nexusPreviewReport(switching?"Switching preview…":"Checking music preview…", "loading");
+  const attempt=++nexusPreviewAttempt;
+  const audio=new Audio();
+  currentAudio=audio;
+  audio.preload="auto";
+  audio.src=safeUrl;
+  nexusPreviewApplyAudioSettings(audio);
+  audio.onloadedmetadata=()=>{if(currentAudio===audio){nexusPreviewDiagnostics.lastChecked=new Date().toLocaleTimeString();nexusPreviewReport("Preview metadata available · "+(Number.isFinite(audio.duration)?Math.round(audio.duration)+"s duration":"duration unknown"),"ready");}};
+  const timeout=setTimeout(()=>{if(currentAudio===audio&&attempt===nexusPreviewAttempt)handlePreviewFailure(btn,safeFallback,new Error("Preview timed out"));},NEXUS_PREVIEW_TIMEOUT_MS);
+  audio.nexusPreviewTimeout=timeout;
+  const clearAttempt=()=>clearTimeout(timeout);
+  if(btn?.dataset)btn.dataset.previewUrl=safeUrl;
+  btn.textContent="…";btn.setAttribute("aria-busy","true");
+  audio.onended=()=>{clearAttempt();if(currentAudio===audio){nexusPreviewProgressStop();currentAudio=null;nexusPreviewResetButton(btn);const panel=document.getElementById?.("nexusPreviewProgress");if(panel)panel.hidden=true;}};
+  audio.onerror=()=>{clearAttempt();if(currentAudio===audio&&attempt===nexusPreviewAttempt){
+    const error=new Error("Media download failed");
+    error.mediaErrorCode=Number(audio.error?.code)||0;
+    handlePreviewFailure(btn,safeFallback,error);
+  }};
+  audio.onstalled=()=>{if(currentAudio===audio&&attempt===nexusPreviewAttempt)nexusPreviewReport("Network stalled — waiting for audio. You can stop and retry.","warning");};
+  audio.onwaiting=()=>{if(currentAudio===audio&&attempt===nexusPreviewAttempt)nexusPreviewReport("Buffering preview…","loading");};
+  audio.onplaying=()=>{if(currentAudio===audio&&attempt===nexusPreviewAttempt)nexusPreviewReport("Preview playing","playing");};
+  try {
+    await audio.play();
+    clearAttempt();
+    if(currentAudio!==audio||attempt!==nexusPreviewAttempt){audio.pause();audio.removeAttribute("src");nexusPreviewResetButton(btn);return;}
+    btn.textContent="⏸";btn.classList.add("playing");btn.removeAttribute("aria-busy");btn.setAttribute("aria-label","Pause song preview");
+    nexusPreviewProgressStart(audio);
+    nexusPreviewDiagnostics.played++;nexusPreviewDiagnostics.lastError="";
+    nexusPreviewReport("Preview playing · source verified by browser", "playing");
+  }catch(error){clearAttempt();if(currentAudio===audio&&attempt===nexusPreviewAttempt)handlePreviewFailure(btn,safeFallback,error);}
+}
+function handlePreviewFailure(btn,fallbackUrl,error){
+  nexusPreviewProgressStop();const progress=document.getElementById?.("nexusPreviewProgress");if(progress)progress.hidden=true;
+  const audio=currentAudio;
+  nexusPreviewAttempt++;
+  currentAudio=null;
+  if(audio){clearTimeout(audio.nexusPreviewTimeout);audio.onerror=null;audio.onended=null;audio.onstalled=null;audio.onwaiting=null;audio.onplaying=null;audio.pause();audio.removeAttribute("src");audio.load();}
+  nexusPreviewResetButton(btn);
+  const safeFallback=nexusSafeMusicLink(fallbackUrl);
+  const reason=nexusPreviewFailureReason(error);
+  nexusPreviewDiagnostics.failures++;
+  nexusPreviewDiagnostics.lastError=nexusPreviewErrorCode(error);
+  nexusPreviewReport("Preview unavailable ["+nexusPreviewDiagnostics.lastError+"]: "+reason,"error");
+  const retryable=["TIMEOUT","NETWORK_OR_MEDIA","INTERRUPTED","MEDIA_ABORTED"].includes(nexusPreviewDiagnostics.lastError);
+  if(retryable&&btn?.isConnected&&btn.dataset.previewUrl){
+    nexusPreviewLastFailed={url:btn.dataset.previewUrl,btn,fallback:fallbackUrl};
+    const panel=document.getElementById?.("nexusPreviewDiagnostics");
+    if(panel){const retry=document.createElement("button");retry.type="button";retry.className="nexus-tool-btn";retry.textContent="↻ Retry preview";retry.addEventListener("click",nexusPreviewRetry,{once:true});panel.append(" ",retry);}
+  }
+  if(safeFallback)showToast(reason,()=>window.open(safeFallback,"_blank","noopener,noreferrer"),"Open in Deezer");
+  else showToast(reason);
 }
 
 // ---------------- 🪐 PURE SURFACE SURFACE SURFACE SHINE ENGINE ----------------
 function stopPreview() {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio = null;
-    document.querySelectorAll(".audio-preview-btn").forEach(b => { b.textContent = "▶"; b.classList.remove("playing"); });
+  nexusPreviewProgressStop();const progress=document.getElementById?.("nexusPreviewProgress");if(progress)progress.hidden=true;
+  nexusPreviewAttempt++;
+  if(currentAudio){
+    const audio=currentAudio;currentAudio=null;
+    clearTimeout(audio.nexusPreviewTimeout);audio.onerror=null;audio.onended=null;audio.onstalled=null;audio.onwaiting=null;audio.onplaying=null;audio.pause();audio.removeAttribute("src");audio.load();
   }
+  document.querySelectorAll(".audio-preview-btn").forEach(nexusPreviewResetButton);
 }
 
 // Per-card mini breakdown of which signals (genre, cast/crew, synopsis, etc.)
@@ -5493,13 +5838,26 @@ function nexusProgressMap(){
 }
 function nexusGetListStatus(uid){
   const value=nexusProgressMap()[String(uid)];
-  return value === "progress" || value === "done" ? value : "planned";
+  return value === "progress" || value === "done" || value === "paused" ? value : "planned";
+}
+function nexusPauseStorageKey(){return "nexus-manga-paused-at:"+(currentUser?.id||"guest");}
+function nexusPauseMap(){try{const x=JSON.parse(localStorage.getItem(nexusPauseStorageKey())||"{}");return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}catch(_){return {};}}
+function nexusPausedDays(uid,now=Date.now()){
+  const timestamp=nexusPauseMap()[String(uid)];
+  if(!Number.isSafeInteger(timestamp)||timestamp<=0||timestamp>now)return null;
+  return Math.floor((now-timestamp)/86400000);
 }
 function nexusSetListStatus(uid,status){
-  if(!["planned","progress","done"].includes(status))return;
+  if(!["planned","progress","paused","done"].includes(status))return;
   const obj=nexusProgressMap();
+  const previous=nexusGetListStatus(uid);
   if(status==="planned")delete obj[String(uid)];else obj[String(uid)]=status;
-  try{localStorage.setItem(nexusProgressStorageKey(),JSON.stringify(obj));}
+  try{localStorage.setItem(nexusProgressStorageKey(),JSON.stringify(obj));
+    const dates=nexusPauseMap();
+    if(status==="paused"&&previous!=="paused")dates[String(uid)]=Date.now();
+    else if(status!=="paused")delete dates[String(uid)];
+    localStorage.setItem(nexusPauseStorageKey(),JSON.stringify(dates));
+  }
   catch(_){showToast("Progress could not be saved on this device");}
 }
 // Episode counts are separate from planned/in-progress/completed and scoped to this device/account.
@@ -5518,6 +5876,158 @@ function nexusSetWatchedEpisodes(item,value){
   const total=nexusEpisodeTotal(item);if(total && value > total)return false;
   const counts=nexusEpisodeMap();if(value===0)delete counts[item.uid];else counts[item.uid]=value;
   try{localStorage.setItem(nexusEpisodeStorageKey(),JSON.stringify(counts));return true;}catch(_){showToast("Episode progress could not be saved on this device");return false;}
+}
+// NEXUS 8.1: Manga chapter progress is separate from anime episodes.
+function nexusMangaStorageKey(){return "nexus-manga-chapter-progress:"+(currentUser?.id || "guest");}
+function nexusMangaMap(){
+  try{const value=JSON.parse(localStorage.getItem(nexusMangaStorageKey())||"{}");return value&&typeof value==="object"&&!Array.isArray(value)?value:{};}catch(_){return {};}
+}
+function nexusMangaTotal(item){return Number.isSafeInteger(item.chapters)&&item.chapters>0?item.chapters:null;}
+function nexusReadChapters(item){
+  const count=nexusMangaMap()[item.uid],total=nexusMangaTotal(item);
+  const safe=Number.isSafeInteger(count)&&count>=0?count:0;
+  return total?Math.min(safe,total):safe;
+}
+function nexusSetReadChapters(item,count){
+  if(item.provider!=="manga"||!watchlist.has(item.uid)||!Number.isSafeInteger(count)||count<0||count>1000000)return false;
+  const total=nexusMangaTotal(item);if(total&&count>total)return false;
+  const progress=nexusMangaMap();if(count===0)delete progress[item.uid];else progress[item.uid]=count;
+  try{localStorage.setItem(nexusMangaStorageKey(),JSON.stringify(progress));return true;}
+  catch(_){showToast("Manga progress could not be saved on this device");return false;}
+}
+function nexusMangaProgressHtml(item){
+  if(item.provider!=="manga"||!watchlist.has(item.uid))return "";
+  const read=nexusReadChapters(item),total=nexusMangaTotal(item);
+  return '<div class="nexus-manga-progress" role="group" aria-label="Chapter progress for '+escapeHtml(item.title)+'"><strong>Chapters read</strong><div class="nexus-episode-stepper"><button type="button" data-chapter-step="-1" aria-label="One fewer chapter read" '+(read===0?'disabled':'')+'>−</button><output aria-live="polite">'+read+' / '+(total||'total unknown')+'</output><button type="button" data-chapter-step="1" aria-label="One more chapter read" '+((total&&read>=total)||read>=1000000?'disabled':'')+'>+</button></div><small>Saved on this device · included in backup, not cloud sync.</small></div>';
+}
+function nexusWireMangaProgress(root,item){
+  if(!root)return;
+  root.querySelectorAll("[data-chapter-step]").forEach(button=>button.addEventListener("click",()=>{
+    const step=Number(button.dataset.chapterStep);
+    if(!nexusSetReadChapters(item,nexusReadChapters(item)+step))return;
+    const group=button.closest(".nexus-manga-progress");
+    group.outerHTML=nexusMangaProgressHtml(item);
+    const fresh=root.querySelector(".nexus-manga-progress");
+    nexusWireMangaProgress(fresh,item);
+    const preferred=fresh?.querySelector('[data-chapter-step="'+step+'"]');
+    (preferred&&!preferred.disabled?preferred:fresh?.querySelector("button:not(:disabled)"))?.focus({preventScroll:true});
+    const meter=root.querySelector(".nexus-progress-meter");if(meter)meter.outerHTML=nexusProgressMeterHtml(item);
+    renderWatchlist();
+  }));
+}
+// Series and K-drama progress uses its own local, account-scoped map.
+function nexusSeriesStorageKey(){return "nexus-series-episode-progress:"+(currentUser?.id||"guest");}
+function nexusSeriesMap(){try{const x=JSON.parse(localStorage.getItem(nexusSeriesStorageKey())||"{}");return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}catch(_){return {};}}
+function nexusSeriesTotal(item){return Number.isSafeInteger(item.episodes)&&item.episodes>0?item.episodes:null;}
+function nexusSeenSeriesEpisodes(item){const n=nexusSeriesMap()[item.uid];const safe=Number.isSafeInteger(n)&&n>=0?n:0;const total=nexusSeriesTotal(item);return total?Math.min(safe,total):safe;}
+function nexusSetSeenSeriesEpisodes(item,n){
+  if(!["series","kdrama"].includes(item.provider)||!watchlist.has(item.uid)||!Number.isSafeInteger(n)||n<0||n>1000000)return false;
+  const total=nexusSeriesTotal(item);if(total&&n>total)return false;
+  const map=nexusSeriesMap();if(n===0)delete map[item.uid];else map[item.uid]=n;
+  try{localStorage.setItem(nexusSeriesStorageKey(),JSON.stringify(map));return true;}catch(_){showToast("TV progress could not be saved on this device");return false;}
+}
+// Separate, account-scoped season logs. Never infer a watched season from a total.
+function nexusSeasonStorageKey(){return "nexus-season-progress:"+(currentUser?.id||"guest");}
+function nexusSeasonMap(){try{const x=JSON.parse(localStorage.getItem(nexusSeasonStorageKey())||"{}");return x&&typeof x==="object"&&!Array.isArray(x)?x:{};}catch(_){return {};}}
+function nexusSeasonWatched(item,season){const value=nexusSeasonMap()[item.uid]?.[String(season.number)];return Number.isSafeInteger(value)&&value>=0?Math.min(value,season.episodes):0;}
+function nexusSetSeasonWatched(item,season,count){
+ if(!["series","kdrama"].includes(item.provider)||!watchlist.has(item.uid)||!Number.isSafeInteger(season.number)||season.number<=0||!Number.isSafeInteger(season.episodes)||season.episodes<=0||!Number.isSafeInteger(count)||count<0||count>season.episodes)return false;
+ const map=nexusSeasonMap();const record={...(map[item.uid]||{})};if(count===0)delete record[String(season.number)];else record[String(season.number)]=count;
+ if(Object.keys(record).length)map[item.uid]=record;else delete map[item.uid];
+ try{localStorage.setItem(nexusSeasonStorageKey(),JSON.stringify(map));return true;}catch(_){showToast("Season progress could not be saved on this device");return false;}
+}
+function nexusSeasonSummary(item,extras){
+  const seasons=extras?.tmdb?.seasonBreakdown;
+  if(!["series","kdrama"].includes(item.provider)||!Array.isArray(seasons)||!seasons.length)return null;
+  const valid=seasons.filter(s=>Number.isSafeInteger(s.number)&&s.number>0&&Number.isSafeInteger(s.episodes)&&s.episodes>0);
+  if(!valid.length)return null;
+  const watched=valid.reduce((sum,season)=>sum+nexusSeasonWatched(item,season),0);
+  const total=valid.reduce((sum,season)=>sum+season.episodes,0);
+  const logged=nexusSeasonMap()[item.uid];
+  return {watched,total,pct:Math.round(100*watched/total),logged:Boolean(logged&&Object.keys(logged).length),seasonCount:valid.length,overall:nexusSeenSeriesEpisodes(item)};
+}
+function nexusSeriesSeasonHtml(item,extras){
+  if(!["series","kdrama"].includes(item.provider))return "";
+  const seasons=extras?.tmdb?.seasonBreakdown;
+  if(!Array.isArray(seasons)||!seasons.length)return "";
+  const total=seasons.reduce((sum,s)=>sum+s.episodes,0);
+  const saved=nexusSeasonMap()[item.uid];
+  const summary=nexusSeasonSummary(item,extras);
+  if(watchlist.has(item.uid)){
+    const rows=seasons.map(s=>{const watched=nexusSeasonWatched(item,s);return '<div class="nexus-season-row"><span>Season '+s.number+': '+watched+' / '+s.episodes+' EP</span><button type="button" data-season-number="'+s.number+'" data-season-step="-1" '+(watched===0?'disabled':'')+' aria-label="One fewer watched episode in season '+s.number+'">−</button><button type="button" data-season-number="'+s.number+'" data-season-step="1" '+(watched>=s.episodes?'disabled':'')+' aria-label="One more watched episode in season '+s.number+'">+</button></div>';}).join('');
+    const meter=summary?'<p><strong>Season log: '+summary.watched+' / '+summary.total+' EP · '+summary.pct+'%</strong></p><progress max="100" value="'+summary.pct+'" aria-label="Logged season progress '+summary.pct+' percent"></progress>':'';
+    const mismatch=summary&&summary.logged&&summary.overall!==summary.watched?'<p class="nexus-progress-warning" role="status">Overall counter: '+summary.overall+' EP; season logs: '+summary.watched+' EP. These are independent records. Update either counter to reconcile; neither will overwrite the other.</p>':'';
+    return '<section class="nexus-season-progress" data-season-progress><h3>Season-by-season watched episodes</h3><p>Individually logged on this device. '+(saved?'':'No season episodes logged yet.')+'</p>'+meter+mismatch+rows+'</section>';
+  }
+  // A cumulative count cannot prove which season the viewer watched.
+  // Show an illustrative sequential allocation, clearly labeled as an assumption.
+  let remaining=nexusSeenSeriesEpisodes(item);
+  const rows=seasons.map(s=>{const watched=Math.min(remaining,s.episodes);remaining=Math.max(0,remaining-s.episodes);
+    return '<li>Season '+s.number+': '+watched+' / '+s.episodes+' EP</li>';}).join('');
+  return '<section class="nexus-season-progress"><h3>Season progress (sequential estimate)</h3><p>Assumes episodes were watched in season order; not an individual season log. Specials are excluded. TMDB lists '+total+' regular season episodes.</p><ul>'+rows+'</ul></section>';
+}
+function nexusWireSeasonProgress(root,item,extras){
+ if(!root)return;
+ const seasons=extras?.tmdb?.seasonBreakdown||[];
+ root.querySelectorAll('[data-season-step]').forEach(button=>button.addEventListener('click',()=>{
+   const season=seasons.find(s=>s.number===Number(button.dataset.seasonNumber));if(!season)return;
+   if(!nexusSetSeasonWatched(item,season,nexusSeasonWatched(item,season)+Number(button.dataset.seasonStep)))return;
+   const group=button.closest('[data-season-progress]');group.outerHTML=nexusSeriesSeasonHtml(item,extras);
+   nexusWireSeasonProgress(root,item,extras);
+   root.querySelector('[data-season-number="'+season.number+'"][data-season-step="'+button.dataset.seasonStep+'"]:not(:disabled)')?.focus({preventScroll:true});
+ }));
+}
+function nexusSeriesProgressHtml(item){
+  if(!["series","kdrama"].includes(item.provider)||!watchlist.has(item.uid))return "";
+  const count=nexusSeenSeriesEpisodes(item),total=nexusSeriesTotal(item);
+  return '<div class="nexus-series-progress" role="group" aria-label="TV episode progress for '+escapeHtml(item.title)+'"><strong>Episodes watched</strong><div class="nexus-episode-stepper"><button type="button" data-series-step="-1" aria-label="One fewer TV episode watched" '+(count===0?'disabled':'')+'>−</button><output aria-live="polite">'+count+' / '+(total||'total unknown')+'</output><button type="button" data-series-step="1" aria-label="One more TV episode watched" '+((total&&count>=total)||count>=1000000?'disabled':'')+'>+</button></div><small>Saved on this device · included in backup.</small></div>';
+}
+function nexusWireSeriesProgress(root,item){
+  if(!root)return;
+  root.querySelectorAll('[data-series-step]').forEach(button=>button.addEventListener('click',()=>{
+    const step=Number(button.dataset.seriesStep);
+    if(!nexusSetSeenSeriesEpisodes(item,nexusSeenSeriesEpisodes(item)+step))return;
+    const group=button.closest('.nexus-series-progress');group.outerHTML=nexusSeriesProgressHtml(item);
+    const fresh=root.querySelector('.nexus-series-progress');nexusWireSeriesProgress(fresh,item);
+    (fresh?.querySelector('[data-series-step="'+step+'"]:not(:disabled)')||fresh?.querySelector('button:not(:disabled)'))?.focus({preventScroll:true});
+    const meter=root.querySelector(".nexus-progress-meter");if(meter)meter.outerHTML=nexusProgressMeterHtml(item);
+    renderWatchlist();
+  }));
+}
+function nexusProgressSummary(item){
+  if(item.provider==='anime')return {current:nexusWatchedEpisodes(item),total:nexusEpisodeTotal(item),unit:'EP'};
+  if(item.provider==='manga')return {current:nexusReadChapters(item),total:nexusMangaTotal(item),unit:'Ch'};
+  if(item.provider==='series'||item.provider==='kdrama')return {current:nexusSeenSeriesEpisodes(item),total:nexusSeriesTotal(item),unit:'EP'};
+  return null;
+}
+function nexusProgressMeterHtml(item){
+  const p=nexusProgressSummary(item);if(!p)return '';
+  const pct=p.total?Math.round(p.current/p.total*100):null;
+  return '<div class="nexus-progress-meter"><span>'+escapeHtml(p.unit)+' '+p.current+' / '+(p.total||'unknown')+(pct===null?'':' · '+pct+'%')+'</span>'+(pct===null?'':'<progress max="100" value="'+pct+'" aria-label="'+escapeHtml(item.title)+' progress '+pct+' percent"></progress>')+'</div>';
+}
+let nexusMangaDashboardFilter="active";
+function nexusRenderMangaDashboard(){
+  const root=document.getElementById('nexusMangaDashboard');if(!root)return;
+  const manga=[...watchlist.values()].filter(item=>item.provider==='manga');
+  const active=manga.filter(item=>nexusGetListStatus(item.uid)!=='paused'&&nexusGetListStatus(item.uid)!=='done'&&nexusReadChapters(item)>0&&(!nexusMangaTotal(item)||nexusReadChapters(item)<nexusMangaTotal(item)));
+  const completed=manga.filter(item=>nexusGetListStatus(item.uid)==='done'||(nexusMangaTotal(item)&&nexusReadChapters(item)>=nexusMangaTotal(item)));
+  const paused=manga.filter(item=>nexusGetListStatus(item.uid)==='paused');
+  const knownRemaining=active.reduce((sum,item)=>sum+(nexusMangaTotal(item)?nexusMangaTotal(item)-nexusReadChapters(item):0),0);
+  const longPaused=paused.filter(item=>{const days=nexusPausedDays(item.uid);return days!==null&&days>=30;});
+  root.replaceChildren();if(!manga.length)return;
+  const heading=document.createElement('strong');heading.textContent='Manga reading dashboard';
+  const stats=document.createElement('p');stats.textContent=active.length+' with chapters read · '+paused.length+' paused ('+longPaused.length+' for 30+ days) · '+completed.length+' completed · '+knownRemaining+' confirmed chapters remaining'+(active.some(item=>!nexusMangaTotal(item))?' · some totals unknown':'');
+  root.append(heading,stats);
+  const controls=document.createElement('div');controls.className='nexus-manga-filter';
+  const selector=document.createElement('select');selector.setAttribute('aria-label','Filter manga reading dashboard');
+  [['active','Currently reading'],['paused','Paused'],['done','Completed'],['all','All manga']].forEach(([value,label])=>{const opt=document.createElement('option');opt.value=value;opt.textContent=label;selector.append(opt);});
+  selector.value=nexusMangaDashboardFilter;
+  selector.addEventListener('change',()=>{nexusMangaDashboardFilter=selector.value;nexusRenderMangaDashboard();});
+  controls.append(selector);root.append(controls);
+  const list=document.createElement('div');list.className='nexus-manga-dashboard-list';
+  const display=nexusMangaDashboardFilter==='paused'?paused:nexusMangaDashboardFilter==='done'?completed:nexusMangaDashboardFilter==='all'?manga:active;
+  display.slice(0,6).forEach(item=>{const button=document.createElement('button');button.type='button';button.textContent=item.title+' · '+nexusReadChapters(item)+' / '+(nexusMangaTotal(item)||'?')+' chapters'+(nexusGetListStatus(item.uid)==='paused'&&nexusPausedDays(item.uid)!==null?' · paused '+nexusPausedDays(item.uid)+'d':'');button.addEventListener('click',()=>openDetailModal(item.uid));list.append(button);});
+  root.append(list);
 }
 function nexusEpisodeProgressHtml(item){
   if(item.provider !== "anime" || !watchlist.has(item.uid))return "";
@@ -5544,92 +6054,170 @@ function nexusPurgeOrphanProgress(){
   // still loading or a conflict is being resolved. Unmatched statuses are inert
   // until the matching watchlist item reappears.
 }
-// NEXUS 7.1: bounded manual batches, confirmed backlog, local-day filters.
-const nexusAiringDashboard = {version:0,cache:new Map(),attempted:new Set(),loading:false,scope:null};
-function nexusAiringScope(){return currentUser?.id || "guest";}
-function nexusAiringSyncScope(){
-  const scope=nexusAiringScope();
-  if(scope!==nexusAiringDashboard.scope){
-    nexusAiringDashboard.scope=scope;nexusAiringDashboard.version++;
-    nexusAiringDashboard.cache.clear();nexusAiringDashboard.attempted.clear();
-  }
-  for(const key of nexusAiringDashboard.cache.keys())if(!watchlist.has(key))nexusAiringDashboard.cache.delete(key);
-  for(const key of nexusAiringDashboard.attempted)if(!watchlist.has(key))nexusAiringDashboard.attempted.delete(key);
+// NEXUS 7.2: verified schedule pages, visible backlog and bounded API work.
+const nexusAiringDashboard={version:0,cache:new Map(),loading:false,cursor:0,batchSize:5,maxPages:3,selectedDay:null,weekOffset:0,checkedAt:new Map(),lastErrors:new Map()};
+function nexusAiringDashboardData(item,media,now=Date.now()){
+  const next=media?.nextAiringEpisode;
+  if(!next || !Number.isSafeInteger(next.episode) || next.episode<1 || !isValidAnimeAiringTimestamp(next.airingAt) || next.airingAt*1000<=now)return null;
+  return {item,episode:next.episode,at:next.airingAt*1000,watched:nexusWatchedEpisodes(item)};
 }
-function nexusAiringDashboardData(item, media, now=Date.now()){
-  if(!media)return null;
-  const watched=nexusWatchedEpisodes(item),known=new Map();
-  for(const ep of media.airingSchedule?.nodes || []){
-    if(Number.isSafeInteger(ep?.episode)&&ep.episode>0&&isValidAnimeAiringTimestamp(ep.airingAt)&&ep.airingAt*1000<=now&&ep.episode>watched)known.set(ep.episode,ep.airingAt*1000);
+function nexusAiringWindowMatches(entry,window,now=Date.now()){
+  if(window==="all")return true;
+  if(window==="week")return entry.at>=now && entry.at<now+7*86400000;
+  if(window==="today"){
+    const day=new Date(now),end=new Date(day.getFullYear(),day.getMonth(),day.getDate()+1).getTime();
+    return entry.at>=now && entry.at<end;
   }
-  const next=media.nextAiringEpisode;
-  const valid=Number.isSafeInteger(next?.episode)&&next.episode>0&&isValidAnimeAiringTimestamp(next.airingAt)&&next.airingAt*1000>now;
-  return {item,watched,unwatched:known.size,partial:!!media.airingSchedule?.pageInfo?.hasNextPage,episode:valid?next.episode:null,at:valid?next.airingAt*1000:null};
+  return true;
 }
-function nexusAiringMatches(entry,filter,now=Date.now()){
-  if(filter==="unwatched")return entry.unwatched>0;
-  if(!entry.at)return false;
-  const start=new Date(now);start.setHours(0,0,0,0);
-  const end=new Date(start);end.setDate(end.getDate()+(filter==="week"?7:1));
-  return filter==="all" || (entry.at>=now&&entry.at>=start.getTime()&&entry.at<end.getTime());
+function nexusAiringAiredCount(media,watched,now=Date.now()){
+  const schedules=media?.confirmedSchedule;
+  if(!Array.isArray(schedules))return 0;
+  return new Set(schedules.filter(x=>Number.isSafeInteger(x?.episode)&&x.episode>watched&&isValidAnimeAiringTimestamp(x?.airingAt)&&x.airingAt*1000<=now).map(x=>x.episode)).size;
 }
 function nexusRenderAiringDashboard(){
-  nexusAiringSyncScope();
-  const root=document.getElementById("nexusAiringCards"),status=document.getElementById("nexusAiringStatus");
+  const root=document.getElementById("nexusAiringCards"),status=document.getElementById("nexusAiringStatus"),batch=document.getElementById("nexusAiringBatch");
   if(!root||!status)return;
   root.replaceChildren();
   const anime=[...watchlist.values()].filter(i=>i.provider==="anime");
-  const all=anime.map(item=>{const e=nexusAiringDashboard.cache.get(String(item.uid));return e?nexusAiringDashboardData(item,e.media):null;}).filter(Boolean);
-  const filter=document.getElementById("nexusAiringFilter")?.value || "all";
-  const entries=all.filter(e=>nexusAiringMatches(e,filter)).sort((a,b)=>(a.at??Infinity)-(b.at??Infinity)||a.item.title.localeCompare(b.item.title));
-  const count=all.reduce((n,e)=>n+e.unwatched,0),titles=all.filter(e=>e.unwatched>0).length;
-  document.getElementById("nexusAiringSummary").textContent=count+" confirmed unwatched aired episodes across "+titles+" titles · "+all.length+" / "+anime.length+" schedules available"+(all.some(e=>e.partial)?" · Some histories are incomplete":"");
+  const window=document.getElementById("nexusAiringWindow")?.value||"all";
+  const checked=anime.map(item=>({item,media:nexusAiringDashboard.cache.get(String(item.uid))?.media})).filter(x=>x.media);
+  const selectedDay=nexusAiringDashboard.selectedDay;
+  const inSelectedDay=entry=>!selectedDay||(entry?.at>=selectedDay.start&&entry.at<selectedDay.end);
+  // Show titles with confirmed unwatched aired episodes even if the series has ended.
+  const entries=checked.map(({item,media})=>{
+    const upcoming=nexusAiringDashboardData(item,media);
+    const watched=nexusWatchedEpisodes(item);
+    const count=nexusAiringAiredCount(media,watched);
+    return {item,media,upcoming,watched,count};
+  }).filter(e=>selectedDay ? (e.upcoming&&inSelectedDay(e.upcoming)) : (window==="unwatched" ? e.count>0 : (e.upcoming&&nexusAiringWindowMatches(e.upcoming,window)) || (window==="all"&&e.count>0)))
+    .sort((a,b)=>(a.upcoming?.at??Infinity)-(b.upcoming?.at??Infinity));
   for(const entry of entries){
     const btn=document.createElement("button");btn.type="button";btn.className="nexus-airing-card";
     const title=document.createElement("strong");title.textContent=entry.item.title;
-    const when=document.createElement("span");when.textContent=entry.at?"Next EP "+entry.episode+" · "+new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(entry.at)):"No confirmed upcoming broadcast";
-    const progress=document.createElement("span");progress.textContent=entry.unwatched+" confirmed aired · not watched"+(entry.partial?" (partial history)":"")+" · Watched through EP "+entry.watched;
-    btn.append(title,when,progress);btn.addEventListener("click",()=>openDetailModal(entry.item.uid));root.append(btn);
+    const when=document.createElement("span");when.textContent=entry.upcoming ? "Next EP "+entry.upcoming.episode+" · "+new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(entry.upcoming.at)) : "No confirmed upcoming broadcast";
+    const progress=document.createElement("span");progress.textContent="Watched through EP "+entry.watched;
+    const unwatched=document.createElement("span");unwatched.textContent=entry.count ? entry.count+" confirmed aired EP"+(entry.count===1?"":"s")+" not yet watched" : "No confirmed unwatched aired EP in checked schedule";
+    const coverage=document.createElement("span");coverage.textContent=entry.media.scheduleComplete ? "Checked available schedule pages" : "Partial schedule — more episodes may exist";
+    const compared=document.createElement("span");
+    const knownAired=new Set((entry.media.confirmedSchedule||[]).filter(x=>Number.isSafeInteger(x?.episode)&&isValidAnimeAiringTimestamp(x?.airingAt)&&x.airingAt*1000<=Date.now()).map(x=>x.episode)).size;
+    compared.textContent="Watched through: "+entry.watched+" · Confirmed aired in checked data: "+knownAired;
+    btn.append(title,when,progress,unwatched,compared,coverage);
+    btn.addEventListener("click",()=>openDetailModal(entry.item.uid));
+    root.append(btn);
   }
-  const remaining=anime.filter(i=>Number.isSafeInteger(Number(i.id))&&Number(i.id)>0&&!nexusAiringDashboard.attempted.has(String(i.uid))).length;
-  const button=document.getElementById("nexusAiringRefresh");
-  button.disabled=nexusAiringDashboard.loading;button.textContent=remaining?"Check next batch ("+Math.min(12,remaining)+")":"Refresh schedules";
-  if(!nexusAiringDashboard.loading)status.textContent=!anime.length?"Save anime to your Watchlist to track broadcasts.":entries.length+" matching titles · "+remaining+" eligible titles left to check. Missing schedules are unknown, not zero episodes. Refresh to retry or update checked data.";
+  // Seven local calendar-day buckets. Only confirmed nextAiringEpisode dates are shown.
+  const daily=document.getElementById("nexusAiringDaily");
+  if(daily){
+    daily.replaceChildren();
+    const nav=document.createElement("div");nav.className="nexus-airing-week-nav";
+    const prev=document.createElement("button");prev.type="button";prev.textContent="← Previous week";prev.disabled=nexusAiringDashboard.weekOffset===0;
+    prev.addEventListener("click",()=>{nexusAiringDashboard.weekOffset=Math.max(0,nexusAiringDashboard.weekOffset-1);nexusAiringDashboard.selectedDay=null;nexusRenderAiringDashboard();});
+    const next=document.createElement("button");next.type="button";next.textContent="Next week →";next.disabled=nexusAiringDashboard.weekOffset===4;
+    next.addEventListener("click",()=>{nexusAiringDashboard.weekOffset=Math.min(4,nexusAiringDashboard.weekOffset+1);nexusAiringDashboard.selectedDay=null;nexusRenderAiringDashboard();});
+    const label=document.createElement("span");
+    const base=new Date(),weekStart=new Date(base.getFullYear(),base.getMonth(),base.getDate());weekStart.setDate(weekStart.getDate()+nexusAiringDashboard.weekOffset*7);
+    const weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+6);
+    const dateFormat=new Intl.DateTimeFormat(undefined,{month:"short",day:"numeric"});
+    label.textContent=dateFormat.format(weekStart)+" – "+dateFormat.format(weekEnd);
+    const today=document.createElement("button");today.type="button";today.textContent="Today";today.disabled=nexusAiringDashboard.weekOffset===0&&!nexusAiringDashboard.selectedDay;
+    today.addEventListener("click",()=>{nexusAiringDashboard.weekOffset=0;nexusAiringDashboard.selectedDay=null;nexusRenderAiringDashboard();});
+    nav.append(prev,label,next,today);daily.append(nav);
+    const now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    start.setDate(start.getDate()+nexusAiringDashboard.weekOffset*7);
+    const confirmedUpcoming=checked.map(({item,media})=>nexusAiringDashboardData(item,media)).filter(Boolean);
+    for(let day=0;day<7;day++){
+      const begin=new Date(start);begin.setDate(start.getDate()+day);
+      const end=new Date(begin);end.setDate(begin.getDate()+1);
+      const matches=confirmedUpcoming.filter(e=>e.at>=Date.now()&&e.at>=begin.getTime()&&e.at<end.getTime());
+      const card=document.createElement("button");card.type="button";card.className="nexus-airing-day";
+      const active=selectedDay?.start===begin.getTime();
+      card.setAttribute("aria-pressed",String(active));card.classList.toggle("selected",active);
+      card.setAttribute("aria-label","Show anime broadcasts for "+begin.toDateString());
+      card.addEventListener("click",()=>{nexusAiringDashboard.selectedDay=active?null:{start:begin.getTime(),end:end.getTime()};nexusRenderAiringDashboard();});
+      const heading=document.createElement("strong");heading.textContent=new Intl.DateTimeFormat(undefined,{weekday:"short",month:"short",day:"numeric"}).format(begin);
+      const count=document.createElement("span");count.textContent=matches.length+" confirmed next broadcast"+(matches.length===1?"":"s");
+      const details=document.createElement("small");
+      details.className="nexus-airing-day-details";
+      details.textContent=matches.length?matches.slice(0,3).map(e=>e.item.title+" · EP "+e.episode).join(" • ")+(matches.length>3?" · +"+(matches.length-3)+" more":""):"No confirmed broadcasts";
+      card.append(heading,count,details);daily.append(card);
+    }
+  }
+  if(batch){
+    const stale=nexusAiringDashboard.lastChecked&&Date.now()-nexusAiringDashboard.lastChecked>24*60*60*1000;
+    const failures=(nexusAiringDashboard.lastFailures||[]).length;
+    const fresh=checked.filter(({item})=>{const at=nexusAiringDashboard.checkedAt.get(String(item.uid));return at&&Date.now()-at<=86400000;}).length;
+    const old=checked.length-fresh;
+    const lastChecked=nexusAiringDashboard.lastChecked?new Intl.DateTimeFormat(undefined,{dateStyle:"short",timeStyle:"short"}).format(new Date(nexusAiringDashboard.lastChecked)):"Not checked yet";
+    const confirmed=checked.reduce((sum,{item,media})=>sum+nexusAiringAiredCount(media,nexusWatchedEpisodes(item)),0);
+    const partial=checked.filter(({media})=>!media.scheduleComplete).length;
+    batch.textContent=checked.length+" / "+anime.length+" checked · "+confirmed+" confirmed unwatched aired EP"+(partial?" · "+partial+" partial schedule(s)":"")+" · Last check: "+lastChecked+(stale?" · Schedule may be outdated — refresh recommended":"")+" · Fresh: "+fresh+" · Older: "+old+" · Failed: "+failures;
+  }
+  if(!anime.length)status.textContent="Save anime to your Watchlist to track broadcasts.";
+  else if(!nexusAiringDashboard.cache.size&&!nexusAiringDashboard.loading)status.textContent="Select ‘Check airings’ to load confirmed schedules.";
+  else if(!nexusAiringDashboard.loading)status.textContent=entries.length+" matching anime. Unwatched counts reflect confirmed episodes in checked schedule pages, not an estimate of missing episodes.";
 }
-async function nexusRefreshAiringDashboard(restart=false){
+async function nexusFetchAiringMedia(id){
+  const query="query($id:Int,$page:Int){ Media(id:$id,type:ANIME){ nextAiringEpisode{episode airingAt} airingSchedule(page:$page,perPage:50){pageInfo{hasNextPage} nodes{episode airingAt}} } }";
+  const all=[];
+  let next=null,complete=false;
+  for(let page=1;page<=nexusAiringDashboard.maxPages;page++){
+    try{
+      const result=await anilistQuery(query,{id,page});
+      if(result?.errors?.length)throw Error("AniList returned errors");
+      const media=result?.data?.Media;
+      if(!media||!Array.isArray(media.airingSchedule?.nodes))throw Error("Missing AniList schedule");
+      if(page===1)next=media.nextAiringEpisode||null;
+      all.push(...media.airingSchedule.nodes);
+      if(!media.airingSchedule.pageInfo?.hasNextPage){complete=true;break;}
+    }catch(error){if(page===1)throw error;break;}
+  }
+  return {nextAiringEpisode:next,confirmedSchedule:all,scheduleComplete:complete};
+}
+async function nexusRefreshAiringDashboard(){
   if(nexusAiringDashboard.loading)return;
-  nexusAiringSyncScope();
-  const eligible=[...watchlist.values()].filter(i=>i.provider==="anime"&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
-  if(restart===true||eligible.every(i=>nexusAiringDashboard.attempted.has(String(i.uid)))){nexusAiringDashboard.attempted.clear();nexusAiringDashboard.cache.clear();}
-  const anime=eligible.filter(i=>!nexusAiringDashboard.attempted.has(String(i.uid))).slice(0,12);
-  if(!anime.length){nexusRenderAiringDashboard();return;}
   const button=document.getElementById("nexusAiringRefresh"),status=document.getElementById("nexusAiringStatus");
-  nexusAiringDashboard.loading=true;const version=++nexusAiringDashboard.version,scope=nexusAiringScope();
-  button.disabled=true;button.setAttribute("aria-busy","true");let failed=0;
-  const query="query($id:Int){ Media(id:$id,type:ANIME){ nextAiringEpisode{episode airingAt} } Page(page:1,perPage:50){pageInfo{hasNextPage} airingSchedules(mediaId:$id,notYetAired:false,sort:TIME_DESC){episode airingAt}} }";
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
+  if(!anime.length){nexusRenderAiringDashboard();return;}
+  if(nexusAiringDashboard.cursor>=anime.length)nexusAiringDashboard.cursor=0;
+  const retry=(nexusAiringDashboard.lastFailures||[]).map(uid=>anime.find(i=>i.uid===uid)).filter(Boolean);
+  const batch=retry.length?retry.slice(0,nexusAiringDashboard.batchSize):anime.slice(nexusAiringDashboard.cursor,nexusAiringDashboard.cursor+nexusAiringDashboard.batchSize);
+  const isRetry=retry.length>0;
+  nexusAiringDashboard.loading=true;
+  const version=++nexusAiringDashboard.version;
+  button.disabled=true;button.setAttribute("aria-busy","true");
+  let failed=0;
+  const failedItems=[];
+  const retryQueue=nexusAiringDashboard.lastFailures||[];
   try{
-    for(const [index,item] of anime.entries()){
-      if(version!==nexusAiringDashboard.version||scope!==nexusAiringScope())break;
-      if(!watchlist.has(item.uid))continue;
-      status.textContent="Checking schedules "+(index+1)+"/"+anime.length+"…";
+    for(const [index,item] of batch.entries()){
+      if(version!==nexusAiringDashboard.version)break;
+      status.textContent="Checking "+(index+1)+"/"+batch.length+" in this batch…";
       try{
-        const result=await anilistQuery(query,{id:Number(item.id)});
-        if(version!==nexusAiringDashboard.version||scope!==nexusAiringScope())break;
+        const media=await nexusFetchAiringMedia(Number(item.id));
         if(!watchlist.has(item.uid))continue;
-        if(result?.errors?.length||!result?.data?.Media||!Array.isArray(result?.data?.Page?.airingSchedules))throw Error("Schedule unavailable");
-        nexusAiringDashboard.cache.set(String(item.uid),{media:{...result.data.Media,airingSchedule:{nodes:result.data.Page.airingSchedules,pageInfo:result.data.Page.pageInfo}}});
-      }catch(e){failed++;}
-      nexusAiringDashboard.attempted.add(String(item.uid));
+        nexusAiringDashboard.cache.set(String(item.uid),{item,media});
+        nexusAiringDashboard.lastChecked=Date.now();
+        nexusAiringDashboard.checkedAt.set(String(item.uid),nexusAiringDashboard.lastChecked);
+        nexusAiringDashboard.lastErrors.delete(String(item.uid));
+      }catch(error){failed++;failedItems.push(item);nexusAiringDashboard.lastErrors.set(String(item.uid),String(error?.message||"Schedule request failed"));}
+    }
+    if(version===nexusAiringDashboard.version){
+      if(!isRetry)nexusAiringDashboard.cursor+=batch.length;
+      // Preserve cached successful results; failed entries can be retried in a later full pass.
+      nexusAiringDashboard.lastFailures=(isRetry?retry.slice(batch.length).map(i=>i.uid):[]).concat(failedItems.map(i=>i.uid));
     }
   }finally{
     nexusAiringDashboard.loading=false;button.disabled=false;button.removeAttribute("aria-busy");
-    nexusRenderAiringDashboard();
-    if(failed)status.textContent+=" "+failed+" requests failed. Use Refresh from first batch to retry.";
+    if(version===nexusAiringDashboard.version){
+      nexusRenderAiringDashboard();
+      status.textContent+=" Checked "+batch.length+" of "+anime.length+" anime this batch."+(failed?" "+failed+" request(s) failed; previously loaded results retained. Retry on next pass.":"");
+      button.textContent=nexusAiringDashboard.lastFailures?.length?"↻ Retry failed schedules":nexusAiringDashboard.cursor>=anime.length?"↻ Check airings again":"↻ Check next "+nexusAiringDashboard.batchSize;
+    }
   }
 }
-document.getElementById("nexusAiringRefresh")?.addEventListener("click",()=>nexusRefreshAiringDashboard());
-document.getElementById("nexusAiringRestart")?.addEventListener("click",()=>nexusRefreshAiringDashboard(true));
-document.getElementById("nexusAiringFilter")?.addEventListener("change",nexusRenderAiringDashboard);
+document.getElementById("nexusAiringRefresh")?.addEventListener("click",nexusRefreshAiringDashboard);
+document.getElementById("nexusAiringWindow")?.addEventListener("change",()=>{nexusAiringDashboard.selectedDay=null;nexusRenderAiringDashboard();});
 
 function renderWatchlist(){
   nexusPurgeOrphanProgress();
@@ -5639,11 +6227,11 @@ function renderWatchlist(){
   const vaultCategory = document.getElementById("nexusVaultCategory")?.value || "all";
   const vaultSort = document.getElementById("nexusVaultSort")?.value || "title";
   const vaultStatus = document.getElementById("nexusVaultStatus")?.value || "all";
-  const statusCounts={planned:0,progress:0,done:0};
+  const statusCounts={planned:0,progress:0,paused:0,done:0};
   for(const item of watchlist.values()) statusCounts[nexusGetListStatus(item.uid)]++;
   const overview=document.getElementById("nexusListOverview");
   if(overview){overview.replaceChildren();
-    [["planned","Want to watch / read"],["progress","In progress"],["done","Completed"]].forEach(([key,label])=>{
+    [["planned","Want to watch / read"],["progress","In progress"],["paused","Paused reading"],["done","Completed"]].forEach(([key,label])=>{
       const btn=document.createElement("button");btn.type="button";btn.className="nexus-list-stat";
       btn.setAttribute("aria-label",`Show ${label} titles`);
       btn.setAttribute("aria-pressed", String(vaultStatus === key));
@@ -5655,7 +6243,9 @@ function renderWatchlist(){
   const vaultItems = [...watchlist.values()].filter(item => {
     const matchesCategory = vaultCategory === "all" || item.provider === vaultCategory;
     const haystack = `${item.title || ""} ${item.artist || ""} ${(item.genres || []).join(" ")}`.toLocaleLowerCase();
-    return matchesCategory && haystack.includes(vaultQuery) && (vaultStatus === "all" || nexusGetListStatus(item.uid) === vaultStatus);
+    const summary=nexusProgressSummary(item);
+    const unfinished=summary ? (!summary.total || summary.current<summary.total) && nexusGetListStatus(item.uid)!=="done" : nexusGetListStatus(item.uid)!=="done";
+    return matchesCategory && haystack.includes(vaultQuery) && (vaultStatus === "all" || (vaultStatus === "unfinished" ? unfinished : nexusGetListStatus(item.uid) === vaultStatus));
   });
   vaultItems.sort((a,b) => vaultSort === "year"
     ? (Number(b.year) || 0) - (Number(a.year) || 0) || String(a.title).localeCompare(String(b.title))
@@ -5683,13 +6273,13 @@ function renderWatchlist(){
     // Same gap the pool-item cards had before: music tracks saved to the
     // watchlist had no way to preview at all — the results grid and pool
     // cards both got a preview button already, this one was missed.
-    const audioPlayerHtml = (item.provider === "music" && item.preview) ? `<button class="audio-preview-btn" onclick="togglePreview('${item.preview}', this, '${item.url}')">▶</button>` : "";
+    const audioPlayerHtml = (item.provider === "music" && item.preview) ? `<button class="audio-preview-btn" onclick="togglePreview(decodeURIComponent('${encodeURIComponent(item.preview)}'), this, decodeURIComponent('${encodeURIComponent(item.url)}'))">▶</button>` : "";
     const card = document.createElement("div"); card.className = "ticket";
     card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn active-watch" data-action="unwatch" aria-label="Remove ${escapeHtml(item.title)} from watchlist">${unwatchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div></div><div class="perf"></div><div class="ticket-bottom"><div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div><a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
     const progressRow=document.createElement("label");progressRow.className="nexus-list-progress";
     const progressLabel=document.createElement("span");progressLabel.textContent="Progress";
     const progressSelect=document.createElement("select");progressSelect.dataset.uid=item.uid;progressSelect.setAttribute("aria-label","Progress for "+item.title);
-    [["planned","Want to watch / read"],["progress","In progress"],["done","Completed"]].forEach(([value,text])=>{
+    (item.provider==="manga" ? [["planned","Plan to read"],["progress","Currently reading"],["paused","Paused reading"],["done","Finished reading"]] : [["planned","Want to watch / read"],["progress","In progress"],["done","Completed"]]).forEach(([value,text])=>{
       const opt=document.createElement("option");opt.value=value;opt.textContent=text;progressSelect.appendChild(opt);
     });
     progressSelect.value=nexusGetListStatus(item.uid);
@@ -5701,6 +6291,9 @@ function renderWatchlist(){
     });
     progressRow.append(progressLabel,progressSelect);
     card.querySelector(".ticket-bottom")?.prepend(progressRow);
+    if(item.provider === "manga"){const chapters=document.createElement("div");chapters.innerHTML=nexusMangaProgressHtml(item);card.querySelector(".ticket-bottom")?.appendChild(chapters);nexusWireMangaProgress(chapters,item);}
+    if(item.provider==="series"||item.provider==="kdrama"){const tv=document.createElement("div");tv.innerHTML=nexusSeriesProgressHtml(item);card.querySelector(".ticket-bottom")?.appendChild(tv);nexusWireSeriesProgress(tv,item);}
+    if(nexusProgressSummary(item)){const meter=document.createElement("div");meter.innerHTML=nexusProgressMeterHtml(item);card.querySelector(".ticket-bottom")?.appendChild(meter);}
     if(item.provider === "anime"){const episodes=document.createElement("div");episodes.innerHTML=nexusEpisodeProgressHtml(item);card.querySelector(".ticket-bottom")?.appendChild(episodes);nexusWireEpisodeProgress(episodes,item);}
     card.querySelector(".ticket-poster")?.addEventListener("click", () => openDetailModal(item.uid));
     card.querySelector(".ticket-poster")?.setAttribute("tabindex", "0");
@@ -5710,6 +6303,7 @@ function renderWatchlist(){
   });
   wireHoverPreview(watchlistGrid);
   nexusRenderAiringDashboard();
+  nexusRenderMangaDashboard();
 }
 
 for (const id of ["nexusVaultSearch", "nexusVaultCategory", "nexusVaultSort", "nexusVaultStatus"]) {
@@ -5867,7 +6461,7 @@ function nexusBackupMessage(message){
   if (nexusBackupStatus) nexusBackupStatus.textContent = message;
 }
 function nexusValidateBackup(data){
-  if (!data || data.format !== "nexus-taste-backup" || ![1, 2, 3].includes(data.version) ||
+  if (!data || data.format !== "nexus-taste-backup" || ![1, 2, 3, 4, 5, 6, 7].includes(data.version) ||
       !data.entries || typeof data.entries !== "object" || Array.isArray(data.entries)) {
     throw new Error("This is not a supported NEXUS backup file.");
   }
@@ -5875,7 +6469,7 @@ function nexusValidateBackup(data){
   if (data.version >= 2 && data.listProgress !== undefined) {
     if (!data.listProgress || typeof data.listProgress !== "object" || Array.isArray(data.listProgress) ||
         Object.keys(data.listProgress).length > 10000 ||
-        Object.entries(data.listProgress).some(([uid,status]) => uid.length > 250 || !["progress","done"].includes(status))) {
+        Object.entries(data.listProgress).some(([uid,status]) => uid.length > 250 || !["progress","paused","done"].includes(status))) {
       throw new Error("Invalid list progress in backup.");
     }
   }
@@ -5904,7 +6498,7 @@ function nexusValidateBackup(data){
       throw new Error("Invalid preferences in " + key);
     }
   }
-  if(data.version === 3){
+  if(data.version >= 3){
     const progress=data.episodeProgress;
     if(!progress || typeof progress !== "object" || Array.isArray(progress) || Object.keys(progress).length>10000)throw new Error("Invalid episode progress in backup.");
     const saved=data.entries["rm-watchlist"];
@@ -5916,16 +6510,59 @@ function nexusValidateBackup(data){
       if(!item || item.provider!=="anime" || !Number.isSafeInteger(count) || count<0 || count>1000000 || (nexusEpisodeTotal(item) && count>nexusEpisodeTotal(item)))throw new Error("Invalid watched episode count in backup.");
     }
   }
+  if(data.version>=4){
+    const chapters=data.mangaProgress,saved=data.entries["rm-watchlist"];
+    if(!chapters||typeof chapters!=="object"||Array.isArray(chapters)||Object.keys(chapters).length>10000||!Array.isArray(saved))throw new Error("Invalid manga progress in backup.");
+    const titles=new Map(saved.map(item=>[item.uid,item]));
+    for(const [uid,count] of Object.entries(chapters)){
+      const item=titles.get(uid);
+      if(!item||item.provider!=="manga"||!Number.isSafeInteger(count)||count<0||count>1000000||(nexusMangaTotal(item)&&count>nexusMangaTotal(item)))throw new Error("Invalid chapter progress in backup.");
+    }
+  }
+  if(data.version>=5){
+    const tv=data.seriesProgress,saved=data.entries['rm-watchlist'];
+    if(!tv||typeof tv!=='object'||Array.isArray(tv)||Object.keys(tv).length>10000||!Array.isArray(saved))throw new Error('Invalid TV progress in backup.');
+    const titles=new Map(saved.map(item=>[item.uid,item]));
+    for(const [uid,count] of Object.entries(tv)){
+      const item=titles.get(uid);
+      if(!item||!['series','kdrama'].includes(item.provider)||!Number.isSafeInteger(count)||count<0||count>1000000||(nexusSeriesTotal(item)&&count>nexusSeriesTotal(item)))throw new Error('Invalid TV episode count in backup.');
+    }
+  }
+  if(data.version>=6){
+    const seasonData=data.seasonProgress,saved=data.entries['rm-watchlist'];
+    if(!seasonData||typeof seasonData!=="object"||Array.isArray(seasonData)||Object.keys(seasonData).length>10000||!Array.isArray(saved))throw new Error('Invalid season progress in backup.');
+    const titles=new Map(saved.map(item=>[item.uid,item]));
+    for(const [uid,record] of Object.entries(seasonData)){
+      const item=titles.get(uid);
+      if(!item||!["series","kdrama"].includes(item.provider)||!record||typeof record!=="object"||Array.isArray(record)||Object.keys(record).length>100)throw new Error('Invalid season progress title.');
+      for(const [season,count] of Object.entries(record))if(!/^[1-9]\d*$/.test(season)||Number(season)>1000||!Number.isSafeInteger(count)||count<0||count>1000000)throw new Error('Invalid season episode count.');
+    }
+  }
+  if(data.version>=7){
+    const pauses=data.mangaPausedAt,saved=data.entries['rm-watchlist'];
+    if(!pauses||typeof pauses!=="object"||Array.isArray(pauses)||Object.keys(pauses).length>10000||!Array.isArray(saved))throw new Error("Invalid paused manga dates in backup.");
+    const titles=new Map(saved.map(item=>[item.uid,item]));
+    for(const [uid,time] of Object.entries(pauses)){
+      if(titles.get(uid)?.provider!=="manga"||data.listProgress?.[uid]!=="paused"||!Number.isSafeInteger(time)||time<=0||time>Date.now()+86400000)throw new Error("Invalid paused manga date in backup.");
+    }
+  }
   return keys;
 }
 async function nexusRestoreEpisodeTransaction(data,writePreferences){
-  if(data.version!==3)return writePreferences();
-  const key=nexusEpisodeStorageKey(),previous=localStorage.getItem(key);
-  // Check local storage before changing preferences; roll back counts if IndexedDB fails.
-  localStorage.setItem(key,JSON.stringify(data.episodeProgress));
-  try{return await writePreferences();}catch(error){
-    try{if(previous===null)localStorage.removeItem(key);else localStorage.setItem(key,previous);}
-    catch(_){throw new Error("Preference restore failed and episode counts could not be rolled back. Keep your backup and retry before reloading.");}
+  if(data.version<3)return writePreferences();
+  const keys=[nexusEpisodeStorageKey(),...(data.version>=4?[nexusMangaStorageKey()]:[]),...(data.version>=5?[nexusSeriesStorageKey()]:[]),...(data.version>=6?[nexusSeasonStorageKey()]:[]),...(data.version>=7?[nexusPauseStorageKey()]:[])];
+  const previous=keys.map(key=>localStorage.getItem(key));
+  // Both progress maps are written before preference writes; restore both if a write fails.
+  try{
+    localStorage.setItem(keys[0],JSON.stringify(data.episodeProgress));
+    if(data.version>=4)localStorage.setItem(keys[1],JSON.stringify(data.mangaProgress));
+    if(data.version>=5)localStorage.setItem(keys[2],JSON.stringify(data.seriesProgress));
+    if(data.version>=6)localStorage.setItem(keys[3],JSON.stringify(data.seasonProgress));
+    if(data.version>=7)localStorage.setItem(keys[4],JSON.stringify(data.mangaPausedAt));
+    return await writePreferences();
+  }catch(error){
+    try{keys.forEach((key,i)=>{if(previous[i]===null)localStorage.removeItem(key);else localStorage.setItem(key,previous[i]);});}
+    catch(_){throw new Error("Restore failed and progress could not be rolled back. Keep your backup and retry before reloading.");}
     throw error;
   }
 }
@@ -5955,7 +6592,11 @@ async function nexusExportBackup(){
     let listProgress = {};
     try { listProgress = Object.fromEntries(Object.entries(nexusProgressMap()).filter(([uid])=>watchlist.has(uid))); } catch (_) {}
     const episodeProgress=Object.fromEntries([...watchlist.values()].filter(item=>item.provider==="anime").map(item=>[item.uid,nexusWatchedEpisodes(item)]).filter(([,count])=>count>0));
-    const payload = { format: "nexus-taste-backup", version: 3, exportedAt: new Date().toISOString(), entries, settings, listProgress, episodeProgress };
+    const mangaProgress=Object.fromEntries([...watchlist.values()].filter(item=>item.provider==="manga").map(item=>[item.uid,nexusReadChapters(item)]).filter(([,count])=>count>0));
+    const seriesProgress=Object.fromEntries([...watchlist.values()].filter(item=>["series","kdrama"].includes(item.provider)).map(item=>[item.uid,nexusSeenSeriesEpisodes(item)]).filter(([,count])=>count>0));
+    const seasonProgress=Object.fromEntries([...watchlist.values()].filter(item=>["series","kdrama"].includes(item.provider)).map(item=>[item.uid,nexusSeasonMap()[item.uid]]).filter(([,record])=>record&&Object.keys(record).length));
+    const mangaPausedAt=Object.fromEntries(Object.entries(nexusPauseMap()).filter(([uid,time])=>watchlist.get(uid)?.provider==="manga"&&nexusGetListStatus(uid)==="paused"&&Number.isSafeInteger(time)&&time>0&&time<=Date.now()));
+    const payload = { format: "nexus-taste-backup", version: 7, seasonProgress, mangaPausedAt, exportedAt: new Date().toISOString(), entries, settings, listProgress, episodeProgress, mangaProgress, seriesProgress };
     nexusValidateBackup(payload);
     const url = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }));
     const a = document.createElement("a");
@@ -6003,7 +6644,7 @@ async function nexusRestoreBackup(file){
       const clean = {};
       const savedIds = new Set((await idbGet("rm-watchlist") || []).map(item=>String(item.uid)));
       for (const [uid,status] of Object.entries(data.listProgress)) {
-        if (savedIds.has(uid) && ["progress","done"].includes(status)) clean[uid] = status;
+        if (savedIds.has(uid) && ["progress","paused","done"].includes(status)) clean[uid] = status;
       }
       try { localStorage.setItem(nexusProgressStorageKey(),JSON.stringify(clean)); }
       catch (_) { nexusBackupMessage("Preferences restored, but progress could not be saved locally."); }
@@ -6081,4 +6722,11 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
   <p id="nexusConflictError" role="alert" style="color:#ffb7b7"></p>
 </dialog>
 </body>
-</html>
+</html><style>
+.nexus-music-player-status{display:grid;gap:10px;margin:12px 0 18px;padding:12px;border:1px solid rgba(207,170,93,.28);border-radius:12px}
+.nexus-music-player-status #nexusPreviewHelp{justify-self:start}
+.nexus-season-progress progress{display:block;width:100%;height:9px;margin:8px 0 12px;accent-color:#d8ae5c}
+.nexus-progress-warning{padding:9px 12px;border-left:3px solid #d8ae5c;background:rgba(216,174,92,.08);border-radius:4px}
+</style>
+
+<style>.nexus-music-player-status #nexusPreviewAudit{min-height:38px}</style>
