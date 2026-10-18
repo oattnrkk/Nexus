@@ -700,6 +700,16 @@ section.block{padding-top:38px}
 .nexus-search-select:focus-visible,.suggestion-item:focus-visible{outline:2px solid #d4af37;outline-offset:2px}
 .nexus-suggestion-open{font-size:11px;opacity:.7;white-space:nowrap;margin-left:auto}
 @media(max-width:600px){.nexus-search-select{min-height:42px}.nexus-suggestion-open{font-size:10px}}
+
+/* NEXUS 9.2.1: instant detail summary and explicit selection action */
+.nexus-quick-view{padding:32px 26px;min-height:200px}
+.nexus-quick-top{display:flex;align-items:flex-start;gap:20px}
+.nexus-quick-top>img{width:118px;max-height:178px;object-fit:cover;border-radius:10px;background:#24212a}
+.nexus-quick-top>div{min-width:0;flex:1}
+.nexus-quick-select{min-height:44px;margin:12px 0;padding:10px 18px;background:rgba(213,181,133,.14);color:var(--text);border:1px solid var(--gold);border-radius:9px;cursor:pointer;font:inherit}
+.nexus-quick-select[aria-pressed="true"]{background:rgba(213,181,133,.32)}
+.nexus-quick-select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(max-width:520px){.nexus-quick-view{padding:26px 15px}.nexus-quick-top{gap:12px}.nexus-quick-top>img{width:88px}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -942,8 +952,358 @@ button:disabled{opacity:.48;cursor:not-allowed}
 .detail-modal-loading{color:#d7cfc3}
 @media (max-width:600px){.detail-modal-content{width:min(100%,560px)}.nexus-home-action{min-height:48px}}
 </style>
+<!-- NEXUS 9.4: Music Discovery ranking, deduplication, and preview hardening. -->
+<style id="nexus98-editorial-calm">
+/* NEXUS 9.8 — Editorial calm: reduce competing chrome, preserve gold accents. */
+:root{--nexus98-radius:16px;--nexus98-muted:rgba(232,224,211,.63)}
+html{scroll-padding-top:80px}
+body{background:#0c0b0e}
+.hero{padding:52px 20px 30px!important;background:radial-gradient(ellipse 60% 95% at 50% 0%,rgba(207,165,93,.09),transparent 85%)!important}
+.hero .eyebrow{font-size:10px;letter-spacing:.25em;color:var(--gold)}
+.hero .title{font-size:clamp(54px,9vw,100px);letter-spacing:.045em;line-height:1.02;margin:12px 0}
+.hero .tagline{font-size:clamp(13px,1.5vw,16px);max-width:520px;color:var(--nexus98-muted);line-height:1.6}
+.hero .marquee-rule{opacity:.28;margin:24px auto 18px}
+.toggle-row{max-width:730px;margin-inline:auto;gap:5px;padding:5px;border:1px solid rgba(223,184,119,.14);border-radius:16px;background:rgba(255,255,255,.025)}
+.toggle-row .seg-btn{flex:1;min-width:90px;border-radius:11px}
+.nexus-jump{padding:9px 14px!important;gap:4px!important;border-bottom-color:rgba(223,184,119,.1)!important}
+.nexus-jump a{font-size:11px!important;letter-spacing:.02em!important;padding:9px 13px!important;border-radius:10px}
+.wrap{max-width:1240px}
+section.block{margin-top:18px}
+.block-head{margin-bottom:20px}
+.block-head h2{letter-spacing:-.025em}
+.nexus-home{margin-top:24px!important}
+.nexus-home-top{gap:18px}
+.nexus-home-metrics{gap:10px}
+.nexus-home-more{margin-top:18px;border:1px solid rgba(223,184,119,.12);border-radius:14px;background:rgba(255,255,255,.018)}
+.nexus-home-more>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;font-size:12px;letter-spacing:.05em;color:var(--nexus98-muted)}
+.nexus-home-more>summary::-webkit-details-marker{display:none}
+.nexus-home-more[open]>summary{color:var(--gold);border-bottom:1px solid rgba(223,184,119,.12)}
+.nexus-home-more .nexus-home-lower{margin:16px}
+.nexus-refine{margin:12px 0 22px;border:1px solid rgba(223,184,119,.16);border-radius:14px;background:rgba(255,255,255,.018);overflow:hidden}
+.nexus-refine>summary{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;list-style:none;min-height:50px}
+.nexus-refine>summary::-webkit-details-marker{display:none}
+.nexus-refine-label{color:var(--text);font-weight:600;font-size:13px}
+.nexus-refine-description{font-size:11px;color:var(--nexus98-muted)}
+.nexus-refine-chevron{margin-left:auto;color:var(--gold);font-size:18px;transition:transform .2s}
+.nexus-refine[open] .nexus-refine-chevron{transform:rotate(180deg)}
+.nexus-refine-body{padding:0 16px 16px;border-top:1px solid rgba(223,184,119,.1)}
+.nexus-refine .nexus-discovery-controls{margin-top:16px}
+.nexus-refine .nexus-discovery-presets{margin-top:10px}
+.search-wrap{max-width:860px;margin-inline:auto}
+.search-input{border-radius:14px!important;min-height:56px}
+.pool-grid{gap:16px!important}
+.pool-grid .card{border-radius:14px}
+.nexus-home-panel,.analytics-card{border-radius:var(--nexus98-radius)!important}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(max-width:680px){
+ .hero{padding:34px 14px 22px!important}
+ .hero .title{font-size:clamp(48px,14vw,74px)}
+ .hero .marquee-rule{margin:18px auto 12px}
+ .toggle-row{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:460px}
+ .toggle-row .seg-btn{min-width:0!important;padding:11px 4px!important;font-size:11px}
+ .nexus-jump{justify-content:flex-start!important;flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none}
+ .nexus-jump::-webkit-scrollbar{display:none}
+ .nexus-jump a{flex:none;white-space:nowrap}
+ .nexus-refine-description{display:none}
+ .nexus-refine-body{padding:0 12px 12px}
+ .nexus-home-more .nexus-home-lower{margin:12px}
+ .block-head h2{font-size:clamp(21px,6vw,29px)}
+}
+@media(prefers-reduced-motion:reduce){.nexus-refine-chevron{transition:none}}
+</style>
+<style id="nexus99-cinema-refinement">
+/* NEXUS 9.9 — restrained cinema editorial system */
+:root{--n99-canvas:#0b0b0d;--n99-surface:#151416;--n99-edge:rgba(229,202,158,.12);--n99-gold:#dbbd8b;--n99-copy:#eee9e1}
+body{background:var(--n99-canvas);color:var(--n99-copy)}
+.wrap{max-width:1180px}
+.block-head{padding-bottom:12px;border-bottom:1px solid var(--n99-edge);margin-bottom:22px}
+.block-head h2{font-size:clamp(23px,2.4vw,34px);font-weight:450;letter-spacing:-.035em}
+/* Search: posters have breathing room and hierarchy, not competing strokes */
+.pool-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,325px),1fr));gap:12px!important}
+.pool-item{background:var(--n99-surface);border:1px solid transparent;box-shadow:none;border-radius:13px;padding:14px;gap:14px;transform:none}
+.pool-item:hover{background:#1b191a;border-color:var(--n99-edge);box-shadow:0 8px 22px rgba(0,0,0,.17);transform:translateY(-1px)}
+.pool-item.selected{background:#211c18;border-color:rgba(219,189,139,.65);box-shadow:inset 0 0 0 1px rgba(219,189,139,.12)}
+.p-poster-wrap{width:62px;height:88px;border:0;border-radius:7px;box-shadow:none}
+.pool-item .p-title{font-size:14px;font-weight:600;line-height:1.45;letter-spacing:-.01em}
+.pool-item .p-meta{font-size:10px;letter-spacing:.06em;line-height:1.5}
+.p-check{width:23px;height:23px}
+/* Recommendations: quiet cards with prominent titles and clear actions */
+.results-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:15px}
+.ticket{background:#151416;border:1px solid var(--n99-edge);border-radius:14px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.ticket:hover{transform:translateY(-2px);border-color:rgba(219,189,139,.34);box-shadow:0 12px 35px rgba(0,0,0,.22)}
+.card-shine{display:none}
+.ticket-top{gap:15px;padding:18px 18px 14px}
+.ticket-poster,.ticket-poster-wrap{width:76px;height:110px;border-radius:7px}
+.ticket-info{padding-right:70px;justify-content:center}
+.t-title{font-size:19px;line-height:1.25;letter-spacing:-.02em}
+.t-type{font-size:10px;letter-spacing:.11em;color:var(--n99-gold)}
+.t-year{font-size:11px;line-height:1.6}
+.match-badge{font-size:10px;right:17px;top:65px;color:var(--n99-gold)}
+.ticket-bottom{padding-left:18px;padding-right:18px}
+.tag{border-radius:6px}
+/* Detail sheet: premium, readable, less visual noise */
+.detail-modal{padding:18px}
+.detail-modal-backdrop{background:rgba(4,4,6,.86);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.detail-modal-content{max-width:760px;max-height:min(90dvh,950px);background:#171517;border:1px solid rgba(219,189,139,.19);border-radius:18px;box-shadow:0 30px 100px rgba(0,0,0,.65)}
+.detail-modal-close{top:16px;right:16px;background:rgba(20,19,21,.9);border-color:rgba(255,255,255,.15)}
+.detail-content{line-height:1.75}
+.detail-title{letter-spacing:-.035em;line-height:1.15}
+.detail-meta{line-height:1.7}
+.detail-overview{line-height:1.85;max-width:68ch}
+.nexus-quick-top{gap:22px}
+.nexus-quick-top img{border-radius:10px}
+/* Consistent focus and reduced motion */
+.pool-item:focus-visible,.ticket button:focus-visible,.ticket a:focus-visible,.detail-modal button:focus-visible{outline:2px solid var(--n99-gold);outline-offset:3px}
+@media(max-width:680px){
+ .wrap{padding-left:15px;padding-right:15px}
+ .pool-grid,.results-grid{grid-template-columns:1fr;gap:11px!important}
+ .pool-item{padding:12px;gap:12px}
+ .p-poster-wrap{width:58px;height:82px}
+ .ticket-top{padding:15px;gap:12px}
+ .ticket-poster,.ticket-poster-wrap{width:70px;height:100px}
+ .t-title{font-size:18px}
+ .detail-modal{padding:8px}
+ .detail-modal-content{border-radius:14px;max-height:calc(100dvh - 16px)}
+ .nexus-quick-top{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){.pool-item,.ticket{transition:none!important}.pool-item:hover,.ticket:hover{transform:none!important}}
+</style>
+<style id="nexus100-premium-redesign">
+/* NEXUS 10.0 — redesigned discovery-first editorial experience */
+:root{--n10-bg:#0b0b0c;--n10-panel:#151416;--n10-ink:#f3eee6;--n10-muted:#aaa39b;--n10-gold:#d9b981}
+body{background:var(--n10-bg);color:var(--n10-ink)}
+.hero{position:relative;isolation:isolate;padding:72px 24px 34px!important;overflow:hidden;background:radial-gradient(ellipse 45% 75% at 50% -8%,rgba(217,185,129,.16),transparent 78%)!important}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.35;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(25% - 1px),rgba(255,255,255,.035) 25%);mask-image:linear-gradient(to bottom,black,transparent 95%)}
+.hero .eyebrow{font-size:10px;font-weight:600;letter-spacing:.36em}
+.hero .title{font-size:clamp(76px,13vw,156px);font-weight:450;letter-spacing:-.065em;line-height:.9;margin:22px 0 24px;text-shadow:0 12px 65px rgba(0,0,0,.45)}
+.hero .tagline{max-width:none;font-size:clamp(14px,1.65vw,18px);font-weight:350;color:#c7c0b7}
+.n10-hero-hairline{display:flex;align-items:center;justify-content:center;gap:18px;margin:30px auto 24px;max-width:600px}
+.n10-hero-hairline span{height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(217,185,129,.32))}
+.n10-hero-hairline span:last-child{transform:scaleX(-1)}
+.n10-hero-hairline b{font-size:9px;font-weight:500;letter-spacing:.24em;color:#a79b89;white-space:nowrap}
+.toggle-row{max-width:850px;box-shadow:0 8px 40px rgba(0,0,0,.2)}
+.nexus-jump{position:relative;background:rgba(13,12,14,.94);border-top:1px solid rgba(217,185,129,.08)}
+.nexus-jump a{transition:background .2s,color .2s}
+.wrap{max-width:1160px}
+#searchSection{padding-top:40px;margin-bottom:64px}
+#searchSection .block-head{display:flex;align-items:end;gap:22px;border:0;margin-bottom:28px}
+#searchSection .block-head h2{font-size:clamp(34px,5vw,62px);line-height:1.04;letter-spacing:-.055em;max-width:730px;margin:8px 0 10px;font-weight:450}
+#searchSection .block-head h2 em,#nexusHomeTitle em{font-weight:450;font-style:italic;color:var(--n10-gold)}
+.n10-section-kicker{font-size:10px;letter-spacing:.24em;font-weight:600;color:var(--n10-gold)}
+.n10-section-lede{font-size:14px;line-height:1.7;color:var(--n10-muted);margin:0}
+#searchSection .block-head #poolCount{margin-left:auto;align-self:center;white-space:nowrap}
+#searchSection .search-wrap{max-width:100%;margin-bottom:12px}
+#searchSection .search-input{font-size:17px;background:#1b191a;border:1px solid rgba(217,185,129,.26);border-radius:15px!important;min-height:64px;padding-left:24px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+#searchSection .search-input:focus{border-color:var(--n10-gold);box-shadow:0 0 0 3px rgba(217,185,129,.1)}
+#searchSection .nexus-refine{margin-top:14px;margin-bottom:30px;border-color:rgba(217,185,129,.1);background:transparent}
+#searchSection .pool-grid{gap:14px!important}
+#searchSection .pool-item{background:#171618;border:1px solid rgba(255,255,255,.045);border-radius:15px}
+#searchSection .pool-item:hover{border-color:rgba(217,185,129,.3)}
+#nexusForYou{margin:0 0 48px!important;padding-top:28px;border-top:1px solid rgba(217,185,129,.14)}
+#nexusForYou .nexus-home-top{align-items:end}
+#nexusHomeTitle{font-size:clamp(31px,4vw,50px);font-weight:450;letter-spacing:-.045em}
+#nexusForYou .nexus-home-metrics{margin-top:22px}
+#nexusForYou .nexus-journey{margin-top:22px}
+#nexusForYou .nexus-home-more{background:transparent}
+#nexusForYou .nexus-home-insight{opacity:.8}
+#nexusDataTools{opacity:.82}
+footer{border-top:1px solid rgba(217,185,129,.1)}
+@media(max-width:700px){
+ .hero{padding:50px 16px 22px!important}
+ .hero .title{font-size:clamp(65px,17vw,108px);letter-spacing:-.07em}
+ .n10-hero-hairline{margin:24px auto 18px}
+ .n10-hero-hairline b{font-size:8px;letter-spacing:.12em}
+ #searchSection{padding-top:22px;margin-bottom:44px}
+ #searchSection .block-head{display:block;margin-bottom:20px}
+ #searchSection .block-head h2{font-size:clamp(32px,9vw,48px)}
+ #searchSection .block-head #poolCount{display:inline-block;margin-top:10px}
+ #searchSection .search-input{min-height:58px;font-size:15px}
+ #nexusForYou .nexus-home-top{align-items:start}
+ #nexusHomeTitle{font-size:34px}
+}
+@media(prefers-reduced-motion:reduce){.nexus-jump a{transition:none}}
+</style>
+<style id="nexus101-visual-polish">
+/* NEXUS 10.1 — Interaction & visual QA polish */
+:root{--n101-ring:#e8c991;--n101-soft:rgba(234,201,145,.13)}
+.pool-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,310px),1fr));gap:16px!important}
+.pool-item{position:relative;min-width:0;min-height:116px;align-items:center;gap:15px;padding:16px;border:1px solid rgba(255,255,255,.075);background:#171619;box-shadow:none;transition:border-color .18s ease,background .18s ease,transform .18s ease}
+.pool-item:hover{background:#1e1c1f;border-color:rgba(232,201,145,.32);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.22)}
+.pool-item.selected{background:linear-gradient(110deg,rgba(217,185,129,.12),#1a1819);border-color:rgba(217,185,129,.55);box-shadow:inset 3px 0 0 #d9b981}
+.pool-item .p-title{font-size:15px;line-height:1.45;letter-spacing:-.01em;font-weight:600}
+.pool-item .p-meta{font-size:10px;line-height:1.5;letter-spacing:.045em;text-transform:none;color:#aca59b}
+.pool-item .p-surprise-reason{font-size:11px;line-height:1.5}
+.p-poster-wrap{width:65px;height:94px;border-radius:9px;border-color:rgba(255,255,255,.1);box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.pool-item-controls{gap:10px;align-self:center}
+.pool-vote-actions{gap:5px}
+.pool-item button,.detail-modal button{touch-action:manipulation}
+.pool-item:focus-visible,.pool-item button:focus-visible,.detail-modal button:focus-visible,.detail-modal a:focus-visible{outline:2px solid var(--n101-ring);outline-offset:3px}
+.detail-modal{padding:clamp(12px,3vw,30px);align-items:center}
+.detail-modal-backdrop{background:rgba(4,4,6,.88);backdrop-filter:blur(9px)}
+.detail-modal-content{width:min(100%,790px);max-height:min(90dvh,900px);border:1px solid rgba(232,201,145,.2);border-radius:20px;background:#151416;box-shadow:0 34px 110px rgba(0,0,0,.7);overscroll-behavior:contain}
+.detail-modal-close{top:15px;right:15px;width:44px;height:44px;min-width:44px;min-height:44px;background:rgba(15,14,16,.88);border:1px solid rgba(255,255,255,.2);color:#f5eee3;z-index:5}
+.detail-modal-close:hover{background:#302921;border-color:var(--n101-ring)}
+.detail-back-btn{top:15px;left:15px;min-height:44px;border-radius:12px;background:rgba(15,14,16,.86)}
+.detail-backdrop{height:clamp(180px,29vw,300px);border-radius:19px 19px 0 0}
+.detail-content{padding:18px clamp(20px,4vw,38px) 34px}
+.detail-title{font-size:clamp(27px,4vw,40px);letter-spacing:-.035em;line-height:1.15}
+.detail-meta{color:#b5aca0;line-height:1.65}
+.detail-overview{font-size:14px;line-height:1.85;color:#c7beb2;max-width:67ch}
+.detail-actions{flex-wrap:wrap;gap:9px;margin:16px 0 20px}
+.detail-actions button,.detail-actions a{min-height:42px}
+.detail-cast-row{scrollbar-width:thin;scrollbar-color:rgba(217,185,129,.35) transparent}
+.nexus-refine>summary:hover,.nexus-home-more>summary:hover{background:rgba(217,185,129,.045)}
+.nexus-refine>summary:focus-visible,.nexus-home-more>summary:focus-visible{outline:2px solid var(--n101-ring);outline-offset:-3px}
+@media(max-width:700px){
+ .pool-grid{grid-template-columns:1fr;gap:10px!important}
+ .pool-item{min-height:104px;padding:12px 13px;gap:12px}
+ .p-poster-wrap{width:58px;height:84px}
+ .pool-item .p-title{font-size:14px}
+ .pool-item-controls{gap:7px}
+ .detail-modal{padding:0;align-items:flex-end}
+ .detail-modal-content{width:100%;max-height:94dvh;max-height:94svh;border-radius:20px 20px 0 0;border-bottom:0}
+ .detail-backdrop{height:190px;border-radius:20px 20px 0 0}
+ .detail-content{padding:14px 20px max(28px,env(safe-area-inset-bottom))}
+ .detail-title{font-size:29px}
+ .detail-overview{font-size:14px;line-height:1.75}
+ .detail-modal-close{top:12px;right:12px}
+ .detail-back-btn{top:12px;left:12px}
+}
+@media(max-width:380px){
+ .pool-item{gap:9px;padding:11px}
+ .p-poster-wrap{width:52px;height:76px}
+ .pool-item-controls{gap:4px}
+ .detail-actions{gap:6px}
+}
+@media(hover:none){.pool-item:hover{transform:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){
+ .pool-item,.p-poster,.detail-modal-content,.detail-modal-backdrop{animation:none!important;transition:none!important}
+ .pool-item:hover{transform:none}
+}
+</style>
+<style id="nexus102-cinematic-dashboard">
+/* NEXUS 10.2 — Cinematic Dashboard, based on supplied three-column reference */
+:root{--n102-left:220px;--n102-right:278px;--n102-bg:#080b13;--n102-gold:#e2b65d}
+body{background:var(--n102-bg)!important}
+body::before{opacity:.35}
+.n102-sidebar,.n102-rail{position:fixed;top:0;bottom:0;z-index:60;background:#070a12;color:#eee9e2}
+.n102-sidebar{left:0;width:var(--n102-left);border-right:1px solid rgba(255,255,255,.075);padding:34px 17px 24px;display:flex;flex-direction:column;overflow-y:auto}
+.n102-brand{font-family:'Work Sans',sans-serif;font-size:29px;font-weight:300;letter-spacing:-.065em;color:#f3efe8;text-decoration:none;margin:2px 0 51px 8px}
+.n102-brand span{color:var(--n102-gold);font-size:14px;vertical-align:top;margin-left:3px}
+.n102-nav-caption{font-size:10px;letter-spacing:.18em;color:#797d88;margin:0 0 13px 11px;font-weight:600}
+.n102-nav-caption-lower{margin-top:30px}
+.n102-menu{display:flex;flex-direction:column;gap:4px}
+.n102-nav-link{position:relative;display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;color:#b9bdc7;font:500 13px 'Work Sans',sans-serif;text-decoration:none;text-align:left;border-radius:10px;padding:13px 14px;cursor:pointer}
+.n102-nav-link:hover{color:#fff;background:rgba(255,255,255,.05)}
+.n102-nav-link.is-active{color:var(--n102-gold);background:rgba(226,182,93,.085)}
+.n102-nav-link.is-active:before{content:"";position:absolute;left:-17px;top:11px;bottom:11px;width:3px;border-radius:0 4px 4px 0;background:var(--n102-gold)}
+.n102-nav-link>span{flex:1}
+.n102-sidebar-foot{margin-top:auto;padding:25px 8px 0;color:#777e8d;font-size:11px}
+.n102-online-dot{display:inline-block;width:6px;height:6px;background:#c4a16a;border-radius:50%;margin-right:7px}
+.n102-rail{right:0;width:var(--n102-right);border-left:1px solid rgba(255,255,255,.07);padding:33px 18px;overflow-y:auto}
+.n102-rail-header{display:flex;align-items:center;gap:12px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.n102-rail-mark{display:grid;place-items:center;width:43px;height:43px;border-radius:13px;background:rgba(226,182,93,.13);color:var(--n102-gold);font-size:22px}
+.n102-rail-header strong{display:block;font-size:14px;font-weight:600}
+.n102-rail-header small{display:block;font-size:10px;color:#8f95a0;margin-top:4px}
+.n102-rail-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:30px 0 15px}
+.n102-rail-section-head h3{font-size:13px;font-weight:600;margin:0}
+.n102-rail-section-head a{font-size:10px;color:var(--n102-gold);text-decoration:none}
+.n102-continue{display:grid;gap:11px}
+.n102-rail-empty{font-size:12px;line-height:1.7;color:#848996;border:1px dashed rgba(255,255,255,.12);padding:19px 13px;border-radius:12px}
+.n102-continue-item{display:flex;gap:11px;align-items:center;padding:9px;border-radius:12px;text-decoration:none;color:#f2f0ed;background:#10141d;border:1px solid rgba(255,255,255,.05)}
+.n102-continue-item img{width:47px;height:65px;object-fit:cover;border-radius:7px;background:#1b2028}
+.n102-continue-item strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:11px;line-height:1.5}
+.n102-continue-item small{display:block;margin-top:5px;font-size:10px;color:#a8aeb8}
+.n102-rail-shortcuts{display:grid;gap:7px}
+.n102-rail-shortcuts a{display:flex;gap:11px;align-items:center;color:#c4c7ce;text-decoration:none;font-size:12px;padding:12px;border-radius:10px;background:#10141d}
+.n102-rail-shortcuts a span:nth-child(2){flex:1}
+.n102-rail-shortcuts a:hover{color:var(--n102-gold)}
+.n102-rail-note{font-size:10px;line-height:1.7;color:#737a86;margin-top:30px}
+.n102-mobile-menu,.n102-sidebar-scrim{display:none}
+.auth-bar{left:var(--n102-left)!important;right:var(--n102-right)!important;width:auto!important;max-width:none!important;z-index:35}
+.hero,.nexus-jump,.wrap,footer{margin-left:var(--n102-left)!important;margin-right:var(--n102-right)!important;width:auto!important;max-width:none!important}
+.hero{padding:48px 30px 15px!important;text-align:left;background:transparent!important}
+.hero:before{display:none}
+.hero .title{font-size:clamp(48px,6vw,75px);margin:8px 0 12px;letter-spacing:-.07em}
+.hero .eyebrow{font-size:9px;letter-spacing:.19em}
+.hero .tagline{font-size:12px}
+.n10-hero-hairline{display:none}
+.toggle-row{margin:28px 0 0;max-width:100%;border-radius:12px}
+.nexus-jump{padding:9px 23px!important;justify-content:flex-start!important}
+.wrap{padding:0 25px!important}
+#searchSection{padding-top:22px;margin-bottom:38px}
+#searchSection .block-head{margin-bottom:18px}
+#searchSection .block-head h2{font-size:clamp(26px,3.2vw,39px)}
+#searchSection .n10-section-lede{font-size:12px}
+#searchSection .search-input{min-height:54px;font-size:14px}
+.n102-featured{position:relative;min-height:clamp(210px,26vw,345px);margin:16px 0 19px;border-radius:15px;overflow:hidden;background:#181c24}
+.n102-featured[hidden]{display:none!important}
+.n102-featured-art{position:absolute;inset:0;background-size:cover;background-position:center 35%;filter:saturate(.85)}
+.n102-featured-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,8,14,.95) 0%,rgba(6,8,14,.7) 43%,rgba(6,8,14,.12) 100%),linear-gradient(0deg,rgba(6,8,14,.45),transparent)}
+.n102-featured-copy{position:relative;z-index:1;max-width:75%;padding:clamp(22px,3vw,40px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-height:inherit}
+.n102-featured-kicker{font-size:10px;letter-spacing:.17em;color:var(--n102-gold);font-weight:600}
+.n102-featured h3{font-size:clamp(24px,3vw,43px);letter-spacing:-.035em;line-height:1.13;margin:13px 0 7px}
+.n102-featured p{font-size:12px;color:#c7c8cc;line-height:1.5;margin:0 0 21px}
+.n102-featured-button{border:0;border-radius:9px;background:var(--n102-gold);color:#15100a;padding:12px 17px;font-size:12px;font-weight:700;cursor:pointer}
+#searchSection .pool-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))}
+#nexusForYou{padding-top:23px}
+@media(min-width:1500px){:root{--n102-left:238px;--n102-right:305px}.wrap{padding:0 35px!important}}
+@media(max-width:1150px){:root{--n102-left:190px;--n102-right:235px}.n102-sidebar{padding-inline:12px}.n102-nav-link.is-active:before{left:-12px}.n102-rail{padding-inline:12px}.wrap{padding:0 18px!important}}
+@media(max-width:950px){
+ :root{--n102-right:0px}
+ .n102-rail{position:relative;inset:auto;width:auto;margin:22px 20px 30px var(--n102-left);border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:20px}
+ .n102-continue{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+ .auth-bar{right:0!important}
+ .hero,.nexus-jump,.wrap,footer{margin-right:0!important}
+}
+@media(max-width:650px){
+ :root{--n102-left:0px}
+ .n102-mobile-menu{display:flex;position:fixed;top:11px;left:12px;z-index:88;align-items:center;gap:8px;padding:9px 12px;border:1px solid rgba(226,182,93,.3);border-radius:9px;background:#11151e;color:#f3eee5;font-size:12px}
+ .n102-sidebar{transform:translateX(-105%);transition:transform .2s;z-index:92;width:min(82vw,280px)}
+ .n102-sidebar.is-open{transform:translateX(0)}
+ .n102-sidebar-scrim:not([hidden]){display:block;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:91}
+ .auth-bar{padding-left:100px!important;min-height:55px}
+ .hero{padding:68px 18px 15px!important}
+ .hero .title{font-size:clamp(56px,15vw,88px)}
+ .toggle-row{margin-top:20px}
+ .nexus-jump{padding:8px 12px!important}
+ .wrap{padding:0 15px!important}
+ #searchSection{padding-top:18px}
+ #searchSection .block-head h2{font-size:clamp(27px,8vw,39px)}
+ .n102-featured{min-height:235px}
+ .n102-featured-copy{max-width:90%;padding:20px}
+ .n102-featured h3{font-size:27px}
+ .n102-featured-shade{background:linear-gradient(90deg,rgba(6,8,14,.93),rgba(6,8,14,.35))}
+ .n102-rail{margin:22px 15px 28px}
+ .n102-continue{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.n102-sidebar{transition:none}}
+</style>
 </head>
 <body>
+<button class="n102-mobile-menu" id="n102MenuToggle" type="button" aria-expanded="false" aria-controls="n102Sidebar">☰ <span>Menu</span></button>
+<div class="n102-sidebar-scrim" id="n102SidebarScrim" hidden></div>
+<aside class="n102-sidebar" id="n102Sidebar" aria-label="Main navigation">
+  <a class="n102-brand" href="#top" aria-label="NEXUS home">NEXUS<span>✦</span></a>
+  <div class="n102-nav-caption">EXPLORE</div>
+  <nav class="n102-menu" aria-label="Entertainment categories">
+    <a class="n102-nav-link is-active" href="#searchSection" data-n102-home>⌂ <span>Home</span></a>
+    <button type="button" class="n102-nav-link" data-n102-mode="movie">▣ <span>Movies</span></button>
+    <button type="button" class="n102-nav-link" data-n102-mode="series">▤ <span>TV Series</span></button>
+    <button type="button" class="n102-nav-link" data-n102-mode="anime">✧ <span>Anime</span></button>
+    <button type="button" class="n102-nav-link" data-n102-mode="kdrama">♡ <span>K-Dramas</span></button>
+    <button type="button" class="n102-nav-link" data-n102-mode="manga">▧ <span>Manga</span></button>
+    <button type="button" class="n102-nav-link" data-n102-mode="music">♫ <span>Music</span></button>
+  </nav>
+  <div class="n102-nav-caption n102-nav-caption-lower">YOUR SPACE</div>
+  <nav class="n102-menu" aria-label="Personal collection">
+    <a class="n102-nav-link" href="#ratingsSection">♡ <span>My Vault</span></a>
+    <a class="n102-nav-link" href="#watchlistSection">◷ <span>Watchlist</span></a>
+    <a class="n102-nav-link" href="#analyticsSection">◈ <span>Taste insights</span></a>
+  </nav>
+  <div class="n102-sidebar-foot"><span class="n102-online-dot"></span> Discover something new.</div>
+</aside>
+
 <div id="ambientBackdrop" class="ambient-backdrop"></div>
 
 <div class="auth-bar">
@@ -991,11 +1351,11 @@ button:disabled{opacity:.48;cursor:not-allowed}
 </div>
 
 <a class="nexus-skip" href="#searchSection">Skip to discovery</a>
-<div class="hero">
-  <p class="eyebrow">Movies &amp; Shows via TMDB · Anime &amp; Manga via AniList · Music via Deezer &amp; Last.fm</p>
+<div class="hero" id="top">
+  <p class="eyebrow">YOUR PERSONAL DISCOVERY SPACE</p>
   <h1 class="title">NEXUS</h1>
-  <p class="tagline">Search what you love. Rate recommendations as Liked to branch out your pool, or Disliked to ban them permanently.</p>
-  <div class="marquee-rule"></div>
+  <p class="tagline">A universe of stories. Curated by your curiosity.</p>
+  <div class="n10-hero-hairline" aria-hidden="true"><span></span><b>EXPLORE THE UNEXPECTED</b><span></span></div>
   <div class="toggle-row" id="typeToggle">
     <button class="seg-btn" data-mode="movie" aria-pressed="false">Movies</button>
     <button class="seg-btn active" data-mode="anime" aria-pressed="true">Anime</button>
@@ -1012,21 +1372,20 @@ button:disabled{opacity:.48;cursor:not-allowed}
   <a href="#analyticsSection">Taste insights</a>
   <a href="#nexusDataTools">Backup &amp; restore</a>
 </nav>
+<aside class="n102-rail" aria-label="Your personal space">
+  <div class="n102-rail-header"><span class="n102-rail-mark">✦</span><div><strong>Your space</strong><small>Curated for your taste</small></div></div>
+  <div class="n102-rail-section-head"><h3>Continue exploring</h3><a href="#watchlistSection">View list ↗</a></div>
+  <div id="n102Continue" class="n102-continue"><p class="n102-rail-empty">Save titles to your Watchlist to see them here.</p></div>
+  <div class="n102-rail-section-head"><h3>Quick access</h3></div>
+  <div class="n102-rail-shortcuts">
+    <a href="#nexusForYou">✧ <span>For you</span> <span>↗</span></a>
+    <a href="#ratingsSection">♡ <span>Liked &amp; disliked</span> <span>↗</span></a>
+    <a href="#analyticsSection">◈ <span>Taste profile</span> <span>↗</span></a>
+  </div>
+  <p class="n102-rail-note">Your picks, not a streaming service. Discover, save and keep track.</p>
+</aside>
 <div class="wrap">
 
-<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
-  <div class="nexus-home-top"><div><div class="nexus-eyebrow">YOUR PERSONAL SPACE</div><h2 id="nexusHomeTitle">For You <span class="nexus-gold">✦</span></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
-  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
-  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
-    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">My List →</a></div>
-    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
-  </div>
-  <div class="nexus-home-lower">
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
-  </div>
-  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
-</section>
   <section class="block" id="analyticsSection" style="display:none;">
     <div class="block-head">
       <h2>Your Taste Insights</h2>
@@ -1075,7 +1434,7 @@ button:disabled{opacity:.48;cursor:not-allowed}
 
   <section class="block" id="searchSection">
     <div class="block-head">
-      <h2>Discover your next favorite</h2>
+      <div class="n10-section-kicker">01 / THE DISCOVERY ROOM</div><h2>Find something <em>extraordinary.</em></h2><p class="n10-section-lede">One search. Endless stories, sounds, and worlds.</p>
       <span class="count" id="poolCount"></span>
     </div>
     
@@ -1084,9 +1443,23 @@ button:disabled{opacity:.48;cursor:not-allowed}
       <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
       <div class="search-spinner" id="searchSpinner"></div>
       <button type="button" class="cmdk-hint" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
-      <div class="search-suggestions" id="searchSuggestions"></div>
+      <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
     </div>
+    <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
+      <div class="n102-featured-art" id="n102FeaturedArt"></div>
+      <div class="n102-featured-shade"></div>
+      <div class="n102-featured-copy">
+        <span class="n102-featured-kicker">✦ FROM YOUR DISCOVERIES</span>
+        <h3 id="n102FeaturedTitle"></h3>
+        <p id="n102FeaturedMeta"></p>
+        <button id="n102FeaturedDetails" type="button" class="n102-featured-button">View details ↗</button>
+      </div>
+    </section>
+    <details class="nexus-refine" id="nexusRefinePanel">
+      <summary><span class="nexus-refine-label">⚙ Refine results</span><span class="nexus-refine-description">Genre · Rating · Year · Sort</span><span class="nexus-refine-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="nexus-refine-body">
     <div class="nexus-discovery-controls" role="group" aria-label="Refine discovery results">
+      <label>Genre <select id="nexusDiscoverGenre"><option value="all">All genres</option></select></label>
       <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
       <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
       <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
@@ -1098,6 +1471,8 @@ button:disabled{opacity:.48;cursor:not-allowed}
       <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
       <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
     </div>
+      </div>
+    </details>
     <div class="pool-grid" id="poolGrid">
       <div class="empty-note">Start typing above to search.</div>
     </div>
@@ -1123,6 +1498,23 @@ button:disabled{opacity:.48;cursor:not-allowed}
     </div>
   </section>
 
+
+<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
+  <div class="nexus-home-top"><div><div class="nexus-eyebrow">02 / YOUR COLLECTION</div><h2 id="nexusHomeTitle">Curated <em>for you.</em></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
+  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
+  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
+    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">My List →</a></div>
+    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
+  </div>
+  <details class="nexus-home-more">
+    <summary>Explore your taste profile <span aria-hidden="true">↗</span></summary>
+  <div class="nexus-home-lower">
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
+  </div>
+  </details>
+  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
+</section>
 
   <section class="nexus-tools" id="nexusDataTools" aria-label="Taste profile backup tools">
     <span class="nexus-tools-title">✦ Your taste, your data</span>
@@ -1472,7 +1864,22 @@ async function cacheGet(key, ttl = CACHE_TTL_MS){
   try{ const parsed = await idbGet("cache:" + key); if(!parsed || (Date.now() - parsed.ts) > ttl) return null; return parsed.data; }catch(e){ return null; }
 }
 async function cacheSet(key, data){ try{ await idbSet("cache:" + key, { ts: Date.now(), data }); }catch(e){} }
-async function withCache(key, fn, ttl = CACHE_TTL_MS){ const cached = await cacheGet(key, ttl); if(cached) return cached; const data = await fn(); await cacheSet(key, data); return data; }
+// 9.6: Coalesce simultaneous reads for the same cache key. Failed calls are
+// removed from the in-flight map so subsequent searches can retry normally.
+const nexusCacheInFlight = new Map();
+async function withCache(key, fn, ttl = CACHE_TTL_MS){
+  if(nexusCacheInFlight.has(key)) return nexusCacheInFlight.get(key);
+  const pending=(async()=>{
+    const cached=await cacheGet(key,ttl);
+    if(cached !== null && cached !== undefined) return cached;
+    const data=await fn();
+    await cacheSet(key,data);
+    return data;
+  })();
+  nexusCacheInFlight.set(key,pending);
+  try{return await pending;}
+  finally{if(nexusCacheInFlight.get(key)===pending)nexusCacheInFlight.delete(key);}
+}
 
 // IndexedDB entries were never evicted before — every "cache:..." key just
 // sat there forever once it stopped being read, growing unbounded over long-
@@ -1524,6 +1931,17 @@ const lastCallByHost = {}; const hostStartQueue = new Map();
 const MIN_GAP = 500; const MAX_RETRIES = 3; const FETCH_TIMEOUT_MS = 12000;
 function getHostKey(url){ try{ return new URL(url).hostname; }catch(e){ return "default"; } }
 function nexusWait(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function nexusAbortError(){const e=new Error("REQUEST_ABORTED");e.name="AbortError";return e;}
+function nexusWaitOrAbort(ms,signal){
+  if(signal?.aborted)return Promise.reject(nexusAbortError());
+  if(!signal)return nexusWait(ms);
+  return new Promise((resolve,reject)=>{
+    let timer;
+    const onAbort=()=>{clearTimeout(timer);signal.removeEventListener("abort",onAbort);reject(nexusAbortError());};
+    timer=setTimeout(()=>{signal.removeEventListener("abort",onAbort);resolve();},ms);
+    signal.addEventListener("abort",onAbort,{once:true});
+  });
+}
 async function nexusHostSlot(host){
   const prior=hostStartQueue.get(host)||Promise.resolve();
   const turn=prior.catch(()=>{}).then(async()=>{
@@ -1555,23 +1973,45 @@ function nexusRetryDelay(attempt,retryAfter){
 async function queuedFetch(url,options={},attempt=0){
   const host=getHostKey(url);
   const finalUrl=USE_SERVERLESS_PROXY?`${PROXY_BACKEND_URL}?url=${encodeURIComponent(url)}`:url;
+  if(options.signal?.aborted)throw nexusAbortError();
   await nexusHostSlot(host);
+  if(options.signal?.aborted)throw nexusAbortError();
   let res;
   try{res=await fetchWithTimeout(finalUrl,options);}
   catch(error){
     if(options.signal?.aborted)throw error;
     if(attempt>=MAX_RETRIES)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
-    await nexusWait(nexusRetryDelay(attempt));return queuedFetch(url,options,attempt+1);
+    await nexusWaitOrAbort(nexusRetryDelay(attempt),options.signal);return queuedFetch(url,options,attempt+1);
   }
   if(res.status===429||res.status===502||res.status===503||res.status===504){
     if(attempt>=MAX_RETRIES)throw new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
-    await nexusWait(nexusRetryDelay(attempt,res.headers?.get?.("Retry-After")));
+    await nexusWaitOrAbort(nexusRetryDelay(attempt,res.headers?.get?.("Retry-After")),options.signal);
     return queuedFetch(url,options,attempt+1);
   }
   if(!res.ok)throw new Error("API_ERROR_"+res.status);
   try{return await res.json();}catch(_){throw new Error("INVALID_API_RESPONSE");}
 }
 
+// 9.7: Treat third-party metadata as untrusted. Only expose HTTPS links
+// to users, and ensure optional API fields always have predictable shapes.
+function nexusSafeExternalUrl(value){
+  if(typeof value!=="string"||!value.trim())return "";
+  try{const url=new URL(value);return url.protocol==="https:"?url.href:"";}catch(_){return "";}
+}
+function nexusSafeArray(value){return Array.isArray(value)?value:[];}
+function nexusSafeText(value,fallback=""){return typeof value==="string"&&value.trim()?value.trim():fallback;}
+function nexusReadableApiError(error){
+  const code=nexusPublicApiError(error);
+  const messages={
+    TIMEOUT:"การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองอีกครั้ง",
+    INVALID_RESPONSE:"บริการส่งข้อมูลที่ไม่ถูกต้อง กรุณาลองอีกครั้ง",
+    SERVICE_UNAVAILABLE:"บริการข้อมูลขัดข้องชั่วคราว กรุณาลองอีกครั้ง",
+    RATE_LIMIT:"มีคำขอจำนวนมาก กรุณารอสักครู่แล้วลองใหม่",
+    SCRIPT_LOAD:"ไม่สามารถโหลดบริการเพลงได้ กรุณาลองอีกครั้ง",
+    REQUEST_FAILED:"ไม่สามารถโหลดข้อมูลได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่"
+  };
+  return messages[code]||messages.REQUEST_FAILED;
+}
 function nexusPublicApiError(error){
   const msg=String(error?.message||"").toLowerCase();
   if(msg.includes("timed out")||msg.includes("timeout"))return "TIMEOUT";
@@ -1720,17 +2160,17 @@ async function anilistQuery(query, variables){
   }
 }
 function normalizeAniListMedia(m, provider){
-  const cleanStreams = (m.externalLinks || []).filter(l => l.type === "STREAMING" || l.type === "INFO").slice(0, 3).map(l => ({ name: l.site, url: l.url, logo: faviconFor(l.url) }));
-  const studioNames = (m.studios && m.studios.nodes) ? m.studios.nodes.map(s => s.name) : [];
+  const cleanStreams = nexusSafeArray(m.externalLinks).filter(l => l && (l.type === "STREAMING" || l.type === "INFO") && nexusSafeExternalUrl(l.url)).slice(0,3).map(l => ({ name: nexusSafeText(l.site,"Open link"), url: nexusSafeExternalUrl(l.url), logo: faviconFor(l.url) }));
+  const studioNames = nexusSafeArray(m.studios?.nodes).map(s => s?.name).filter(Boolean);
   // Main staff (director etc.) and top-billed Japanese voice actors are the
   // anime/manga equivalent of the director/cast signal already used for
   // movies/TV — "always watches anything this VA is in" is a real pattern.
   // Both fields are optional in the query response (manga rarely has voice
   // actors, some entries have no staff credited yet), so this degrades to
   // studios-only exactly like before if either is missing.
-  const staffNames = (m.staff && m.staff.edges) ? m.staff.edges.map(e => e.node && e.node.name && e.node.name.full).filter(Boolean) : [];
-  const vaNames = (m.characters && m.characters.edges) ? m.characters.edges.flatMap(e => (e.voiceActors || []).map(va => va.name && va.name.full)).filter(Boolean) : [];
-  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji || m.title.native)) || "Untitled", originalTitle: m.title?.romaji || m.title?.native || "", aliases: [...new Set([m.title?.english,m.title?.romaji,m.title?.native,...(m.synonyms||[])].filter(Boolean))], image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: m.genres || [], url: m.siteUrl || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: (m.tags || []).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
+  const staffNames = nexusSafeArray(m.staff?.edges).map(e => e?.node?.name?.full).filter(Boolean);
+  const vaNames = nexusSafeArray(m.characters?.edges).flatMap(e => nexusSafeArray(e?.voiceActors).map(va => va?.name?.full)).filter(Boolean);
+  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji || m.title.native)) || "Untitled", originalTitle: m.title?.romaji || m.title?.native || "", aliases: [...new Set([m.title?.english,m.title?.romaji,m.title?.native,...(m.synonyms||[])].filter(Boolean))], image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: nexusSafeArray(m.genres), url: nexusSafeExternalUrl(m.siteUrl) || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: nexusSafeArray(m.tags).filter(Boolean).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
 }
 
 const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
@@ -1769,15 +2209,38 @@ function showToast(message, onAction, actionLabel = "Undo"){
   while (toastContainer.children.length > 3) toastContainer.removeChild(toastContainer.firstChild);
 }
 
+// NEXUS 9.2: bounded, explainable watchlist affinity. Watchlist is a weak
+// signal: adding a title for later is not the same as explicitly liking it.
+function nexusWatchlistAffinity(item, watchItems){
+  const genres=new Set((item?.genres||[]).filter(Boolean));
+  if(!genres.size || !watchItems.length)return {boost:0,genres:[]};
+  const counts=new Map();
+  watchItems.forEach(w=>{const unique=new Set(w.genres||[]);unique.forEach(g=>{if(g&&g!=="Unknown Genre")counts.set(g,(counts.get(g)||0)+1);});});
+  const matched=[...genres].filter(g=>counts.has(g)).sort((a,b)=>counts.get(b)-counts.get(a));
+  if(!matched.length)return {boost:0,genres:[]};
+  const strength=matched.slice(0,2).reduce((sum,g)=>sum+Math.min(3,counts.get(g)),0);
+  return {boost:Math.min(0.06,strength*0.012),genres:matched.slice(0,2)};
+}
+function nexusRecommendationExplanation(r){
+  const parts=[];
+  if(r.sourceTitles?.length)parts.push("similar to "+[...new Set(r.sourceTitles)].slice(0,2).join(" / "));
+  if(r.genreOverlap?.length)parts.push("liked genres: "+r.genreOverlap.slice(0,2).join(", "));
+  if(r.matchedTags?.length)parts.push("themes: "+r.matchedTags.slice(0,2).join(", "));
+  if(r.matchedCollaborators?.length)parts.push("shared creators: "+r.matchedCollaborators.slice(0,2).join(", "));
+  if(r.watchlistGenres?.length)parts.push("watchlist interest: "+r.watchlistGenres.join(", "));
+  return parts.length?parts.join(" · "):"Related to your liked titles";
+}
 async function computeRecommendations(){
   filterRow.style.display = "none"; renderSkeletons();
   const corePicks = [...selected.values()].filter(i => i.provider === mode); const expandedLikes = [...votedLikes.values()].filter(i => i.provider === mode);
-  const allInputs = [...corePicks, ...expandedLikes]; const candidates = new Map();
+  const allInputs = [...new Map([...corePicks, ...expandedLikes].map(i=>[i.uid,i])).values()];
+  const watchlistTaste=[...watchlist.values()].filter(i=>i.provider===mode && !votedDislikes.has(i.uid));
+  const candidates = new Map();
   try {
     // Fetch real tags + collaborators for liked movie/series/kdrama picks (anime/manga already have them).
     // These are independent per-item lookups, so there's no reason to make each
     // one wait for the previous one to finish.
-    await Promise.all(allInputs.map(async item => { await ensureTags(item); await ensureCollaborators(item); }));
+    await Promise.all(allInputs.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Seed enrichment unavailable",item.uid);} }));
 
     const likedTagMap = new Map(); const likedGenreMap = new Map(); const likedCollaboratorMap = new Map(); let totalGenreWeights = 0;
     allInputs.forEach(item => {
@@ -1797,8 +2260,10 @@ async function computeRecommendations(){
     // await, so two callbacks never touch the shared Map at the same instant.
     await Promise.all(allInputs.map(async (item) => {
       const isMP = item.isMasterpiece; const inputWeight = isMP ? 2 : 1; totalPicksWeight += inputWeight;
-      const recs = await getRecommendationsFor(item);
-      await resolveOngoingFlags(recs.map(r => r.item));
+      let recs=[];
+      try{recs=await getRecommendationsFor(item);await resolveOngoingFlags(recs.map(r=>r.item));}
+      catch(e){console.warn("Recommendation source unavailable",item.uid,e);}
+
       completedInputs++;
       setProgress(`Analyzing connections for "${item.title}" (${completedInputs}/${allInputs.length})...`);
       recs.forEach(r=>{
@@ -1819,7 +2284,7 @@ async function computeRecommendations(){
       // one they liked — but this taxonomy was never fetched for disliked items
       // before, so only their (already-present) genres worked as a negative
       // signal. Same independent-per-item fetch pattern as allInputs above.
-      await Promise.all(dislikedItems.map(async item => { await ensureTags(item); await ensureCollaborators(item); }));
+      await Promise.all(dislikedItems.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Dislike enrichment unavailable",item.uid);} }));
       dislikedItems.forEach(item => {
         (item.tags || []).forEach(t => dislikedTags.add(t.name));
         (item.collaborators || []).forEach(c => dislikedCollaborators.add(c));
@@ -1906,6 +2371,8 @@ async function computeRecommendations(){
       // category, most likely to overlap by chance).
       const penalty = (genrePenaltyCount * 0.2) + (dislikedTagHits * 0.08) + (dislikedCollabHits * 0.15) + (dislikedSynopsisSim * 0.15) + artistPenalty;
       const sourceScore = totalPicksWeight ? c.sources / totalPicksWeight : 0;
+      const watchAffinity=nexusWatchlistAffinity(c.item,watchlistTaste);
+      c.watchlistGenres=watchAffinity.genres;
       // Music tracks carry no tag/collaborator/synopsis taxonomy usable the same
       // way movies/anime do, so those terms are meaningless for this mode — score
       // purely from the provider's own similarity signal instead. (Deezer genres
@@ -1920,7 +2387,7 @@ async function computeRecommendations(){
         // mediocre match from several. sourceScore (cross-seed agreement) is
         // kept as a smaller secondary signal.
         const avgSimilarity = c.sources ? Math.min(1, (c.weight / c.sources) / 10) : 0;
-        c.matchScore = Math.max(0, (avgSimilarity * musicSignalWeights.similarity) + (sourceScore * musicSignalWeights.source) - penalty);
+        c.matchScore = Math.max(0, (avgSimilarity * musicSignalWeights.similarity) + (sourceScore * musicSignalWeights.source) + watchAffinity.boost - penalty);
         c.item._signals = { similarity: avgSimilarity, source: sourceScore };
       } else {
         // c.weight now carries each provider's own real relatedness signal
@@ -1930,7 +2397,7 @@ async function computeRecommendations(){
         // strongest candidate in this pool since providers use different scales.
         const normalizedRankScore = maxCandidateWeight ? Math.min(1, c.weight / maxCandidateWeight) : 0;
         const cappedTagScore = Math.min(tagMatchScore, 1);
-        c.matchScore = Math.max(0, ((sourceScore * signalWeights.source) + (normalizedRankScore * signalWeights.rank) + (c.genreAffinity * signalWeights.genre) + (cappedTagScore * signalWeights.tag) + (collaboratorAffinity * signalWeights.collaborator) + (synopsisScore * signalWeights.synopsis)) - penalty);
+        c.matchScore = Math.max(0, ((sourceScore * signalWeights.source) + (normalizedRankScore * signalWeights.rank) + (c.genreAffinity * signalWeights.genre) + (cappedTagScore * signalWeights.tag) + (collaboratorAffinity * signalWeights.collaborator) + (synopsisScore * signalWeights.synopsis)) + watchAffinity.boost - penalty);
         c.item._signals = { source: sourceScore, rank: normalizedRankScore, genre: c.genreAffinity, tag: cappedTagScore, collaborator: collaboratorAffinity, synopsis: synopsisScore };
       }
     };
@@ -1980,14 +2447,15 @@ async function computeRecommendations(){
     // with the full signal set — bringing them to the same matching depth
     // anime/manga already had.
     setProgress("Refining matches with detailed tag & credit data...");
-    await Promise.all(ranked.map(async c => { await ensureTags(c.item); await ensureCollaborators(c.item); }));
+    await Promise.all(ranked.map(async c => { try{await ensureTags(c.item);await ensureCollaborators(c.item);}catch(e){console.warn("Candidate enrichment unavailable",c.item.uid);} }));
     ranked.forEach(scoreCandidate);
     ranked.sort((a,b)=> b.matchScore - a.matchScore || b.sources - a.sources || b.weight - a.weight);
 
     setProgress("Injecting localized watch providers for Thailand...");
-    await Promise.all(ranked.map(async c => {
+    await Promise.all(ranked.map(async c => {try{
       if (c.item.provider === "movie" || c.item.provider === "series" || c.item.provider === "kdrama") { c.item.streams = await getLocalizedWatchProviders(c.item.id, c.item.provider); }
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
+      }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
     setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); renderResults(applyFilters(ranked), totalPicksWeight);
   } catch(e) { setProgress(""); resultsGrid.innerHTML = `<div class="error-note">Processing failed. Click primary action to retry.</div>`; }
@@ -2353,7 +2821,7 @@ async function getLastfmArtistTags(artist){
 async function normalizeDeezerTrack(t) {
   if(!t||typeof t!=="object"||!t.id||!t.title)return null;
   const imgUrl = t.album && t.album.cover_medium ? t.album.cover_medium : "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200";
-  const artistName = t.artist ? t.artist.name : "Unknown Artist";
+  const artistName = nexusSafeText(t.artist?.name,"Unknown Artist");
   let genres = await getDeezerAlbumGenres(t.album && t.album.id);
   if (!genres.length) genres = await getLastfmArtistTags(artistName);
   return {
@@ -2366,13 +2834,37 @@ async function normalizeDeezerTrack(t) {
     score: t.rank ? Math.round(Math.min(10, (t.rank / 1000000) * 10) * 10) / 10 : 8.0,
     artist: artistName,
     genres,
-    url: t.link || `https://www.deezer.com/track/${t.id}`,
-    streams: [{ name: "Listen on Deezer", url: t.link, logo: faviconFor("https://deezer.com") }],
+    url: nexusSafeExternalUrl(t.link) || `https://www.deezer.com/track/${encodeURIComponent(t.id)}`,
+    streams: [{ name: "Listen on Deezer", url: nexusSafeExternalUrl(t.link) || `https://www.deezer.com/track/${encodeURIComponent(t.id)}`, logo: faviconFor("https://deezer.com") }],
     rank: t.rank || 0,
     preview: nexusDeezerPreviewUrl(t.preview)
   };
 }
 
+// NEXUS 9.4 — deterministic music relevance, preserving Deezer order as a tie-breaker.
+function nexusMusicSearchKey(value){
+  return String(value||"").normalize("NFKC").toLocaleLowerCase().replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu," ").trim().replace(/\s+/g," ");
+}
+function nexusMusicRelevance(track,query){
+  const q=nexusMusicSearchKey(query);if(!q)return 0;
+  const title=nexusMusicSearchKey(track.title), artist=nexusMusicSearchKey(track.artist), album=nexusMusicSearchKey(track.album);
+  const terms=q.split(" ").filter(Boolean);
+  let score=title===q?120:artist===q?110:0;
+  if(title.startsWith(q))score=Math.max(score,95);
+  if(artist.startsWith(q))score=Math.max(score,85);
+  if(title.includes(q))score=Math.max(score,75);
+  if(artist.includes(q))score=Math.max(score,65);
+  if(album.includes(q))score=Math.max(score,35);
+  score+=terms.reduce((sum,t)=>sum+(title.split(" ").includes(t)?9:0)+(artist.split(" ").includes(t)?6:0)+(album.split(" ").includes(t)?2:0),0);
+  return score;
+}
+function nexusRankMusicResults(items,query){
+  const seen=new Set();
+  return (Array.isArray(items)?items:[]).map((track,index)=>({track,index,score:nexusMusicRelevance(track,query)}))
+    .sort((a,b)=>b.score-a.score||a.index-b.index)
+    .filter(({track})=>{const key=String(track.id||track.uid||"")||nexusMusicSearchKey(track.artist)+"|"+nexusMusicSearchKey(track.title);if(seen.has(key))return false;seen.add(key);return true;})
+    .map(({track})=>track);
+}
 // Search diagnostics describe API payloads, not a claim that audio played successfully.
 const nexusMusicSearchAudit={query:"",received:0,valid:0,withPreview:0,withoutPreview:0,invalid:0,checkedAt:"",error:""};
 function nexusMusicAuditSummary(){
@@ -2382,15 +2874,15 @@ function nexusMusicAuditSummary(){
 }
 document.getElementById?.("nexusPreviewAudit")?.addEventListener?.("click",()=>nexusPreviewReport(nexusMusicAuditSummary(),"info"));
 async function searchMusic(query) {
-  return withCache("deezer-direct-search-v7:" + query.toLowerCase(), async () => {
+  return withCache("deezer-direct-search-v9:" + nexusMusicSearchKey(query), async () => {
     try {
       const data = await fetchDeezerAPI(`/search?q=${encodeURIComponent(query)}&limit=25`);
       const results = Array.isArray(data?.data)?data.data:[];
       // Same reasoning as the movie/TV/anime search functions above — Deezer's
       // /search already returns results in relevance order, so this used to
       // discard that and re-rank by "rank" (a popularity/quality score) alone.
-      const top = results.slice(0, 12);
-      const normalized=(await Promise.all(top.map(t => normalizeDeezerTrack(t)))).filter(Boolean);
+      const top = results.slice(0, 25);
+      const normalized=nexusRankMusicResults((await Promise.all(top.map(t => normalizeDeezerTrack(t)))).filter(Boolean),query).slice(0,12);
       Object.assign(nexusMusicSearchAudit,{query:String(query).slice(0,100),received:results.length,valid:normalized.length,withPreview:normalized.filter(t=>!!t.preview).length,withoutPreview:normalized.filter(t=>!t.preview).length,invalid:top.length-normalized.length,checkedAt:new Date().toISOString(),error:""});
       return normalized;
     } catch (e) {
@@ -3003,10 +3495,11 @@ function setMode(newMode){
 }
 const nexusDiscoveryByMode = new Map();
 function nexusCaptureDiscovery(){
-  return {query:searchBox.value,score:document.getElementById("nexusDiscoverScore").value,year:document.getElementById("nexusDiscoverYear").value,sort:document.getElementById("nexusDiscoverSort").value,hide:document.getElementById("nexusDiscoverHideDisliked").checked};
+  return {query:searchBox.value,genre:document.getElementById("nexusDiscoverGenre").value,score:document.getElementById("nexusDiscoverScore").value,year:document.getElementById("nexusDiscoverYear").value,sort:document.getElementById("nexusDiscoverSort").value,hide:document.getElementById("nexusDiscoverHideDisliked").checked};
 }
 function nexusRestoreDiscovery(state){
   searchBox.value=state?.query || "";
+  document.getElementById("nexusDiscoverGenre").value=state?.genre || "all";
   document.getElementById("nexusDiscoverScore").value=state?.score || "0";
   document.getElementById("nexusDiscoverYear").value=state?.year || "all";
   document.getElementById("nexusDiscoverSort").value=state?.sort || "default";
@@ -3315,6 +3808,7 @@ function nexusTasteMatch(item, model) {
   return {score,reason};
 }
 function nexusDiscoveryFiltered(items) {
+  const genre = document.getElementById("nexusDiscoverGenre").value;
   const minScore = Number(document.getElementById("nexusDiscoverScore").value);
   const minYear = document.getElementById("nexusDiscoverYear").value;
   const sort = document.getElementById("nexusDiscoverSort").value;
@@ -3322,6 +3816,7 @@ function nexusDiscoveryFiltered(items) {
   const filtered = applyModernFilter(items).filter(item => {
     const score = Number(item.score);
     const year = Number.parseInt(item.year, 10);
+    if (genre !== "all" && !(Array.isArray(item.genres) && item.genres.includes(genre))) return false;
     if (minScore && (!Number.isFinite(score) || score < minScore)) return false;
     if (minYear !== "all" && (!Number.isFinite(year) || year < Number(minYear))) return false;
     if (hideDisliked && votedDislikes.has(item.uid)) return false;
@@ -3337,14 +3832,23 @@ function nexusDiscoveryFiltered(items) {
   if (sort === "title") filtered.sort((a,b) => String(a.title).localeCompare(String(b.title)));
   return filtered;
 }
+function nexusUpdateDiscoverGenres(items){
+  const select=document.getElementById("nexusDiscoverGenre");
+  const old=select.value;
+  const genres=[...new Set(items.flatMap(item=>Array.isArray(item.genres)?item.genres:[]).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  select.replaceChildren(new Option("All genres","all"));
+  genres.forEach(g=>select.add(new Option(g,g)));
+  select.value=genres.includes(old)?old:"all";
+}
 function nexusReapplyDiscovery() {
   poolDisplayCount = POOL_PAGE_SIZE;
   currentPoolItems = nexusDiscoveryFiltered(nexusDiscoverRawItems);
   renderSearchResults(null, nexusDiscoverPopular, true);
 }
-["nexusDiscoverScore","nexusDiscoverYear","nexusDiscoverSort","nexusDiscoverHideDisliked"]
+["nexusDiscoverGenre","nexusDiscoverScore","nexusDiscoverYear","nexusDiscoverSort","nexusDiscoverHideDisliked"]
   .forEach(id => document.getElementById(id).addEventListener("change", nexusReapplyDiscovery));
 document.getElementById("nexusDiscoverReset").addEventListener("click", () => {
+  document.getElementById("nexusDiscoverGenre").value = "all";
   document.getElementById("nexusDiscoverScore").value = "0";
   document.getElementById("nexusDiscoverYear").value = "all";
   document.getElementById("nexusDiscoverSort").value = "default";
@@ -3352,6 +3856,7 @@ document.getElementById("nexusDiscoverReset").addEventListener("click", () => {
   nexusReapplyDiscovery();
 });
 document.querySelectorAll("[data-nexus-preset]").forEach(button => button.addEventListener("click", () => {
+  document.getElementById("nexusDiscoverGenre").value = "all";
   document.getElementById("nexusDiscoverScore").value = button.dataset.nexusPreset === "top" ? "8" : "0";
   document.getElementById("nexusDiscoverYear").value = button.dataset.nexusPreset === "recent" ? "2020" : "all";
   document.getElementById("nexusDiscoverSort").value = button.dataset.nexusPreset === "top" ? "rating" : button.dataset.nexusPreset === "recent" ? "newest" : "default";
@@ -3403,7 +3908,7 @@ function localSearch(query, limit = 6){
   return scored.slice(0,limit).map(x=>x.item);
 }
 function nexusNormalizeSearch(text){
-  return String(text||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim();
+  return String(text||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLocaleLowerCase().replace(/[^\p{L}\p{M}\p{N}]+/gu," ").trim();
 }
 function nexusSearchRank(item,query){
   const q=nexusNormalizeSearch(query);
@@ -4111,6 +4616,8 @@ function buildDetailModalHtml(item, extras){
   const watchIcon = isInWatchlist
     ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`
     : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>`;
+  const selectedNow=selected.has(item.uid);
+  const quickSelectHtml=`<button type="button" class="nexus-quick-select" data-action="quick-select" aria-pressed="${selectedNow}">${selectedNow?"✓ Selected":"+ Add to Selection"}</button>`;
   const actionsHtml = item.provider === "music" ? "" : `<div class="detail-actions">
     <button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${likeIcon}</button>
     <button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${dislikeIcon}</button>
@@ -4121,7 +4628,7 @@ function buildDetailModalHtml(item, extras){
   const factsHtml = nexusDetailFactsHtml(item,extras);
   const episodeProgressHtml = nexusEpisodeProgressHtml(item)+nexusMangaProgressHtml(item)+nexusSeriesProgressHtml(item)+nexusProgressMeterHtml(item)+nexusSeriesSeasonHtml(item,extras);
 
-  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${factsHtml}<div data-detail-episode-progress>${episodeProgressHtml}</div>${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
+  return `<div class="detail-backdrop" style="background-image:url('${escapeHtml(backdrop || "")}')"></div><div class="detail-content"><h2 class="detail-title">${escapeHtml(item.title)}</h2><p class="detail-meta">${metaLine}</p>${quickSelectHtml}${actionsHtml}<div class="tag-row">${genresHtml}</div>${tasteConnectionHtml}${factsHtml}<div data-detail-episode-progress>${episodeProgressHtml}</div>${airingHtml}${item.overview ? `<p class="detail-overview">${escapeHtml(item.overview)}</p>` : ""}${trailerHtml}${castHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">Open on ${providerLabel} →</a></div>`;
 }
 // titleIndex (populated by indexItems, see below) is the shared lookup so the
 // modal can be opened from a plain uid string in an inline onclick handler —
@@ -4198,6 +4705,25 @@ function nexusWireTimeline(item){
     refreshDetailModalActions(item);apply();renderWatchlist();showToast("Watched through episode "+episode);
   }));
 }
+function nexusQuickViewHtml(item){
+  const aliases = Array.isArray(item.aliases) ? item.aliases.filter(Boolean).slice(0,4) : [];
+  const genres = Array.isArray(item.genres) ? item.genres.filter(Boolean).slice(0,5) : [];
+  const title = escapeHtml(item.title || "Untitled");
+  const image = escapeHtml(item.image || POSTER_FALLBACK);
+  const meta = [item.year, item.score ? "★"+item.score : "", item.artist].filter(Boolean).map(v=>escapeHtml(String(v))).join(" · ");
+  const selectedNow = selected.has(item.uid);
+  return `<div class="nexus-quick-view" role="status" aria-live="polite"><div class="nexus-quick-top"><img src="${image}" alt="${title}" onerror="this.onerror=null;this.src=POSTER_FALLBACK"><div><h2 class="detail-title">${title}</h2><p class="detail-meta">${meta}</p>${aliases.length?`<p class="detail-meta">Also known as: ${aliases.map(escapeHtml).join(" · ")}</p>`:""}<div class="tag-row">${genres.map(g=>`<span class="tag match">${escapeHtml(g)}</span>`).join("")}</div><button type="button" class="nexus-quick-select" data-action="quick-select" aria-pressed="${selectedNow}">${selectedNow?"✓ Selected":"+ Add to Selection"}</button></div></div>${item.overview?`<p class="detail-overview">${escapeHtml(item.overview)}</p>`:""}<p class="detail-meta" data-quick-status>Loading more details…</p></div>`;
+}
+function nexusWireQuickSelect(item){
+  const btn=detailModalBody.querySelector('[data-action="quick-select"]');
+  if(!btn)return;
+  btn.addEventListener("click",()=>{
+    toggleSelect(item);
+    const on=selected.has(item.uid);
+    btn.textContent=on?"✓ Selected":"+ Add to Selection";
+    btn.setAttribute("aria-pressed",String(on));
+  });
+}
 async function openDetailModal(uid, onBack){
   const item = titleIndex.get(uid);
   if (!item) return;
@@ -4207,7 +4733,8 @@ async function openDetailModal(uid, onBack){
   detailModal.style.display = "flex";
   document.getElementById("detailModalClose").focus({preventScroll:true});
   document.body.style.overflow = "hidden";
-  detailModalBody.innerHTML = `<div class="detail-modal-loading" role="status" aria-live="polite">Loading details…</div>`;
+  detailModalBody.innerHTML = nexusQuickViewHtml(item);
+  nexusWireQuickSelect(item);
   // ensureCollaborators is a no-op if item.collaborators is already set (e.g.
   // anime/manga, or a title that already passed through Results scoring),
   // and otherwise fetches the same shape used everywhere else in the app —
@@ -4220,6 +4747,8 @@ async function openDetailModal(uid, onBack){
     [extras] = await Promise.all([getDetailExtras(item), ensureCollaborators(item)]);
   } catch (_) {
     if(detailModal.style.display === "none" || detailRequestId !== nexusDetailRequestId) return;
+    const status=detailModalBody.querySelector("[data-quick-status]");
+    if(status){status.textContent="Additional details unavailable. Basic details and selection still work.";return;}
     detailModalBody.innerHTML = '<div class="detail-modal-loading" role="alert">Could not load details. <button type="button" class="nexus-calendar-export" data-action="retry-details">Try again</button></div>';
     detailModalBody.querySelector('[data-action="retry-details"]').addEventListener("click",()=>openDetailModal(uid,onBack));
     return;
@@ -4230,6 +4759,7 @@ async function openDetailModal(uid, onBack){
   if(item.provider === "anime" && Number.isSafeInteger(extras.airing?.episodes) && extras.airing.episodes > 0){item.episodes=extras.airing.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
   const backBtnHtml = onBack ? `<button type="button" class="detail-back-btn" id="detailBackBtn">← Back to Taste Map</button>` : "";
   detailModalBody.innerHTML = backBtnHtml + buildDetailModalHtml(item, extras);
+  nexusWireQuickSelect(item);
   if (onBack) document.getElementById("detailBackBtn").addEventListener("click", onBack);
   const likeBtn = detailModalBody.querySelector('[data-action="like"]');
   const dislikeBtn = detailModalBody.querySelector('[data-action="dislike"]');
@@ -4410,7 +4940,7 @@ function nexusPreviewRetry(){
 }
 function nexusPreviewResetButton(btn){if(btn){btn.textContent="▶";btn.classList.remove("playing");btn.removeAttribute("aria-busy");btn.setAttribute("aria-label","Play song preview");}}
 async function togglePreview(url,btn,fallbackUrl){
-  const safeUrl=nexusSafePreviewUrl(url);
+  const safeUrl=nexusDeezerPreviewUrl(nexusSafePreviewUrl(url));
   const safeFallback=nexusSafeMusicLink(fallbackUrl);
   if(!safeUrl||!nexusDeezerPreviewUrl(safeUrl)){handlePreviewFailure(btn,safeFallback,new Error("No preview clip available"));return;}
   if(currentAudio && currentAudio.src===safeUrl && !currentAudio.paused){
@@ -4433,7 +4963,7 @@ async function togglePreview(url,btn,fallbackUrl){
   audio.nexusPreviewTimeout=timeout;
   const clearAttempt=()=>clearTimeout(timeout);
   if(btn?.dataset)btn.dataset.previewUrl=safeUrl;
-  btn.textContent="…";btn.setAttribute("aria-busy","true");
+  if(btn){btn.textContent="…";btn.setAttribute("aria-busy","true");}
   audio.onended=()=>{clearAttempt();if(currentAudio===audio){nexusPreviewProgressStop();currentAudio=null;nexusPreviewResetButton(btn);const panel=document.getElementById?.("nexusPreviewProgress");if(panel)panel.hidden=true;}};
   audio.onerror=()=>{clearAttempt();if(currentAudio===audio&&attempt===nexusPreviewAttempt){
     const error=new Error("Media download failed");
@@ -4447,7 +4977,7 @@ async function togglePreview(url,btn,fallbackUrl){
     await audio.play();
     clearAttempt();
     if(currentAudio!==audio||attempt!==nexusPreviewAttempt){audio.pause();audio.removeAttribute("src");nexusPreviewResetButton(btn);return;}
-    btn.textContent="⏸";btn.classList.add("playing");btn.removeAttribute("aria-busy");btn.setAttribute("aria-label","Pause song preview");
+    if(btn){btn.textContent="⏸";btn.classList.add("playing");btn.removeAttribute("aria-busy");btn.setAttribute("aria-label","Stop song preview");}
     nexusPreviewProgressStart(audio);
     nexusPreviewDiagnostics.played++;nexusPreviewDiagnostics.lastError="";
     nexusPreviewReport("Preview playing · source verified by browser", "playing");
@@ -4522,6 +5052,7 @@ function whyText(r){
   let base = "Matches your overall taste profile"; if (names.length) { base = `Similar in style to <strong>${names[0]}</strong>${names.length > 1 ? ` and ${names.length - 1} other liked ${unit}${names.length - 1 > 1 ? "s" : ""}` : ""}`; }
   let labelPrefix = mode === "music" ? "Artist" : "Genre";
   let details = []; if(sharedGenres.length) details.push(`${labelPrefix}: ${sharedGenres.join(" & ")}`); if(sharedTags.length) details.push(`Themes: ${sharedTags.join(", ")}`); if(sharedCollabs.length) details.push(`Shared crew: ${sharedCollabs.join(", ")}`);
+  if(r.watchlistGenres?.length)details.push(`Watchlist interest: ${r.watchlistGenres.map(escapeHtml).join(", ")}`);
   return details.length ? `${mpLabel}${base} <br><span style="color:var(--gold); font-size:11px; margin-top:4px; display:inline-block; font-weight:500;">→ ${details.join(" | ")}</span>` : mpLabel + base;
 }
 
@@ -6721,6 +7252,77 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
   </div>
   <p id="nexusConflictError" role="alert" style="color:#ffb7b7"></p>
 </dialog>
+<script id="nexus102-dashboard-interactions">
+(function(){
+  const $=id=>document.getElementById(id);
+  function closeMenu(){
+    $("n102Sidebar")?.classList.remove("is-open");
+    $("n102SidebarScrim").hidden=true;
+    $("n102MenuToggle")?.setAttribute("aria-expanded","false");
+  }
+  $("n102MenuToggle")?.addEventListener("click",()=>{
+    const open=$("n102Sidebar").classList.toggle("is-open");
+    $("n102SidebarScrim").hidden=!open;
+    $("n102MenuToggle").setAttribute("aria-expanded",String(open));
+  });
+  $("n102SidebarScrim")?.addEventListener("click",closeMenu);
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeMenu()});
+  $("n102Sidebar")?.querySelectorAll("a").forEach(a=>a.addEventListener("click",closeMenu));
+  $("n102Sidebar")?.querySelectorAll("[data-n102-mode]").forEach(button=>{
+    button.addEventListener("click",()=>{
+      document.querySelector('#typeToggle [data-mode="'+button.dataset.n102Mode+'"]')?.click();
+      document.querySelectorAll(".n102-nav-link").forEach(el=>el.classList.remove("is-active"));
+      button.classList.add("is-active");
+      closeMenu();
+      $("searchSection")?.scrollIntoView({behavior:"smooth",block:"start"});
+    });
+  });
+  $("n102Sidebar")?.querySelector("[data-n102-home]")?.addEventListener("click",()=>{
+    document.querySelectorAll(".n102-nav-link").forEach(el=>el.classList.remove("is-active"));
+    $("n102Sidebar").querySelector("[data-n102-home]").classList.add("is-active");
+  });
+  const pool=$("poolGrid"), featured=$("n102Featured");
+  let featuredCard=null;
+  function syncFeatured(){
+    const card=pool?.querySelector(".pool-item");
+    if(!card){featured.hidden=true;featuredCard=null;return}
+    const img=card.querySelector("img.p-poster");
+    const title=card.querySelector(".p-title");
+    const meta=card.querySelector(".p-meta");
+    if(!img||!title){featured.hidden=true;featuredCard=null;return}
+    featuredCard=card;
+    $("n102FeaturedTitle").textContent=title.textContent.trim();
+    $("n102FeaturedMeta").textContent=meta?.textContent.trim()||"Explore this discovery";
+    const imageUrl=img.currentSrc||img.src;
+    $("n102FeaturedArt").style.backgroundImage=imageUrl?'url("'+imageUrl.replace(/["\\]/g,"")+'")':"none";
+    featured.hidden=false;
+  }
+  $("n102FeaturedDetails")?.addEventListener("click",()=>{
+    const poster=featuredCard?.querySelector("img.p-poster");
+    if(poster)poster.click();
+    else featuredCard?.querySelector("button")?.click();
+  });
+  if(pool){new MutationObserver(syncFeatured).observe(pool,{childList:true,subtree:false});syncFeatured()}
+  const list=$("watchlistGrid"), output=$("n102Continue");
+  function syncWatchlist(){
+    if(!list||!output)return;
+    const cards=[...list.children].filter(el=>el.querySelector("img")).slice(0,3);
+    output.replaceChildren();
+    if(!cards.length){
+      const p=document.createElement("p");p.className="n102-rail-empty";p.textContent="Save titles to your Watchlist to see them here.";output.append(p);return;
+    }
+    cards.forEach(card=>{
+      const link=document.createElement("a");link.className="n102-continue-item";link.href="#watchlistSection";
+      const sourceImg=card.querySelector("img");
+      if(sourceImg){const img=document.createElement("img");img.src=sourceImg.currentSrc||sourceImg.src;img.alt="";img.loading="lazy";link.append(img)}
+      const box=document.createElement("div"),title=document.createElement("strong"),note=document.createElement("small");
+      title.textContent=(card.querySelector(".w-title,.ticket-title,.p-title,h3,h4")?.textContent||card.textContent||"Saved title").trim().slice(0,85);
+      note.textContent="View in Watchlist ↗";box.append(title,note);link.append(box);output.append(link);
+    });
+  }
+  if(list){new MutationObserver(syncWatchlist).observe(list,{childList:true,subtree:false});syncWatchlist()}
+})();
+</script>
 </body>
 </html><style>
 .nexus-music-player-status{display:grid;gap:10px;margin:12px 0 18px;padding:12px;border:1px solid rgba(207,170,93,.28);border-radius:12px}
