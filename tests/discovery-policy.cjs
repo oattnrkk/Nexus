@@ -35,7 +35,7 @@ c.n173SyncSaveButtons();check('Unsaved result exposes save action',button.textCo
 c.watchlist.set(b.uid,b);c.n173SyncSaveButtons();check('Saved result exposes removal action',button.textContent==='Saved'&&button['aria-pressed']==='true'&&button['aria-label'].startsWith('Remove '));
 c.votedDislikes.set(a.uid,a);c.n173SyncSaveButtons();check('Existing save can still be removed after cross-source dislike',!button.disabled);
 c.watchlist.delete(b.uid);c.n173SyncSaveButtons();check('Cross-source dislike disables new save',button.disabled);
-let writes=0,undo;Object.assign(c,{saveState:()=>writes++,renderWatchlist(){},renderAnalytics(){},renderResults(){},applyFilters:()=>[],lastRanked:[],lastTotalPicks:0,showToast:(_,action)=>undo=action});run(fn('handleWatchlist'));
+let writes=0,undo;Object.assign(c,{saveState:()=>writes++,renderWatchlist(){},renderNexusHome(){},renderAnalytics(){},renderResults(){},applyFilters:()=>[],lastRanked:[],lastTotalPicks:0,showToast:(_,action)=>undo=action});run(fn('handleWatchlist'));
 c.handleWatchlist(b);check('Handler also rejects disliked saves',!c.watchlist.has(b.uid)&&writes===0);
 c.votedDislikes.clear();c.handleWatchlist(b);check('Save handler persists and synchronizes button',c.watchlist.has(b.uid)&&writes===1&&button['aria-pressed']==='true');
 undo();check('Undo removes saved title and updates button',!c.watchlist.has(b.uid)&&writes===2&&button['aria-pressed']==='false');
