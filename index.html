@@ -21,7 +21,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>NEXUS — Find your next favorite</title>
 <meta name="description" content="Find your next movie, series or anime. Get three picks for your taste, check Netflix Thailand availability via TMDB, and keep your Watchlist in one place.">
-<meta name="nexus-version" content="17.1">
+<meta name="nexus-version" content="17.2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1360,6 +1360,8 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 }
 </style>
 <style id="nexus171-customer-flow">
+.n172-catalog-notice{padding:12px 15px;border:1px solid rgba(223,184,119,.3);border-radius:12px;color:var(--gold);font-size:12px;line-height:1.7}.n172-catalog-notice[hidden]{display:none!important}
+@media(max-width:650px){.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
 /* NEXUS 17.1: three clear starting points and progressive disclosure. */
 .auth-bar{left:auto!important;right:auto!important;margin-left:var(--n102-left);margin-right:var(--n102-right);width:auto!important}
 .wrap>footer{margin-left:0!important;margin-right:0!important}
@@ -1504,6 +1506,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
       <span class="count" id="poolCount"></span>
     </div>
     
+    <p id="n172CatalogNotice" class="n172-catalog-notice" role="status" aria-live="polite" hidden></p>
     <div id="n171Guide" class="n171-guide" hidden>
       <p id="n171GuideText" role="status" aria-live="polite"></p>
       <button type="button" id="n171GuideFind" class="nexus-tool-btn" disabled>Find similar titles</button>
@@ -2073,9 +2076,10 @@ function nexusWaitOrAbort(ms,signal){
   });
 }
 async function nexusHostSlot(host){
+  const gap=host==='graphql.anilist.co'?2100:MIN_GAP;
   const prior=hostStartQueue.get(host)||Promise.resolve();
   const turn=prior.catch(()=>{}).then(async()=>{
-    const delay=Math.max(0,(lastCallByHost[host]||0)+MIN_GAP-Date.now());
+    const delay=Math.max(0,(lastCallByHost[host]||0)+gap-Date.now());
     if(delay)await nexusWait(delay);
     lastCallByHost[host]=Date.now();
   });
@@ -2096,29 +2100,36 @@ function nexusRetryDelay(attempt,retryAfter){
   if(retryAfter){
     const seconds=Number(retryAfter);
     const parsed=Number.isFinite(seconds)?seconds*1000:Date.parse(retryAfter)-Date.now();
-    if(Number.isFinite(parsed))return Math.max(1000,Math.min(15000,parsed));
+    if(Number.isFinite(parsed))return Math.max(1000,parsed);
   }
   return Math.min(8000,1000*Math.pow(2,attempt));
 }
 async function queuedFetch(url,options={},attempt=0){
   const host=getHostKey(url);
+  const {nexusMaxRetries=MAX_RETRIES,nexusTimeoutMs=FETCH_TIMEOUT_MS,...fetchOptions}=options;
   const finalUrl=USE_SERVERLESS_PROXY?`${PROXY_BACKEND_URL}?url=${encodeURIComponent(url)}`:url;
   if(options.signal?.aborted)throw nexusAbortError();
   await nexusHostSlot(host);
   if(options.signal?.aborted)throw nexusAbortError();
   let res;
-  try{res=await fetchWithTimeout(finalUrl,options);}
+  try{res=await fetchWithTimeout(finalUrl,fetchOptions,nexusTimeoutMs);}
   catch(error){
     if(options.signal?.aborted)throw error;
-    if(attempt>=MAX_RETRIES)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
+    if(attempt>=nexusMaxRetries)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
     await nexusWaitOrAbort(nexusRetryDelay(attempt),options.signal);return queuedFetch(url,options,attempt+1);
   }
   if(res.status===429||res.status===502||res.status===503||res.status===504){
-    if(attempt>=MAX_RETRIES)throw new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
+    if(attempt>=nexusMaxRetries){
+      const error=new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
+      error.retryAfterMs=nexusRetryDelay(attempt,res.headers?.get?.('Retry-After'));throw error;
+    }
     await nexusWaitOrAbort(nexusRetryDelay(attempt,res.headers?.get?.("Retry-After")),options.signal);
     return queuedFetch(url,options,attempt+1);
   }
-  if(!res.ok)throw new Error("API_ERROR_"+res.status);
+  if(!res.ok){
+    const error=new Error("API_ERROR_"+res.status);error.status=res.status;
+    throw error;
+  }
   try{return await res.json();}catch(_){throw new Error("INVALID_API_RESPONSE");}
 }
 
@@ -2322,8 +2333,8 @@ async function n111NetflixThailandStatus(item){
   if(old&&Date.now()-old.time<(old.unknown?n111NetflixUnknownTTL:n111NetflixCacheTTL))return old.promise;
   const promise=(async()=>{
     const names=n111NetflixCandidates(item);
-    if(item.provider!=='anime'){
-      const kind=item.provider==='movie'?'movie':'tv';
+    if(item.provider!=='anime'||n172IsTmdbAnime(item)){
+      const kind=n172IsTmdbAnime(item)?n172TmdbAnimeKind(item):(item.provider==='movie'?'movie':'tv');
       const id=Number(item.id);
       if(!Number.isSafeInteger(id)||id<=0)return n111NetflixStates.UNKNOWN;
       try{
@@ -2446,26 +2457,76 @@ async function resolveTmdbTvIdForAnime(title, year){
 // fallback below can strip it back out via a plain string match instead of a
 // fragile regex mirroring the query structure.
 const ANILIST_HEAVY_FIELDS = " staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } }";
+let n172AniListUnavailableUntil=0;
 async function anilistQuery(query, variables){
-  const headers = { "Content-Type": "application/json", "Accept": "application/json" };
-  try {
-    return await queuedFetch(ANILIST_BASE, { method: "POST", headers, body: JSON.stringify({ query, variables }) });
-  } catch (e) {
-    // AniList rejects overly-complex queries with a non-2xx response (most
-    // relevantly: the staff+characters fields added for VA/staff collaborator
-    // matching push some queries over its complexity budget). queuedFetch
-    // already throws before exposing the response body on any non-ok status,
-    // so there's no GraphQL "errors" array left to inspect here to confirm
-    // it was specifically a complexity error — instead just retry once with
-    // those fields stripped. A request failing for an unrelated reason will
-    // fail the same way again and surface normally to the caller's existing
-    // try/catch (every caller of anilistQuery already degrades to []).
-    if (query.includes(ANILIST_HEAVY_FIELDS)) {
-      const lightQuery = query.split(ANILIST_HEAVY_FIELDS).join("");
-      return queuedFetch(ANILIST_BASE, { method: "POST", headers, body: JSON.stringify({ query: lightQuery, variables }) });
+  if(Date.now()<n172AniListUnavailableUntil)throw new Error('ANILIST_COOLDOWN');
+  const headers={"Content-Type":"application/json","Accept":"application/json"};
+  async function request(q){
+    const data=await queuedFetch(ANILIST_BASE,{method:'POST',headers,body:JSON.stringify({query:q,variables}),nexusMaxRetries:0,nexusTimeoutMs:8000});
+    if(data?.errors?.length){
+      const error=new Error('ANILIST_QUERY_ERROR');
+      error.complexity=data.errors.some(e=>/complexity|too complex/i.test(e?.message||''));
+      error.rateLimited=data.errors.some(e=>Number(e?.status)===429);
+      throw error;
     }
-    throw e;
+    if(!data?.data)throw new Error('INVALID_ANILIST_RESPONSE');
+    return data;
   }
+  try{return await request(query);}
+  catch(error){
+    // A blocked, timed-out or rate-limited request must not be retried as a lighter query.
+    if(error.complexity&&query.includes(ANILIST_HEAVY_FIELDS)){
+      try{return await request(query.split(ANILIST_HEAVY_FIELDS).join(''));}catch(lightError){error=lightError;}
+    }
+    if(error.status===403||/NETWORK_UNREACHABLE|REQUEST_TIMEOUT|INVALID_API_RESPONSE/.test(error.message))n172AniListUnavailableUntil=Date.now()+5*60*1000;
+    if(error.rateLimited||/RATE_LIMITED/.test(error.message))n172AniListUnavailableUntil=Date.now()+Math.max(60*1000,error.retryAfterMs||0);
+    throw error;
+  }
+}
+// Alternate catalog records keep a separate identity and never masquerade as AniList IDs.
+function n172IsTmdbAnime(item){return item?.provider==='anime'&&item.metadataSource==='tmdb';}
+function n172TmdbAnimeKind(item){return item.tmdbKind==='movie'?'movie':'tv';}
+function n172NormalizeTmdbAnime(data,kind,genres){
+  const item=kind==='movie'?normalizeMovieItem(data,genres):normalizeTVItem(data,genres);
+  return {...item,uid:`anime:tmdb:${kind}:${data.id}`,provider:'anime',metadataSource:'tmdb',tmdbKind:kind,animeFormat:kind==='movie'?'MOVIE':'TV',tags:[]};
+}
+function n172IsJapaneseAnimation(data){
+  return Number.isSafeInteger(data?.id)&&data.id>0&&data.original_language==='ja'&&(data.genre_ids||[]).includes(16);
+}
+async function n172AnimeGenres(kind){
+  return withCache('anime-tmdb-genres:'+kind,async()=>{
+    const data=await queuedFetch(`${TMDB_BASE}/genre/${kind}/list?api_key=${TMDB_KEY}&language=en-US`);
+    return Object.fromEntries((data.genres||[]).map(g=>[g.id,g.name]));
+  });
+}
+async function n172TmdbAnimeCatalog(query='',page=1){
+  const language=window.nexusUILanguage==='th'?'th-TH':'en-US';
+  return withCache(`anime-tmdb-v1:${language}:${query.toLowerCase()}:${page}`,async()=>{
+    const results=await Promise.allSettled(['tv','movie'].map(async kind=>{
+      const genres=await n172AnimeGenres(kind);
+      const path=query?`search/${kind}`:`discover/${kind}`;
+      const params=query?`query=${encodeURIComponent(query)}`:'with_genres=16&with_original_language=ja&sort_by=popularity.desc';
+      const data=await queuedFetch(`${TMDB_BASE}/${path}?api_key=${TMDB_KEY}&${params}&page=${page}&include_adult=false&language=${language}`);
+      return (data.results||[]).filter(n172IsJapaneseAnimation).map(d=>n172NormalizeTmdbAnime(d,kind,genres));
+    }));
+    if(results.every(r=>r.status==='rejected'))throw new Error('ANIME_SOURCES_UNAVAILABLE');
+    return results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  });
+}
+async function n172AnimeSource(primary,fallback){
+  try{return await primary();}catch(_){return fallback();}
+}
+async function n172TmdbAnimeRecommendations(item){
+  const kind=n172TmdbAnimeKind(item),genres=await n172AnimeGenres(kind);
+  const data=await queuedFetch(`${TMDB_BASE}/${kind}/${item.id}/recommendations?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==='th'?'th-TH':'en-US'}`);
+  const list=(data.results||[]).filter(n172IsJapaneseAnimation);
+  return list.map((d,i)=>({item:n172NormalizeTmdbAnime(d,kind,genres),weight:tmdbRecPositionWeight(i,list.length,d.vote_average)}));
+}
+function n172SyncCatalogNotice(items=[]){
+  const notice=document.getElementById('n172CatalogNotice');if(!notice)return;
+  const backup=mode==='anime'&&items.some(n172IsTmdbAnime);
+  notice.hidden=!backup;
+  notice.textContent=backup?'Anime catalog: TMDB backup. Airing schedules require an AniList title.':'';
 }
 function normalizeAniListMedia(m, provider){
   const cleanStreams = nexusSafeArray(m.externalLinks).filter(l => l && (l.type === "STREAMING" || l.type === "INFO") && nexusSafeExternalUrl(l.url)).slice(0,3).map(l => ({ name: nexusSafeText(l.site,"Open link"), url: nexusSafeExternalUrl(l.url), logo: faviconFor(l.url) }));
@@ -2484,7 +2545,7 @@ function normalizeAniListMedia(m, provider){
 const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 const ANILIST_RECS_QUERY = `query ($id: Int, $type: MediaType) { Media(id: $id, type: $type) { recommendations(sort: RATING_DESC, perPage: 25) { nodes { rating mediaRecommendation { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } } } }`;
 
-async function searchAniList(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function n172SearchAniListPrimary(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
 async function getAniListRecommendations(id, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-recs:` + id, async () => { const data = await anilistQuery(ANILIST_RECS_QUERY, { id: Number(id), type }); return ((data.data?.Media?.recommendations?.nodes) || []).filter(n => n.mediaRecommendation).map(n => ({ item: normalizeAniListMedia(n.mediaRecommendation, provider), weight: n.rating || 0 })); }); }
 
 function renderSkeletons() { resultsGrid.innerHTML = ""; filmstripWrap.style.display = "block"; for(let i=0; i<6; i++) { const sk = document.createElement("div"); sk.className = "sk-card"; sk.innerHTML = `<div class="sk-anim"></div><div style="display:flex; gap:12px; padding:14px;"><div class="sk-block" style="width:64px; height:90px; flex-shrink:0;"></div><div style="flex:1; display:flex; flex-direction:column; gap:8px; margin-top:4px;"><div class="sk-block" style="width:40px; height:10px;"></div><div class="sk-block" style="width:80%; height:16px;"></div><div class="sk-block" style="width:60%; height:12px;"></div></div></div><div class="sk-block" style="margin:12px 14px; height:24px;"></div>`; resultsGrid.appendChild(sk); } }
@@ -2762,6 +2823,7 @@ async function computeRecommendations(){
     setProgress("Injecting localized watch providers for Thailand...");
     await Promise.all(ranked.map(async c => {try{
       if (c.item.provider === "movie" || c.item.provider === "series" || c.item.provider === "kdrama") { c.item.streams = await getLocalizedWatchProviders(c.item.id, c.item.provider); }
+      else if(n172IsTmdbAnime(c.item)){c.item.streams=await getLocalizedWatchProviders(c.item.id,n172TmdbAnimeKind(c.item));}
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
       }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
@@ -2794,6 +2856,7 @@ async function getTVKeywords(id){
   });
 }
 async function ensureTags(item){
+  if(n172IsTmdbAnime(item)){if(!item.tags?.length)item.tags=await (n172TmdbAnimeKind(item)==='movie'?getMovieKeywords(item.id):getTVKeywords(item.id));return item;}
   if(item.tags && item.tags.length) return item; // anime/manga already have real tags; don't refetch
   if(item.provider === "movie"){ item.tags = await getMovieKeywords(item.id); }
   else if(item.provider === "series" || item.provider === "kdrama"){ item.tags = await getTVKeywords(item.id); }
@@ -2866,6 +2929,10 @@ async function getTVCreators(id){
   });
 }
 async function ensureCollaborators(item){
+  if(n172IsTmdbAnime(item)){
+    if(!item.collaborators?.length)item.collaborators=n172TmdbAnimeKind(item)==='movie'?(await getMovieCreditsAndCollection(item.id)).names:await getTVCreators(item.id);
+    return item;
+  }
   if(item.collaborators && item.collaborators.length) return item; // anime/manga studios already present
   if(item.provider === "movie"){
     const { names, collection } = await getMovieCreditsAndCollection(item.id);
@@ -3489,6 +3556,13 @@ function scoreSurpriseCandidate(item, profile){
 // ---------------- POPULAR / TRENDING ----------------
 const ANILIST_TRENDING_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 
+async function searchAniList(query,provider){
+  return provider==='anime'?n172AnimeSource(()=>n172SearchAniListPrimary(query,provider),()=>n172TmdbAnimeCatalog(query)):n172SearchAniListPrimary(query,provider);
+}
+async function getPopularAniList(provider,page=1){
+  return provider==='anime'?n172AnimeSource(()=>n172PopularAniListPrimary(provider,page),()=>n172TmdbAnimeCatalog('',page)):n172PopularAniListPrimary(provider,page);
+}
+
 async function getPopularMovies(page = 1){ const genreMap = await loadMovieGenres(); return withCache(`popular:movie:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_KEY}&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
 async function getPopularTVProvider(provider, page = 1){
   const cfg = TV_PROVIDERS[provider];
@@ -3500,7 +3574,7 @@ async function getPopularTVProvider(provider, page = 1){
 }
 async function getPopularSeries(page = 1){ return getPopularTVProvider("series", page); }
 async function getPopularKDramas(page = 1){ return getPopularTVProvider("kdrama", page); }
-async function getPopularAniList(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function n172PopularAniListPrimary(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
 
 // Genre-filtered discover fetchers — same normalized shape as the popular
 // fetchers above, just scoped to one genre. Used only by Surprise Me's
@@ -3545,6 +3619,7 @@ function buildGenrePoolFetcher(currentMode){
     const raw = await getDeezerGenreChartTracks(matched.id, Math.floor(Math.random() * 4) * 25);
     return Promise.all(raw.map(t => normalizeDeezerTrack(t)));
   };
+  if(currentMode==='anime'&&Date.now()<n172AniListUnavailableUntil)return async()=>n172TmdbAnimeCatalog('',1+Math.floor(Math.random()*3));
   const provider = currentMode === "manga" ? "manga" : "anime";
   return async (genreName) => getAniListByGenre(provider, genreName, 1 + Math.floor(Math.random() * 3));
 }
@@ -3701,11 +3776,17 @@ async function searchByMode(mode, query){
   return mode === "manga" ? searchAniList(query, "manga") : searchAniList(query, "anime"); 
 }
 async function getRecommendationsFor(item){ 
+  if(n172IsTmdbAnime(item))return n172TmdbAnimeRecommendations(item);
   if (item.provider === "movie") return getMovieRecommendations(item.id); 
   if (item.provider === "series") return getSeriesRecommendations(item.id); 
   if (item.provider === "kdrama") return getKDramaRecommendations(item.id); 
   if (item.provider === "music") return getMusicRecommendations(item.id);
-  return item.provider === "manga" ? getAniListRecommendations(item.id, "manga") : getAniListRecommendations(item.id, "anime"); 
+  if(item.provider==='manga')return getAniListRecommendations(item.id,'manga');
+  return n172AnimeSource(()=>getAniListRecommendations(item.id,'anime'),async()=>{
+    const kind=item.animeFormat==='MOVIE'?'movie':'tv';
+    const id=await n113FindAnimeTmdb(item,n111NetflixCandidates(item),kind);
+    return id?n172TmdbAnimeRecommendations({...item,id,tmdbKind:kind}):[];
+  }); 
 }
 
 // ---------------- STATE MANAGEMENT ----------------
@@ -3929,6 +4010,7 @@ function executeModeChange(newMode) {
   const moreCategories=document.querySelector('.n171-more-categories');
   if(moreCategories&&['manga','music'].includes(mode))moreCategories.open=true;
   renderSelectedStrip();
+  n172SyncCatalogNotice();
   hideSuggestions();
   stopPreview(); 
   // The year-cutoff filter only applies to movie/series/anime/etc metadata
@@ -4095,7 +4177,12 @@ async function loadColdStart(){
     renderSearchResults(items, true);
   }catch(e){
     if(myMode !== mode || coldToken !== searchRequestSeq) return;
-    poolGrid.innerHTML = '<div class="error-note">Couldn\'t load titles right now — check your connection and try searching directly.</div>'; loadMoreBtn.style.display = "none";
+    poolGrid.replaceChildren();
+    const note=document.createElement('div');note.className='error-note nexus-discovery-empty';note.setAttribute('role','status');
+    const message=document.createElement('p');message.textContent='The catalog is temporarily unavailable. Your saved titles are still available.';
+    const retry=document.createElement('button');retry.type='button';retry.className='nexus-tool-btn';retry.textContent='Try loading again';retry.addEventListener('click',()=>loadColdStart());
+    const saved=document.createElement('a');saved.href='#watchlistSection';saved.className='nexus-tool-btn';saved.textContent='Open Watchlist';
+    note.append(message,retry,saved);poolGrid.append(note);loadMoreBtn.style.display='none';
   }
 }
 
@@ -4396,6 +4483,7 @@ function nexusRankSearchResults(items,query){
     .sort((a,b)=>b.rank-a.rank||a.index-b.index).map(entry=>entry.item);
 }
 function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = false){
+  n172SyncCatalogNotice(items);
   if(!isLoadMore){
     ++n109CheckVersion; n109AcceptedIds=new Set(); n109SyncDiscoverControl();
     nexusDiscoverRawItems = Array.isArray(items) ? items : [];
@@ -4443,7 +4531,7 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
     el.setAttribute("role", "group"); el.removeAttribute("tabindex");
     let label = item.provider; if (item.provider === "series") label = "TV Series"; else if (item.provider === "kdrama") label = "K-Drama"; else if (item.provider === "music") label = "Music Track";
     
-    let metaContent = `${label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
+    let metaContent = `${n172IsTmdbAnime(item)?"Anime · TMDB":label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
     if (item.provider === "music" || item.uid.startsWith("music:")) {
       let artistName = item.artist || "Unknown Artist";
       metaContent = `Artist: ${artistName}${item.score ? " · ★" + item.score : ""}`;
@@ -4895,6 +4983,10 @@ function toggleOverview(paragraphEl, toggleLabelEl) {
 const YT_EMBED_ORIGIN = encodeURIComponent(window.location.origin);
 async function getDetailExtras(item){
   try {
+    if(n172IsTmdbAnime(item)){
+      const kind=n172TmdbAnimeKind(item);
+      return withCache(`detail-extras-anime-tmdb:${kind}:${item.id}`,async()=>extractTmdbDetailExtras(await queuedFetch(`${TMDB_BASE}/${kind}/${item.id}?api_key=${TMDB_KEY}&append_to_response=videos,credits`)));
+    }
     if (item.provider === "movie") {
       return withCache(`detail-extras-movie-v1:${item.id}`, async () => {
         const data = await queuedFetch(`${TMDB_BASE}/movie/${item.id}?api_key=${TMDB_KEY}&append_to_response=videos,credits`);
@@ -5162,6 +5254,12 @@ function nexusDetailFactsHtml(item,extras){
       if(artists.length)add("Artists",artists.map(x=>x.name).join(" · "));
       add("Creators / staff",roles.map(x=>x.name+" ("+x.role+")").join(" · "));
     }
+  }else if(n172IsTmdbAnime(item)){
+    add('Category','Anime');add('Release year',item.year);
+    add('Status',extras.tmdb?.status||'Not confirmed');
+    if(n172TmdbAnimeKind(item)==='movie')add('Runtime',extras.tmdb?.runtime?extras.tmdb.runtime+' min':'Not confirmed');
+    else add('Total episodes',extras.tmdb?.episodes||'Not confirmed');
+    add('Airing schedule','Not available from this source');
   }else if(item.provider==="anime"){
     add("Category","Anime");add("First aired",nexusPublicationDate(extras.airing?.startDate));
     add("Status",extras.airing?.status?.replaceAll("_"," ")||"Not confirmed");
@@ -5184,7 +5282,7 @@ function nexusDetailFactsHtml(item,extras){
     }
   }
   if(item.score!==null&&item.score!==undefined)add("Rating",item.score);
-  return `<section class="nexus-detail-facts" aria-label="${escapeHtml(item.provider)} information"><h3>${item.provider==="manga"?"Manga publication details":"Title information"}</h3><dl>${rows.join("")}</dl><small>Source: ${item.provider==="manga"||item.provider==="anime"?"AniList":item.provider==="music"?"Deezer":"TMDB"}. Unknown values are not estimated.</small></section>`;
+  return `<section class="nexus-detail-facts" aria-label="${escapeHtml(item.provider)} information"><h3>${item.provider==="manga"?"Manga publication details":"Title information"}</h3><dl>${rows.join("")}</dl><small>Source: ${(item.provider==="manga"||item.provider==="anime")&&!n172IsTmdbAnime(item)?"AniList":item.provider==="music"?"Deezer":"TMDB"}. Unknown values are not estimated.</small></section>`;
 }
 function buildDetailModalHtml(item, extras){
   const backdrop = extras.backdrop || item.image;
@@ -5196,7 +5294,7 @@ function buildDetailModalHtml(item, extras){
   // stripping that header before the request ever leaves the browser.
   const trailerHtml = extras.trailerUrl ? `<div class="detail-trailer-wrap"><iframe src="${extras.trailerUrl}" title="Trailer" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>${extras.trailerWatchUrl ? `<a class="detail-trailer-fallback-link" href="${escapeHtml(extras.trailerWatchUrl)}" target="_blank" rel="noopener">Trailer not playing? Watch it on YouTube →</a>` : ""}` : "";
   const genresHtml = (item.genres || []).filter(g => g !== "Unknown Genre").slice(0, 5).map(g => `<span class="tag match">${escapeHtml(g)}</span>`).join("");
-  const providerLabel = (item.provider === "anime" || item.provider === "manga") ? "AniList" : item.provider === "music" ? "Deezer" : "TMDB";
+  const providerLabel = (item.provider === "anime" || item.provider === "manga")&&!n172IsTmdbAnime(item) ? "AniList" : item.provider === "music" ? "Deezer" : "TMDB";
   const metaLine = item.provider === "music" ? `by ${escapeHtml(item.artist || "Unknown")}` : `${escapeHtml(String(item.year || ""))}${item.score ? ` · ★${item.score}` : ""}`;
 
   // Previously the only way to record an opinion on something was to close
@@ -7206,7 +7304,7 @@ function nexusRenderAiringDashboard(){
   const root=document.getElementById("nexusAiringCards"),status=document.getElementById("nexusAiringStatus"),batch=document.getElementById("nexusAiringBatch");
   if(!root||!status)return;
   root.replaceChildren();
-  const anime=[...watchlist.values()].filter(i=>i.provider==="anime");
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&!n172IsTmdbAnime(i));
   const window=document.getElementById("nexusAiringWindow")?.value||"all";
   const checked=anime.map(item=>({item,media:nexusAiringDashboard.cache.get(String(item.uid))?.media})).filter(x=>x.media);
   const selectedDay=nexusAiringDashboard.selectedDay;
@@ -7280,7 +7378,7 @@ function nexusRenderAiringDashboard(){
     const partial=checked.filter(({media})=>!media.scheduleComplete).length;
     batch.textContent=checked.length+" / "+anime.length+" checked · "+confirmed+" confirmed unwatched aired EP"+(partial?" · "+partial+" partial schedule(s)":"")+" · Last check: "+lastChecked+(stale?" · Schedule may be outdated — refresh recommended":"")+" · Fresh: "+fresh+" · Older: "+old+" · Failed: "+failures;
   }
-  if(!anime.length)status.textContent="Save anime to your Watchlist to track broadcasts.";
+  if(!anime.length)status.textContent=[...watchlist.values()].some(n172IsTmdbAnime)?'Airing schedules require an AniList title. TMDB backup titles remain in your Watchlist.':"Save anime to your Watchlist to track broadcasts.";
   else if(!nexusAiringDashboard.cache.size&&!nexusAiringDashboard.loading)status.textContent="Select ‘Check airings’ to load confirmed schedules.";
   else if(!nexusAiringDashboard.loading)status.textContent=entries.length+" matching anime. Unwatched counts reflect confirmed episodes in checked schedule pages, not an estimate of missing episodes.";
 }
@@ -7304,7 +7402,7 @@ async function nexusFetchAiringMedia(id){
 async function nexusRefreshAiringDashboard(){
   if(nexusAiringDashboard.loading)return;
   const button=document.getElementById("nexusAiringRefresh"),status=document.getElementById("nexusAiringStatus");
-  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&!n172IsTmdbAnime(i)&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
   if(!anime.length){nexusRenderAiringDashboard();return;}
   if(nexusAiringDashboard.cursor>=anime.length)nexusAiringDashboard.cursor=0;
   const retry=(nexusAiringDashboard.lastFailures||[]).map(uid=>anime.find(i=>i.uid===uid)).filter(Boolean);
@@ -7940,6 +8038,12 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
     'More categories':'หมวดอื่น ๆ',
     'Close guide':'ปิดคำแนะนำ',
+    'Anime catalog: TMDB backup. Airing schedules require an AniList title.':'กำลังแสดงข้อมูลอนิเมะสำรองจาก TMDB · ตารางออกอากาศต้องใช้รายการจาก AniList',
+    'Airing schedules require an AniList title. TMDB backup titles remain in your Watchlist.':'ตารางออกอากาศต้องใช้รายการจาก AniList ส่วนเรื่องจาก TMDB ยังบันทึกและติดตามได้ตามปกติ',
+    'Not available from this source':'แหล่งข้อมูลนี้ไม่มีข้อมูลยืนยัน',
+    'The catalog is temporarily unavailable. Your saved titles are still available.':'แค็ตตาล็อกยังไม่พร้อมใช้งานชั่วคราว คุณยังเปิดรายการที่บันทึกไว้ได้',
+    'Try loading again':'ลองโหลดอีกครั้ง',
+    'Open Watchlist':'เปิดรายการที่บันทึก',
     'Discover your first title →':'ค้นหาเรื่องแรกที่อยากดู →',
     'Start by liking a few titles. Your personal taste insights will appear here.':'กดถูกใจเรื่องที่ชอบ เพื่อให้เราเริ่มเรียนรู้รสนิยมของคุณ',
     'Titles you like':'เรื่องที่ถูกใจ',
