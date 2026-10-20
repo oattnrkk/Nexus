@@ -19,7 +19,9 @@
      attributes in the script below) — some environments don't fully honor a
      per-iframe referrerpolicy alone, so this sets the same policy page-wide. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>NEXUS — Movies, Series, Anime &amp; Music</title>
+<title>NEXUS — Find your next favorite</title>
+<meta name="description" content="Find your next movie, series or anime. Get three picks for your taste, check Netflix Thailand availability via TMDB, and keep your Watchlist in one place.">
+<meta name="nexus-version" content="17.3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -785,7 +787,7 @@ function renderNexusPersonalDashboard(liked, queued, genres){
   };
   if(!progressing.length){
     const empty=document.createElement("p");empty.className="nexus-personal-empty";
-    empty.textContent="Nothing in progress yet. Mark a saved title as In Progress in My List to see it here.";
+    empty.textContent="Nothing in progress yet. Mark a saved title as In Progress in Watchlist to see it here.";
     journey.append(empty);
   }else progressing.forEach(item=>{
     const card=createTitle(item, String(item.provider||"Title").toUpperCase()+" · In progress", "nexus-journey-card");
@@ -813,7 +815,7 @@ function renderNexusPersonalDashboard(liked, queued, genres){
     .sort((a,b)=>b.match.score-a.match.score).slice(0,3);
   if(!candidates.length){
     const note=document.createElement("p");note.className="nexus-personal-empty";
-    note.textContent="Save titles to My List to see personalized picks here.";picks.append(note);
+    note.textContent="Save titles to Watchlist to see personalized picks here.";picks.append(note);
   }else candidates.forEach(({item,match})=>{
     const reason=match.score>0?match.reason:"Saved for later · Ready when you are";
     picks.append(createTitle(item,reason,"nexus-personal-pick"));
@@ -1357,6 +1359,37 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
  .n102-mobile-menu{min-height:44px}
 }
 </style>
+<style id="nexus171-customer-flow">
+.n172-catalog-notice{padding:12px 15px;border:1px solid rgba(223,184,119,.3);border-radius:12px;color:var(--gold);font-size:12px;line-height:1.7}.n172-catalog-notice[hidden]{display:none!important}
+.n172-no-airings .nexus-airing-controls,.n172-no-airings .nexus-airing-daily,.n172-no-airings #nexusAiringRefresh{display:none!important}
+@media(max-width:650px){.n102-rail{display:none}.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
+.pool-item-controls{flex-wrap:wrap}.pool-item-controls .p-check{display:none}
+.n173-pool-save{white-space:nowrap;border:1px solid var(--line-strong);border-radius:8px;background:transparent;color:var(--text-dim);padding:7px 9px;font:inherit;font-size:11px;cursor:pointer;min-height:36px}
+.n173-pool-save[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}.n173-pool-save:disabled{opacity:.4;cursor:not-allowed}
+.n173-pool-save:focus-visible,.n173-shuffle-settings summary:focus-visible,.n173-match-details summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.n173-shuffle-settings{font-size:12px;color:var(--text-dim);max-width:400px}.n173-shuffle-settings summary{padding:10px;cursor:pointer}.n173-shuffle-settings label{display:flex;align-items:center;gap:8px;padding:8px}.n173-shuffle-settings input{width:20px;height:20px;accent-color:var(--gold)}.n173-shuffle-settings p{font-size:11px;line-height:1.6;margin:0;padding:0 8px 8px}
+.n173-shuffle-status{flex:1 1 100%;font-size:12px;line-height:1.5;color:var(--text-dim)}.n173-shuffle-status:empty{display:none}
+.n173-match-details{margin:10px 0;font-size:11px;color:var(--text-dim)}.n173-match-details summary{cursor:pointer;padding:8px 0}.n173-match-details p{font-size:11px;line-height:1.7}.n173-favorite-note{color:var(--gold)}.why>div{margin-top:4px;line-height:1.6}
+@media(max-width:650px){.n173-pool-save{min-height:44px;padding:9px}.n173-shuffle-settings{flex:1 1 100%}.n173-shuffle-settings summary{min-height:44px;box-sizing:border-box}}
+/* NEXUS 17.1: three clear starting points and progressive disclosure. */
+.auth-bar{left:auto!important;right:auto!important;margin-left:var(--n102-left);margin-right:var(--n102-right);width:auto!important}
+.wrap>footer{margin-left:0!important;margin-right:0!important}
+.n171-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:850px;margin:26px auto 24px;text-align:left}
+.n171-start-card{font:inherit;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px;border:1px solid var(--line-strong);border-radius:16px;background:var(--bg-alt);color:var(--text);text-decoration:none;cursor:pointer;min-width:0;transition:border-color .2s,transform .2s}
+.n171-start-card>span{color:var(--gold);font-size:20px}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px;line-height:1.6;color:var(--text-dim)}
+.n171-start-primary{border-color:rgba(223,184,119,.5);background:linear-gradient(135deg,rgba(223,184,119,.12),var(--bg-alt))}
+.n171-start-card:hover{border-color:var(--gold);transform:translateY(-2px)}.n171-start-card:focus-visible,.n171-more-categories summary:focus-visible,.n171-data-tools summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.n171-start-card:disabled{opacity:.6;cursor:wait}
+.n171-more-categories{position:relative;align-self:center}.n171-more-categories summary{padding:12px;cursor:pointer;color:var(--text-dim);font-size:12px}.n171-more-categories>div{display:flex;gap:6px;flex-wrap:wrap;padding:8px}
+.n171-guide{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px;margin:0 0 16px;border:1px solid rgba(223,184,119,.3);border-radius:12px;background:rgba(223,184,119,.05)}
+.n171-guide[hidden]{display:none}.n171-guide p{flex:1 1 260px;margin:0;font-size:13px;line-height:1.7}
+.n171-data-tools{margin:20px 0;color:var(--text-dim)}.n171-data-tools>summary{font-size:13px;cursor:pointer;padding:14px 0}
+#watchlistSection.n171-list-empty .nexus-airing-dashboard,#watchlistSection.n171-list-empty .nexus-list-overview,#watchlistSection.n171-list-empty .nexus-manga-dashboard,#watchlistSection.n171-list-empty .nexus-vault-controls,#watchlistSection.n171-list-empty #nexusVaultEmptyReset,#watchlistSection.n171-list-empty #nexusVaultFilterStatus{display:none!important}
+#n116SurpriseNetflixWrap[hidden]{display:none!important}
+#n171WatchlistDiscover[hidden]{display:none!important}
+@media(max-width:650px){.n171-start{grid-template-columns:1fr;gap:8px;margin:20px 0}.n171-start-card{padding:14px;gap:5px}.n171-start-card>span{display:none}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px}.n171-more-categories summary{min-height:44px;box-sizing:border-box}.n171-more-categories>div{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.n171-start-card{transition:none}.n171-start-card:hover{transform:none}}
+</style>
 </head>
 <body>
 <button class="n102-mobile-menu" id="n102MenuToggle" type="button" aria-expanded="false" aria-controls="n102Sidebar">☰ <span>Menu</span></button>
@@ -1375,7 +1408,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
   </nav>
   <div class="n102-nav-caption n102-nav-caption-lower">YOUR SPACE</div>
   <nav class="n102-menu" aria-label="Personal collection">
-    <a class="n102-nav-link" href="#ratingsSection">♡ <span>My Vault</span></a>
+    <a class="n102-nav-link" href="#ratingsSection">♡ <span>My taste</span></a>
     <a class="n102-nav-link" href="#watchlistSection">◷ <span>Watchlist</span></a>
     <a class="n102-nav-link" href="#analyticsSection">◈ <span>Taste insights</span></a>
   </nav>
@@ -1387,7 +1420,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 <div class="auth-bar">
   <div class="auth-status-wrap">
     <span class="status-dot"></span>
-    <span id="authStatus">Running in Local Mode (Offline)</span>
+    <span id="authStatus">Saved on this device</span>
   </div>
   <div class="n103-language" role="group" aria-label="Language / ภาษา">
     <span class="n103-language-label" data-n103-label>Language</span>
@@ -1437,21 +1470,28 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 <div class="hero" id="top">
   <p class="eyebrow">YOUR PERSONAL DISCOVERY SPACE</p>
   <h1 class="title">NEXUS</h1>
-  <p class="tagline">A universe of stories. Curated by your curiosity.</p>
+  <p class="tagline">What should you watch tonight? Start with three picks.</p>
+  <div class="n171-start" aria-label="Start discovering">
+    <button type="button" class="n171-start-card n171-start-primary" id="n171Tonight"><span aria-hidden="true">✦</span><strong>Pick 3 for me</strong><small>Three choices, with reasons. No account needed.</small></button>
+    <button type="button" class="n171-start-card" id="n171Similar"><span aria-hidden="true">♡</span><strong>More like my favorites</strong><small>Choose up to three favorites to get started.</small></button>
+    <a class="n171-start-card" href="#watchlistSection"><span aria-hidden="true">◷</span><strong>Choose from my Watchlist</strong><small>Turn something saved into something watched.</small></a>
+  </div>
   <div class="n10-hero-hairline" aria-hidden="true"><span></span><b>EXPLORE THE UNEXPECTED</b><span></span></div>
   <div class="toggle-row" id="typeToggle">
     <button class="seg-btn" data-mode="movie" aria-pressed="false">Movies</button>
     <button class="seg-btn active" data-mode="anime" aria-pressed="true">Anime</button>
     <button class="seg-btn" data-mode="series" aria-pressed="false">TV Series</button>
     <button class="seg-btn" data-mode="kdrama" aria-pressed="false">K-Dramas</button>
-    <button class="seg-btn" data-mode="manga" aria-pressed="false">Manga</button>
-    <button class="seg-btn" data-mode="music" aria-pressed="false">Music</button>
+    <details class="n171-more-categories"><summary>More categories</summary><div>
+      <button class="seg-btn" data-mode="manga" aria-pressed="false">Manga</button>
+      <button class="seg-btn" data-mode="music" aria-pressed="false">Music</button>
+    </div></details>
   </div>
 </div>
 
 <nav class="nexus-jump" aria-label="Page sections">
   <a href="#searchSection">Discover</a>
-  <a href="#ratingsSection">My Vault</a>
+  <a href="#watchlistSection">Watchlist</a>
   <a href="#analyticsSection">Taste insights</a>
   <a href="#nexusDataTools">Backup &amp; restore</a>
 </nav>
@@ -1468,6 +1508,176 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
   <p class="n102-rail-note">Your picks, not a streaming service. Discover, save and keep track.</p>
 </aside>
 <div class="wrap">
+
+  <section class="block" id="searchSection">
+    <div class="block-head">
+      <div class="n10-section-kicker">01 / THE DISCOVERY ROOM</div><h2>Find something <em>extraordinary.</em></h2><p class="n10-section-lede">One search. Endless stories, sounds, and worlds.</p>
+      <span class="count" id="poolCount"></span>
+    </div>
+    
+    <p id="n172CatalogNotice" class="n172-catalog-notice" role="status" aria-live="polite" hidden></p>
+    <div id="n171Guide" class="n171-guide" hidden>
+      <p id="n171GuideText" role="status" aria-live="polite"></p>
+      <button type="button" id="n171GuideFind" class="nexus-tool-btn" disabled>Find similar titles</button>
+      <button type="button" id="n171GuideClose" class="nexus-tool-btn">Close guide</button>
+    </div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchBox" placeholder="Search anime..." aria-label="Search titles" autocomplete="off">
+      <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
+      <div class="search-spinner" id="searchSpinner"></div>
+      <button type="button" class="cmdk-hint n14-visually-hidden" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
+      <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
+    </div>
+    <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
+      <div class="n102-featured-art" id="n102FeaturedArt"></div>
+      <div class="n102-featured-shade"></div>
+      <div class="n102-featured-copy">
+        <span class="n102-featured-kicker">✦ FROM YOUR DISCOVERIES</span>
+        <h3 id="n102FeaturedTitle"></h3>
+        <p id="n102FeaturedMeta"></p>
+        <button id="n102FeaturedDetails" type="button" class="n102-featured-button">View details ↗</button>
+      </div>
+    </section>
+    <details class="nexus-refine" id="nexusRefinePanel">
+      <summary><span class="nexus-refine-label">⚙ Refine results</span><span class="nexus-refine-description">Genre · Rating · Year · Sort</span><span class="nexus-refine-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="nexus-refine-body">
+    <div class="nexus-discovery-controls" role="group" aria-label="Refine discovery results">
+      <label>Genre <select id="nexusDiscoverGenre"><option value="all">All genres</option></select></label>
+      <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
+      <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
+      <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
+      <label id="n109DiscoverNetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n109DiscoverNetflixOnly" aria-describedby="n109DiscoverNetflixStatus"> <span data-n109-netflix-label>Netflix TH · TMDB</span></label>
+      <label class="nexus-discovery-toggle"><input type="checkbox" id="nexusDiscoverHideDisliked" checked> Hide disliked</label>
+      <button type="button" id="nexusDiscoverReset" class="nexus-tool-btn">Reset filters</button>
+    </div>
+    <p id="n109DiscoverNetflixStatus" role="status" aria-live="polite" hidden class="n109-netflix-status"></p>
+    <div class="nexus-discovery-presets n14-visually-hidden" role="group" aria-label="Quick discovery filters">
+      <button type="button" data-nexus-preset="top" class="nexus-tool-btn">★ Top rated</button>
+      <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
+      <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
+    </div>
+      </div>
+    </details>
+    <div class="pool-grid" id="poolGrid">
+      <div class="empty-note">Start typing above to search.</div>
+    </div>
+    <div style="text-align:center; margin-top:8px;">
+      <button class="btn-ghost" id="loadMoreBtn" style="display:none;">Load more</button>
+    </div>
+    <div class="selected-strip" id="selectedStrip"></div>
+    <div class="cta-row">
+      <button class="btn-primary" id="findBtn" disabled>Find similar titles</button>
+      <button class="btn-ghost" id="surpriseBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        <span>Surprise me</span>
+      </button>
+      <label id="n116SurpriseNetflixWrap" hidden style="display:none;align-items:center;gap:8px;min-height:48px;cursor:pointer;flex-wrap:wrap;">
+        <input id="n116SurpriseNetflixOnly" type="checkbox" style="width:20px;height:20px;accent-color:var(--gold);">
+        <span>Netflix TH only · checked via TMDB</span>
+      </label>
+      <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
+      <details class="n173-shuffle-settings"><summary>Shuffle options</summary>
+        <label><input type="checkbox" id="n173IncludeKnown" aria-describedby="n173KnownHint"> <span>Include familiar titles</span></label>
+        <p id="n173KnownHint">Normally skips liked, selected, in-progress and completed titles. Disliked titles stay excluded.</p>
+      </details>
+      <span id="n173ShuffleStatus" class="n173-shuffle-status" role="status" aria-live="polite"></span>
+      <button class="btn-ghost" id="clearBtn">Clear picks</button>
+      <span class="helper-text" id="capHint"></span>
+    </div>
+    <div class="year-filter-row" id="yearFilterWrap" style="margin-top:18px; max-width:340px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+        <span class="helper-text" style="color:var(--text-dim);">Only show titles from</span>
+        <span class="helper-text" id="yearFilterLabel" style="color:var(--gold); font-weight:600;">2015 onward</span>
+      </div>
+      <input type="range" id="yearFilterSlider" min="1990" max="2030" step="1" value="2015" class="year-slider">
+    </div>
+  </section>
+
+
+<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
+  <div class="nexus-home-top"><div><div class="nexus-eyebrow">02 / YOUR COLLECTION</div><h2 id="nexusHomeTitle">Curated <em>for you.</em></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
+  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
+  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
+    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">Watchlist →</a></div>
+    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
+  </div>
+  <details class="nexus-home-more">
+    <summary>Explore your taste profile <span aria-hidden="true">↗</span></summary>
+  <div class="nexus-home-lower">
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
+  </div>
+  </details>
+  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
+</section>
+
+  <details class="n171-data-tools"><summary>Backup &amp; restore</summary>
+  <section class="nexus-tools" id="nexusDataTools" aria-label="Taste profile backup tools">
+    <span class="nexus-tools-title">✦ Your taste, your data</span>
+    <button type="button" class="nexus-tool-btn" id="nexusExportBtn">↓ Export backup</button>
+    <button type="button" class="nexus-tool-btn" id="nexusReviewConflictBtn" style="display:none">Resolve sync conflict</button>
+    <button type="button" class="nexus-tool-btn" id="nexusRecoveryBtn" title="Download local and cloud copies captured before the last merge">↓ Sync recovery</button>
+    <button type="button" class="nexus-tool-btn" id="nexusImportBtn">↑ Restore backup</button>
+    <input type="file" id="nexusImportFile" accept="application/json,.json" hidden aria-label="Choose NEXUS backup file">
+    <span class="nexus-tools-note">Your backup stays on your device. Restore replaces local preferences; if signed in, your restored profile will also be synced to your account.</span><span id="nexusBackupStatus" class="nexus-backup-status" role="status" aria-live="polite"></span>
+  </section>
+
+  </details>
+
+  <section class="block" id="ratingsSection" style="display:none;">
+    <div class="block-head">
+      <h2>My taste</h2>
+      <span class="count" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;"><span id="ratingsCount"></span><button type="button" id="vaultWrappedBtn" class="filter-reset-btn" style="text-decoration:none;">⬇ Vault Wrapped</button><button type="button" id="vaultViewAllToggle" class="filter-reset-btn" style="text-decoration:none;">View all categories</button></span>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
+      <input type="text" id="vaultSearchBox" class="search-input" placeholder="Filter your vault by title..." aria-label="Filter your vault by title" autocomplete="off" style="flex:1; min-width:200px; margin-bottom:0;">
+      <select class="filter-select" id="vaultSortOrder">
+        <option value="default">Sort: Recently Added</option>
+        <option value="title">Sort: Title A-Z</option>
+        <option value="year-new">Sort: Newest First</option>
+        <option value="year-old">Sort: Oldest First</option>
+      </select>
+    </div>
+    
+    <div style="position:relative; background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 28px; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(223,184,119,0.5), transparent);"></div>
+      <h3 style="font-size:13px; color:var(--gold); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Liked Profile</h3>
+      <div id="topTenContainer"></div>
+      <div id="likedGridsContainer"></div>
+
+      <hr style="border:none; border-top:1px solid var(--line); margin: 36px 0 28px;">
+
+      <h3 style="font-size:13px; color:var(--rose); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><line x1="8" y1="8" x2="16" y2="16"></line></svg>Disliked / Banned Pool</h3>
+      <div id="dislikedGridsContainer"></div>
+    </div>
+  </section>
+
+  <section class="block" id="resultsSection" style="display:none;">
+    <div class="block-head">
+      <h2>Your recommendations</h2>
+      <span class="count" id="resultsCount"></span>
+    </div>
+    <div class="filter-row" id="filterRow" style="display:none;">
+      <label id="n108NetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n108NetflixOnly"> <span data-n108-netflix-label>Netflix TH · TMDB</span></label>
+      <select class="filter-select" id="genreFilter"><option value="all">All genres</option></select>
+      <select class="filter-select" id="scoreFilter">
+        <option value="0">Any score</option>
+        <option value="7">★7+</option>
+        <option value="8">★8+</option>
+      </select>
+      <select class="filter-select" id="sortOrder">
+        <option value="match">Sort by: Match %</option>
+        <option value="score">Sort by: Top Rated</option>
+        <option value="year">Sort by: Newest</option>
+      </select>
+    </div>
+    <p id="n108NetflixStatus" role="status" aria-live="polite" hidden style="font-size:12px;color:var(--muted);margin:10px 0"></p>
+    <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
+    <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
+    <div class="filmstrip" id="filmstripWrap" style="display:none;">
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+  </section>
 
   <section class="block" id="analyticsSection" style="display:none;">
     <div class="block-head">
@@ -1515,165 +1725,9 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
     </div>
   </section>
 
-  <section class="block" id="searchSection">
-    <div class="block-head">
-      <div class="n10-section-kicker">01 / THE DISCOVERY ROOM</div><h2>Find something <em>extraordinary.</em></h2><p class="n10-section-lede">One search. Endless stories, sounds, and worlds.</p>
-      <span class="count" id="poolCount"></span>
-    </div>
-    
-    <div class="search-wrap">
-      <input type="text" class="search-input" id="searchBox" placeholder="Search anime..." aria-label="Search titles" autocomplete="off">
-      <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
-      <div class="search-spinner" id="searchSpinner"></div>
-      <button type="button" class="cmdk-hint n14-visually-hidden" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
-      <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
-    </div>
-    <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
-      <div class="n102-featured-art" id="n102FeaturedArt"></div>
-      <div class="n102-featured-shade"></div>
-      <div class="n102-featured-copy">
-        <span class="n102-featured-kicker">✦ FROM YOUR DISCOVERIES</span>
-        <h3 id="n102FeaturedTitle"></h3>
-        <p id="n102FeaturedMeta"></p>
-        <button id="n102FeaturedDetails" type="button" class="n102-featured-button">View details ↗</button>
-      </div>
-    </section>
-    <details class="nexus-refine" id="nexusRefinePanel">
-      <summary><span class="nexus-refine-label">⚙ Refine results</span><span class="nexus-refine-description">Genre · Rating · Year · Sort</span><span class="nexus-refine-chevron" aria-hidden="true">⌄</span></summary>
-      <div class="nexus-refine-body">
-    <div class="nexus-discovery-controls" role="group" aria-label="Refine discovery results">
-      <label>Genre <select id="nexusDiscoverGenre"><option value="all">All genres</option></select></label>
-      <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
-      <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
-      <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
-      <label id="n109DiscoverNetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n109DiscoverNetflixOnly" aria-describedby="n109DiscoverNetflixStatus"> <span data-n109-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
-      <label class="nexus-discovery-toggle"><input type="checkbox" id="nexusDiscoverHideDisliked" checked> Hide disliked</label>
-      <button type="button" id="nexusDiscoverReset" class="nexus-tool-btn">Reset filters</button>
-    </div>
-    <p id="n109DiscoverNetflixStatus" role="status" aria-live="polite" hidden class="n109-netflix-status"></p>
-    <div class="nexus-discovery-presets n14-visually-hidden" role="group" aria-label="Quick discovery filters">
-      <button type="button" data-nexus-preset="top" class="nexus-tool-btn">★ Top rated</button>
-      <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
-      <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
-    </div>
-      </div>
-    </details>
-    <div class="pool-grid" id="poolGrid">
-      <div class="empty-note">Start typing above to search.</div>
-    </div>
-    <div style="text-align:center; margin-top:8px;">
-      <button class="btn-ghost" id="loadMoreBtn" style="display:none;">Load more</button>
-    </div>
-    <div class="selected-strip" id="selectedStrip"></div>
-    <div class="cta-row">
-      <button class="btn-primary" id="findBtn" disabled>Find similar titles</button>
-      <button class="btn-ghost" id="surpriseBtn">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-        <span>Surprise me</span>
-      </button>
-      <label id="n116SurpriseNetflixWrap" hidden style="display:none;align-items:center;gap:8px;min-height:48px;cursor:pointer;flex-wrap:wrap;">
-        <input id="n116SurpriseNetflixOnly" type="checkbox" style="width:20px;height:20px;accent-color:var(--gold);">
-        <span>Netflix ไทยเท่านั้น · Surprise Me</span>
-      </label>
-      <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
-      <button class="btn-ghost" id="clearBtn">Clear picks</button>
-      <span class="helper-text" id="capHint"></span>
-    </div>
-    <div class="year-filter-row" id="yearFilterWrap" style="margin-top:18px; max-width:340px;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
-        <span class="helper-text" style="color:var(--text-dim);">Only show titles from</span>
-        <span class="helper-text" id="yearFilterLabel" style="color:var(--gold); font-weight:600;">2015 onward</span>
-      </div>
-      <input type="range" id="yearFilterSlider" min="1990" max="2030" step="1" value="2015" class="year-slider">
-    </div>
-  </section>
-
-
-<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
-  <div class="nexus-home-top"><div><div class="nexus-eyebrow">02 / YOUR COLLECTION</div><h2 id="nexusHomeTitle">Curated <em>for you.</em></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
-  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
-  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
-    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">My List →</a></div>
-    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
-  </div>
-  <details class="nexus-home-more">
-    <summary>Explore your taste profile <span aria-hidden="true">↗</span></summary>
-  <div class="nexus-home-lower">
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
-  </div>
-  </details>
-  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
-</section>
-
-  <section class="nexus-tools" id="nexusDataTools" aria-label="Taste profile backup tools">
-    <span class="nexus-tools-title">✦ Your taste, your data</span>
-    <button type="button" class="nexus-tool-btn" id="nexusExportBtn">↓ Export backup</button>
-    <button type="button" class="nexus-tool-btn" id="nexusReviewConflictBtn" style="display:none">Resolve sync conflict</button>
-    <button type="button" class="nexus-tool-btn" id="nexusRecoveryBtn" title="Download local and cloud copies captured before the last merge">↓ Sync recovery</button>
-    <button type="button" class="nexus-tool-btn" id="nexusImportBtn">↑ Restore backup</button>
-    <input type="file" id="nexusImportFile" accept="application/json,.json" hidden aria-label="Choose NEXUS backup file">
-    <span class="nexus-tools-note">Your backup stays on your device. Restore replaces local preferences; if signed in, your restored profile will also be synced to your account.</span><span id="nexusBackupStatus" class="nexus-backup-status" role="status" aria-live="polite"></span>
-  </section>
-
-  <section class="block" id="ratingsSection" style="display:none;">
-    <div class="block-head">
-      <h2>Your Luxury Vault</h2>
-      <span class="count" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;"><span id="ratingsCount"></span><button type="button" id="vaultWrappedBtn" class="filter-reset-btn" style="text-decoration:none;">⬇ Vault Wrapped</button><button type="button" id="vaultViewAllToggle" class="filter-reset-btn" style="text-decoration:none;">View all categories</button></span>
-    </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
-      <input type="text" id="vaultSearchBox" class="search-input" placeholder="Filter your vault by title..." aria-label="Filter your vault by title" autocomplete="off" style="flex:1; min-width:200px; margin-bottom:0;">
-      <select class="filter-select" id="vaultSortOrder">
-        <option value="default">Sort: Recently Added</option>
-        <option value="title">Sort: Title A-Z</option>
-        <option value="year-new">Sort: Newest First</option>
-        <option value="year-old">Sort: Oldest First</option>
-      </select>
-    </div>
-    
-    <div style="position:relative; background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 28px; overflow:hidden;">
-      <div style="position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(223,184,119,0.5), transparent);"></div>
-      <h3 style="font-size:13px; color:var(--gold); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Liked Profile</h3>
-      <div id="topTenContainer"></div>
-      <div id="likedGridsContainer"></div>
-
-      <hr style="border:none; border-top:1px solid var(--line); margin: 36px 0 28px;">
-
-      <h3 style="font-size:13px; color:var(--rose); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><line x1="8" y1="8" x2="16" y2="16"></line></svg>Disliked / Banned Pool</h3>
-      <div id="dislikedGridsContainer"></div>
-    </div>
-  </section>
-
-  <section class="block" id="resultsSection" style="display:none;">
-    <div class="block-head">
-      <h2>Your reel</h2>
-      <span class="count" id="resultsCount"></span>
-    </div>
-    <div class="filter-row" id="filterRow" style="display:none;">
-      <label id="n108NetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n108NetflixOnly"> <span data-n108-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
-      <select class="filter-select" id="genreFilter"><option value="all">All genres</option></select>
-      <select class="filter-select" id="scoreFilter">
-        <option value="0">Any score</option>
-        <option value="7">★7+</option>
-        <option value="8">★8+</option>
-      </select>
-      <select class="filter-select" id="sortOrder">
-        <option value="match">Sort by: Match %</option>
-        <option value="score">Sort by: Top Rated</option>
-        <option value="year">Sort by: Newest</option>
-      </select>
-    </div>
-    <p id="n108NetflixStatus" role="status" aria-live="polite" hidden style="font-size:12px;color:var(--muted);margin:10px 0"></p>
-    <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
-    <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
-    <div class="filmstrip" id="filmstripWrap" style="display:none;">
-      <div class="results-grid" id="resultsGrid"></div>
-    </div>
-  </section>
-
   <section class="block" id="watchlistSection" style="display:none;">
     <div class="block-head">
-      <h2>My list</h2>
+      <h2>Watchlist</h2>
       <span class="count" id="watchlistCount"></span>
     </div>
     <section class="nexus-airing-dashboard" aria-label="Saved anime airing dashboard">
@@ -1683,7 +1737,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
       <div class="nexus-airing-dashboard-status" id="nexusAiringStatus" role="status" aria-live="polite">Select “Check airings” to see the next broadcasts.</div>
       <div id="nexusAiringCards" class="nexus-airing-dashboard-grid"></div>
     </section>
-    <div class="nexus-list-overview" id="nexusListOverview" aria-label="My List progress"></div>
+    <div class="nexus-list-overview" id="nexusListOverview" aria-label="Watchlist progress"></div>
     <div id="nexusMangaDashboard" class="nexus-manga-dashboard" aria-live="polite"></div>
     <div class="nexus-vault-controls" role="search" aria-label="Filter saved titles">
       <input id="nexusVaultSearch" type="search" placeholder="Find a saved title or artist…" aria-label="Search saved titles" autocomplete="off">
@@ -1700,6 +1754,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
     <div id="nexusVaultEmpty" class="nexus-vault-empty" hidden>
       <p id="nexusVaultEmptyText">No saved titles match your filters.</p>
       <button type="button" id="nexusVaultEmptyReset" class="nexus-tool-btn">Reset filters</button>
+      <a href="#searchSection" id="n171WatchlistDiscover" class="nexus-tool-btn">Discover your first title →</a>
     </div>
     <p id="nexusVaultFilterStatus" class="nexus-vault-empty" role="status" aria-live="polite"></p>
     <div class="results-grid" id="watchlistGrid"></div>
@@ -2035,9 +2090,10 @@ function nexusWaitOrAbort(ms,signal){
   });
 }
 async function nexusHostSlot(host){
+  const gap=host==='graphql.anilist.co'?2100:MIN_GAP;
   const prior=hostStartQueue.get(host)||Promise.resolve();
   const turn=prior.catch(()=>{}).then(async()=>{
-    const delay=Math.max(0,(lastCallByHost[host]||0)+MIN_GAP-Date.now());
+    const delay=Math.max(0,(lastCallByHost[host]||0)+gap-Date.now());
     if(delay)await nexusWait(delay);
     lastCallByHost[host]=Date.now();
   });
@@ -2058,29 +2114,36 @@ function nexusRetryDelay(attempt,retryAfter){
   if(retryAfter){
     const seconds=Number(retryAfter);
     const parsed=Number.isFinite(seconds)?seconds*1000:Date.parse(retryAfter)-Date.now();
-    if(Number.isFinite(parsed))return Math.max(1000,Math.min(15000,parsed));
+    if(Number.isFinite(parsed))return Math.max(1000,parsed);
   }
   return Math.min(8000,1000*Math.pow(2,attempt));
 }
 async function queuedFetch(url,options={},attempt=0){
   const host=getHostKey(url);
+  const {nexusMaxRetries=MAX_RETRIES,nexusTimeoutMs=FETCH_TIMEOUT_MS,...fetchOptions}=options;
   const finalUrl=USE_SERVERLESS_PROXY?`${PROXY_BACKEND_URL}?url=${encodeURIComponent(url)}`:url;
   if(options.signal?.aborted)throw nexusAbortError();
   await nexusHostSlot(host);
   if(options.signal?.aborted)throw nexusAbortError();
   let res;
-  try{res=await fetchWithTimeout(finalUrl,options);}
+  try{res=await fetchWithTimeout(finalUrl,fetchOptions,nexusTimeoutMs);}
   catch(error){
     if(options.signal?.aborted)throw error;
-    if(attempt>=MAX_RETRIES)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
+    if(attempt>=nexusMaxRetries)throw new Error(error?.name==="AbortError"?"REQUEST_TIMEOUT":"NETWORK_UNREACHABLE");
     await nexusWaitOrAbort(nexusRetryDelay(attempt),options.signal);return queuedFetch(url,options,attempt+1);
   }
   if(res.status===429||res.status===502||res.status===503||res.status===504){
-    if(attempt>=MAX_RETRIES)throw new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
+    if(attempt>=nexusMaxRetries){
+      const error=new Error(res.status===429?"RATE_LIMITED":"API_UNAVAILABLE");
+      error.retryAfterMs=nexusRetryDelay(attempt,res.headers?.get?.('Retry-After'));throw error;
+    }
     await nexusWaitOrAbort(nexusRetryDelay(attempt,res.headers?.get?.("Retry-After")),options.signal);
     return queuedFetch(url,options,attempt+1);
   }
-  if(!res.ok)throw new Error("API_ERROR_"+res.status);
+  if(!res.ok){
+    const error=new Error("API_ERROR_"+res.status);error.status=res.status;
+    throw error;
+  }
   try{return await res.json();}catch(_){throw new Error("INVALID_API_RESPONSE");}
 }
 
@@ -2200,6 +2263,8 @@ async function getLocalizedWatchProviders(id, type) {
   });
 }
 
+// NEXUS 17.1: TMDB-backed Netflix Thailand checks for all screen categories.
+function n171SupportsNetflix(category){return ['anime','movie','series','kdrama'].includes(category);}
 // NEXUS 10.8: Strict Netflix Thailand anime availability. A missing or ambiguous
 // match is UNKNOWN, not "not on Netflix". Never use AniList externalLinks as proof.
 const n108NetflixProviderId=8; // TMDB Netflix provider; only flatrate availability for TH counts.
@@ -2276,12 +2341,24 @@ async function n111FindStrictAnimeTv(item,names){
   return n113FindAnimeTmdb(item,names,'tv');
 }
 async function n111NetflixThailandStatus(item){
-  if(!item||item.provider!=='anime')return n111NetflixStates.UNKNOWN;
-  const key='v115:'+item.uid+':'+(item.animeFormat||'UNKNOWN')+':'+(item.year||'')+':'+n111NetflixCandidates(item).map(n110NormalizeName).join('|');
+  if(!item||!n171SupportsNetflix(item.provider))return n111NetflixStates.UNKNOWN;
+  const key='v171:'+item.uid+':'+(item.animeFormat||'UNKNOWN')+':'+(item.year||'')+':'+n111NetflixCandidates(item).map(n110NormalizeName).join('|');
   const old=n111NetflixStatusCache.get(key);
   if(old&&Date.now()-old.time<(old.unknown?n111NetflixUnknownTTL:n111NetflixCacheTTL))return old.promise;
   const promise=(async()=>{
     const names=n111NetflixCandidates(item);
+    if(item.provider!=='anime'||n172IsTmdbAnime(item)){
+      const kind=n172IsTmdbAnime(item)?n172TmdbAnimeKind(item):(item.provider==='movie'?'movie':'tv');
+      const id=Number(item.id);
+      if(!Number.isSafeInteger(id)||id<=0)return n111NetflixStates.UNKNOWN;
+      try{
+        const data=await queuedFetch(`${TMDB_BASE}/${kind}/${id}/watch/providers?api_key=${TMDB_KEY}`);
+        const th=data?.results?.TH;
+        if(!th)return n111NetflixStates.UNKNOWN;
+        return Array.isArray(th.flatrate)&&th.flatrate.some(p=>Number(p.provider_id)===n108NetflixProviderId)
+          ?n111NetflixStates.CONFIRMED:n111NetflixStates.NOT_LISTED;
+      }catch(_){return n111NetflixStates.UNKNOWN;}
+    }
     if(!item.animeFormat||!['MOVIE','TV','TV_SHORT','ONA','OVA','SPECIAL'].includes(item.animeFormat))return n111NetflixStates.UNKNOWN;
     const movie=item.animeFormat==='MOVIE';
     const kind=movie?'movie':'tv';
@@ -2322,20 +2399,20 @@ document.getElementById('n108NetflixOnly')?.addEventListener('change',()=>{
 function n108UpdateVisibility(){
   const wrap=document.getElementById('n108NetflixWrap');
   if(!wrap)return;
-  wrap.hidden=mode!=='anime';
-  if(mode!=='anime'&&n108NetflixCheckbox()){n108NetflixCheckbox().checked=false;++n108FilterVersion;const status=document.getElementById('n108NetflixStatus');if(status)status.hidden=true;}
+  wrap.hidden=!n171SupportsNetflix(mode);
+  if(!n171SupportsNetflix(mode)&&n108NetflixCheckbox()){n108NetflixCheckbox().checked=false;++n108FilterVersion;const status=document.getElementById('n108NetflixStatus');if(status)status.hidden=true;}
 }
 async function n108RefreshNetflixResults(){
   const version=++n108FilterVersion;
   n108UpdateVisibility();
   const check=n108NetflixCheckbox();
-  if(!check?.checked||mode!=='anime'){
+  if(!check?.checked||!n171SupportsNetflix(mode)){
     renderResults(applyFilters(lastRanked),lastTotalPicks);
     return;
   }
   const status=document.getElementById('n108NetflixStatus');
   if(status){status.hidden=false;status.textContent='กำลังตรวจสอบ Netflix ประเทศไทย…';}
-  const selected=lastRanked.filter(r=>r.item.provider==='anime');
+  const selected=lastRanked.filter(r=>r.item.provider===mode);
   if(!selected.length){renderResults([],lastTotalPicks);if(status)status.textContent=n111StatusText(0,0,0,0);return;}
   // Never leave unverified recommendations visible while Netflix verification runs.
   renderResults([],lastTotalPicks);
@@ -2345,9 +2422,9 @@ async function n108RefreshNetflixResults(){
   let completed=0;
   async function checkWorker(){while(next<selected.length){
     const i=next++;
-    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
     try{availability[i]=await n111NetflixThailandStatus(selected[i].item);}catch(_){availability[i]=n111NetflixStates.UNKNOWN;}
-    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
     const checked=++completed;
     // Update visible matches incrementally, avoiding a render after every API request.
     if((checked%4===0||checked===selected.length)&&status){
@@ -2358,7 +2435,7 @@ async function n108RefreshNetflixResults(){
     }
   }}
   await Promise.all(Array.from({length:Math.min(4,selected.length)},()=>checkWorker()));
-  if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+  if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
   const eligible=selected.filter((_,i)=>availability[i]===n111NetflixStates.CONFIRMED);
   const notListed=availability.filter(x=>x===n111NetflixStates.NOT_LISTED).length;
   if(status){status.hidden=false;status.textContent=n111StatusText(selected.length,selected.length,eligible.length,notListed)+(window.nexusUILanguage==='th'?' · อ้างอิง TMDB ไม่ใช่ Netflix โดยตรง':' · TMDB data, not direct Netflix verification');}
@@ -2394,26 +2471,119 @@ async function resolveTmdbTvIdForAnime(title, year){
 // fallback below can strip it back out via a plain string match instead of a
 // fragile regex mirroring the query structure.
 const ANILIST_HEAVY_FIELDS = " staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } }";
+let n172AniListUnavailableUntil=0;
 async function anilistQuery(query, variables){
-  const headers = { "Content-Type": "application/json", "Accept": "application/json" };
-  try {
-    return await queuedFetch(ANILIST_BASE, { method: "POST", headers, body: JSON.stringify({ query, variables }) });
-  } catch (e) {
-    // AniList rejects overly-complex queries with a non-2xx response (most
-    // relevantly: the staff+characters fields added for VA/staff collaborator
-    // matching push some queries over its complexity budget). queuedFetch
-    // already throws before exposing the response body on any non-ok status,
-    // so there's no GraphQL "errors" array left to inspect here to confirm
-    // it was specifically a complexity error — instead just retry once with
-    // those fields stripped. A request failing for an unrelated reason will
-    // fail the same way again and surface normally to the caller's existing
-    // try/catch (every caller of anilistQuery already degrades to []).
-    if (query.includes(ANILIST_HEAVY_FIELDS)) {
-      const lightQuery = query.split(ANILIST_HEAVY_FIELDS).join("");
-      return queuedFetch(ANILIST_BASE, { method: "POST", headers, body: JSON.stringify({ query: lightQuery, variables }) });
+  if(Date.now()<n172AniListUnavailableUntil)throw new Error('ANILIST_COOLDOWN');
+  const headers={"Content-Type":"application/json","Accept":"application/json"};
+  async function request(q){
+    const data=await queuedFetch(ANILIST_BASE,{method:'POST',headers,body:JSON.stringify({query:q,variables}),nexusMaxRetries:0,nexusTimeoutMs:8000});
+    if(data?.errors?.length){
+      const error=new Error('ANILIST_QUERY_ERROR');
+      error.complexity=data.errors.some(e=>/complexity|too complex/i.test(e?.message||''));
+      error.rateLimited=data.errors.some(e=>Number(e?.status)===429);
+      throw error;
     }
-    throw e;
+    if(!data?.data)throw new Error('INVALID_ANILIST_RESPONSE');
+    return data;
   }
+  try{return await request(query);}
+  catch(error){
+    // A blocked, timed-out or rate-limited request must not be retried as a lighter query.
+    if(error.complexity&&query.includes(ANILIST_HEAVY_FIELDS)){
+      try{return await request(query.split(ANILIST_HEAVY_FIELDS).join(''));}catch(lightError){error=lightError;}
+    }
+    if(error.status===403||/NETWORK_UNREACHABLE|REQUEST_TIMEOUT|INVALID_API_RESPONSE/.test(error.message))n172AniListUnavailableUntil=Date.now()+5*60*1000;
+    if(error.rateLimited||/RATE_LIMITED/.test(error.message))n172AniListUnavailableUntil=Date.now()+Math.max(60*1000,error.retryAfterMs||0);
+    throw error;
+  }
+}
+// Alternate catalog records keep a separate identity and never masquerade as AniList IDs.
+// Conservative cross-catalog identity: only exact aliases, year and screen format.
+// Existing records keep their IDs; no automatic preference migration or fuzzy merge.
+function n173SameTitle(a,b){
+  if(!a||!b)return false;
+  if(a.uid&&a.uid===b.uid)return true;
+  if(a.provider!=='anime'||b.provider!=='anime'||n172IsTmdbAnime(a)===n172IsTmdbAnime(b))return false;
+  const yearA=Number(a.year),yearB=Number(b.year);
+  if(!Number.isInteger(yearA)||yearA<1900||yearA!==yearB||!a.animeFormat||!b.animeFormat)return false;
+  if((a.animeFormat==='MOVIE')!==(b.animeFormat==='MOVIE'))return false;
+  const names=new Set(n111NetflixCandidates(a).map(n110NormalizeName).filter(Boolean));
+  return n111NetflixCandidates(b).some(name=>names.has(n110NormalizeName(name)));
+}
+function n173Equivalent(map,item){
+  if(map.has(item.uid))return map.get(item.uid);
+  if(item.provider!=='anime')return null;
+  return [...map.values()].find(known=>n173SameTitle(item,known))||null;
+}
+function n173Disliked(item){return !!n173Equivalent(votedDislikes,item);}
+function n173Familiar(item){
+  if(n173Equivalent(selected,item)||n173Equivalent(votedLikes,item))return true;
+  const saved=n173Equivalent(watchlist,item);
+  return !!saved&&['progress','done'].includes(nexusGetListStatus(saved.uid));
+}
+function n173SkipShuffle(item,includeKnown=false){return n173Disliked(item)||(!includeKnown&&n173Familiar(item));}
+const n173GenericSignals=new Set(['animation','anime','manga','japanese animation','unknown genre','อนิเมะ','แอนิเมชัน','แอนิเมชั่น']);
+function n173Informative(values){
+  return [...new Set((values||[]).filter(v=>typeof v==='string'&&v.trim()&&!n173GenericSignals.has(v.trim().toLowerCase())))];
+}
+function n173SaveButtonText(saved){return saved?'Saved':'Save';}
+function n173SyncSaveButtons(){
+  document.querySelectorAll('.n173-pool-save').forEach(button=>{
+    const item=titleIndex.get(button.dataset.uid);if(!item)return;
+    const saved=watchlist.has(item.uid);
+    button.textContent=n173SaveButtonText(saved);
+    button.setAttribute('aria-pressed',String(saved));
+    button.setAttribute('aria-label',(saved?'Remove ':'Save ')+item.title+(saved?' from Watchlist':' for later'));
+    button.disabled=!saved&&n173Disliked(item);
+  });
+}
+function n172IsTmdbAnime(item){return item?.provider==='anime'&&item.metadataSource==='tmdb';}
+function n172TmdbAnimeKind(item){return item.tmdbKind==='movie'?'movie':'tv';}
+function n172AnimeEpisodes(item,extras){
+  const total=n172IsTmdbAnime(item)?(n172TmdbAnimeKind(item)==='tv'?extras.tmdb?.episodes:null):extras.airing?.episodes;
+  return Number.isSafeInteger(total)&&total>0?total:null;
+}
+function n172NormalizeTmdbAnime(data,kind,genres){
+  const item=kind==='movie'?normalizeMovieItem(data,genres):normalizeTVItem(data,genres);
+  return {...item,uid:`anime:tmdb:${kind}:${data.id}`,provider:'anime',metadataSource:'tmdb',tmdbKind:kind,animeFormat:kind==='movie'?'MOVIE':'TV',tags:[]};
+}
+function n172IsJapaneseAnimation(data){
+  return Number.isSafeInteger(data?.id)&&data.id>0&&data.original_language==='ja'&&(data.genre_ids||[]).includes(16);
+}
+async function n172AnimeGenres(kind){
+  return withCache('anime-tmdb-genres:'+kind,async()=>{
+    const data=await queuedFetch(`${TMDB_BASE}/genre/${kind}/list?api_key=${TMDB_KEY}&language=en-US`);
+    return Object.fromEntries((data.genres||[]).map(g=>[g.id,g.name]));
+  });
+}
+async function n172TmdbAnimeCatalog(query='',page=1){
+  const language=window.nexusUILanguage==='th'?'th-TH':'en-US';
+  return withCache(`anime-tmdb-v1:${language}:${query.toLowerCase()}:${page}`,async()=>{
+    const results=await Promise.allSettled(['tv','movie'].map(async kind=>{
+      const genres=await n172AnimeGenres(kind);
+      const path=query?`search/${kind}`:`discover/${kind}`;
+      const params=query?`query=${encodeURIComponent(query)}`:'with_genres=16&with_original_language=ja&sort_by=popularity.desc';
+      const data=await queuedFetch(`${TMDB_BASE}/${path}?api_key=${TMDB_KEY}&${params}&page=${page}&include_adult=false&language=${language}`);
+      return (data.results||[]).filter(n172IsJapaneseAnimation).map(d=>n172NormalizeTmdbAnime(d,kind,genres));
+    }));
+    if(results.every(r=>r.status==='rejected'))throw new Error('ANIME_SOURCES_UNAVAILABLE');
+    return results.flatMap(r=>r.status==='fulfilled'?r.value:[]);
+  });
+}
+async function n172AnimeSource(primary,fallback){
+  try{return await primary();}catch(_){return fallback();}
+}
+async function n172TmdbAnimeRecommendations(item){
+  const kind=n172TmdbAnimeKind(item),genres=await n172AnimeGenres(kind);
+  const data=await queuedFetch(`${TMDB_BASE}/${kind}/${item.id}/recommendations?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==='th'?'th-TH':'en-US'}`);
+  const list=(data.results||[]).filter(n172IsJapaneseAnimation);
+  return list.map((d,i)=>({item:n172NormalizeTmdbAnime(d,kind,genres),weight:tmdbRecPositionWeight(i,list.length,d.vote_average)}));
+}
+function n172SyncCatalogNotice(items=[]){
+  const notice=document.getElementById('n172CatalogNotice');if(!notice)return;
+  const backup=mode==='anime'&&items.some(n172IsTmdbAnime);
+  notice.hidden=!backup;
+  notice.textContent=backup?'Anime catalog: TMDB backup. Airing schedules require an AniList title.':'';
 }
 function normalizeAniListMedia(m, provider){
   const cleanStreams = nexusSafeArray(m.externalLinks).filter(l => l && (l.type === "STREAMING" || l.type === "INFO") && nexusSafeExternalUrl(l.url)).slice(0,3).map(l => ({ name: nexusSafeText(l.site,"Open link"), url: nexusSafeExternalUrl(l.url), logo: faviconFor(l.url) }));
@@ -2432,7 +2602,7 @@ function normalizeAniListMedia(m, provider){
 const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 const ANILIST_RECS_QUERY = `query ($id: Int, $type: MediaType) { Media(id: $id, type: $type) { recommendations(sort: RATING_DESC, perPage: 25) { nodes { rating mediaRecommendation { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } } } }`;
 
-async function searchAniList(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function n172SearchAniListPrimary(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
 async function getAniListRecommendations(id, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-recs:` + id, async () => { const data = await anilistQuery(ANILIST_RECS_QUERY, { id: Number(id), type }); return ((data.data?.Media?.recommendations?.nodes) || []).filter(n => n.mediaRecommendation).map(n => ({ item: normalizeAniListMedia(n.mediaRecommendation, provider), weight: n.rating || 0 })); }); }
 
 function renderSkeletons() { resultsGrid.innerHTML = ""; filmstripWrap.style.display = "block"; for(let i=0; i<6; i++) { const sk = document.createElement("div"); sk.className = "sk-card"; sk.innerHTML = `<div class="sk-anim"></div><div style="display:flex; gap:12px; padding:14px;"><div class="sk-block" style="width:64px; height:90px; flex-shrink:0;"></div><div style="flex:1; display:flex; flex-direction:column; gap:8px; margin-top:4px;"><div class="sk-block" style="width:40px; height:10px;"></div><div class="sk-block" style="width:80%; height:16px;"></div><div class="sk-block" style="width:60%; height:12px;"></div></div></div><div class="sk-block" style="margin:12px 14px; height:24px;"></div>`; resultsGrid.appendChild(sk); } }
@@ -2486,7 +2656,13 @@ function nexusRecommendationExplanation(r){
   if(r.watchlistGenres?.length)parts.push("watchlist interest: "+r.watchlistGenres.join(", "));
   return parts.length?parts.join(" · "):"Related to your liked titles";
 }
+let n172RecommendationVersion=0;
 async function computeRecommendations(){
+  const requestVersion=++n172RecommendationVersion,requestedMode=mode;
+  const isCurrent=()=>requestVersion===n172RecommendationVersion&&requestedMode===mode;
+  findBtn.disabled=true;findBtn.setAttribute('aria-busy','true');
+  document.getElementById('n171GuideFind').disabled=true;
+  setProgress('Finding titles that fit your favorites…');
   filterRow.style.display = "none"; renderSkeletons();
   const corePicks = [...selected.values()].filter(i => i.provider === mode); const expandedLikes = [...votedLikes.values()].filter(i => i.provider === mode);
   const allInputs = [...new Map([...corePicks, ...expandedLikes].map(i=>[i.uid,i])).values()];
@@ -2498,6 +2674,7 @@ async function computeRecommendations(){
     // one wait for the previous one to finish.
     await Promise.all(allInputs.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Seed enrichment unavailable",item.uid);} }));
 
+    if(!isCurrent())return;
     const likedTagMap = new Map(); const likedGenreMap = new Map(); const likedCollaboratorMap = new Map(); let totalGenreWeights = 0;
     allInputs.forEach(item => {
       const weightMultiplier = item.isMasterpiece ? 3 : 1;
@@ -2517,18 +2694,20 @@ async function computeRecommendations(){
     await Promise.all(allInputs.map(async (item) => {
       const isMP = item.isMasterpiece; const inputWeight = isMP ? 2 : 1; totalPicksWeight += inputWeight;
       let recs=[];
-      try{recs=await getRecommendationsFor(item);await resolveOngoingFlags(recs.map(r=>r.item));}
+      try{recs=await getRecommendationsFor(item);if(!isCurrent())return;await resolveOngoingFlags(recs.map(r=>r.item));}
       catch(e){console.warn("Recommendation source unavailable",item.uid,e);}
 
+      if(!isCurrent())return;
       completedInputs++;
       setProgress(`Analyzing connections for "${item.title}" (${completedInputs}/${allInputs.length})...`);
       recs.forEach(r=>{
-        if(selected.has(r.item.uid) || votedDislikes.has(r.item.uid) || votedLikes.has(r.item.uid)) return;
+        if(n173SkipShuffle(r.item,false))return;
         const itemYear = parseInt(r.item.year); if (mode !== "music" && STRICT_MODERN_MODE && !r.item.isOngoing && !isNaN(itemYear) && itemYear < START_YEAR_CUTOFF) return;
         if(!candidates.has(r.item.uid)){ candidates.set(r.item.uid, { item: r.item, weight: 0, sources: 0, sourceTitles: [], derivedFromMasterpiece: false }); }
         const c = candidates.get(r.item.uid); c.weight += (r.weight * inputWeight); c.sources += inputWeight; c.sourceTitles.push(item.title); if(isMP) c.derivedFromMasterpiece = true;
       });
     }));
+    if(!isCurrent())return;
     const dislikedGenres = new Set(); const dislikedTags = new Set(); const dislikedCollaborators = new Set(); const dislikedArtists = new Set();
     const dislikedItems = [...votedDislikes.values()].filter(item => item.provider === mode);
     dislikedItems.forEach(item => {
@@ -2541,6 +2720,7 @@ async function computeRecommendations(){
       // before, so only their (already-present) genres worked as a negative
       // signal. Same independent-per-item fetch pattern as allInputs above.
       await Promise.all(dislikedItems.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Dislike enrichment unavailable",item.uid);} }));
+      if(!isCurrent())return;
       dislikedItems.forEach(item => {
         (item.tags || []).forEach(t => dislikedTags.add(t.name));
         (item.collaborators || []).forEach(c => dislikedCollaborators.add(c));
@@ -2663,6 +2843,7 @@ async function computeRecommendations(){
     // movie/series/kdrama) to pick a bounded shortlist — fetching keywords and
     // credits for every raw candidate (could be 50-100+) would be too expensive.
     let ranked = [...candidates.values()];
+    if(!isCurrent())return;
     ranked.forEach(scoreCandidate);
     ranked.sort((a,b)=> b.matchScore - a.matchScore || b.sources - a.sources || b.weight - a.weight);
     ranked = ranked.slice(0, 24);
@@ -2674,12 +2855,14 @@ async function computeRecommendations(){
     // too slow), and skipped in music mode where overview text isn't the taste
     // signal. Populates semanticScores, which scoreCandidate prefers over the
     // TF-IDF keyword cosine when present.
-    if (mode !== "music") {
-      setProgress("Loading semantic matching model...");
+    if (mode !== "music" && embeddingsAvailable === true) {
+      setProgress("Refining your recommendations…");
       await getEmbedPipeline();
+      if(!isCurrent())return;
       if (embeddingsAvailable) {
         setProgress("Computing semantic similarity...");
         const likedVectors = await Promise.all(allInputs.map(item => embedText(item.overview)));
+        if(!isCurrent())return;
         const likedWeights = allInputs.map(item => item.isMasterpiece ? 3 : 1);
         const likedEmbeddingVec = averageVectors(likedVectors, likedWeights);
         // Disliked items get equal weight (no masterpiece-style boost concept
@@ -2687,6 +2870,7 @@ async function computeRecommendations(){
         // user actively rejected".
         const dislikedVectors = await Promise.all(dislikedItems.map(item => embedText(item.overview)));
         const dislikedEmbeddingVec = averageVectors(dislikedVectors, dislikedItems.map(() => 1));
+        if(!isCurrent())return;
         if (likedEmbeddingVec || dislikedEmbeddingVec) {
           await Promise.all(ranked.map(async c => {
             const vec = await embedText(c.item.overview);
@@ -2698,23 +2882,34 @@ async function computeRecommendations(){
       }
     }
 
+    if(!isCurrent())return;
     // Pass 2: now that the shortlist is small (≤24), fetch real keywords and
     // collaborators for any movie/series/kdrama candidates and re-score/re-sort
     // with the full signal set — bringing them to the same matching depth
     // anime/manga already had.
     setProgress("Refining matches with detailed tag & credit data...");
     await Promise.all(ranked.map(async c => { try{await ensureTags(c.item);await ensureCollaborators(c.item);}catch(e){console.warn("Candidate enrichment unavailable",c.item.uid);} }));
+    if(!isCurrent())return;
     ranked.forEach(scoreCandidate);
     ranked.sort((a,b)=> b.matchScore - a.matchScore || b.sources - a.sources || b.weight - a.weight);
 
     setProgress("Injecting localized watch providers for Thailand...");
     await Promise.all(ranked.map(async c => {try{
       if (c.item.provider === "movie" || c.item.provider === "series" || c.item.provider === "kdrama") { c.item.streams = await getLocalizedWatchProviders(c.item.id, c.item.provider); }
+      else if(n172IsTmdbAnime(c.item)){c.item.streams=await getLocalizedWatchProviders(c.item.id,n172TmdbAnimeKind(c.item));}
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
       }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
-    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&mode==="anime") await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
-  } catch(e) { setProgress(""); resultsGrid.innerHTML = `<div class="error-note">Processing failed. Click primary action to retry.</div>`; }
+    if(!isCurrent())return;
+    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&n171SupportsNetflix(mode)) await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
+  } catch(e) { if(isCurrent()){setProgress("");resultsGrid.innerHTML='<div class="error-note">Processing failed. Click primary action to retry.</div>';} }
+  finally{
+    if(requestVersion===n172RecommendationVersion){
+      findBtn.removeAttribute('aria-busy');
+      findBtn.disabled=![...selected.values()].some(item=>item.provider===mode);
+      n171UpdateGuide();
+    }
+  }
 }
 
 // ---------------- DATA PROVIDERS ----------------
@@ -2742,6 +2937,7 @@ async function getTVKeywords(id){
   });
 }
 async function ensureTags(item){
+  if(n172IsTmdbAnime(item)){if(!item.tags?.length)item.tags=await (n172TmdbAnimeKind(item)==='movie'?getMovieKeywords(item.id):getTVKeywords(item.id));return item;}
   if(item.tags && item.tags.length) return item; // anime/manga already have real tags; don't refetch
   if(item.provider === "movie"){ item.tags = await getMovieKeywords(item.id); }
   else if(item.provider === "series" || item.provider === "kdrama"){ item.tags = await getTVKeywords(item.id); }
@@ -2814,6 +3010,10 @@ async function getTVCreators(id){
   });
 }
 async function ensureCollaborators(item){
+  if(n172IsTmdbAnime(item)){
+    if(!item.collaborators?.length)item.collaborators=n172TmdbAnimeKind(item)==='movie'?(await getMovieCreditsAndCollection(item.id)).names:await getTVCreators(item.id);
+    return item;
+  }
   if(item.collaborators && item.collaborators.length) return item; // anime/manga studios already present
   if(item.provider === "movie"){
     const { names, collection } = await getMovieCreditsAndCollection(item.id);
@@ -3437,6 +3637,13 @@ function scoreSurpriseCandidate(item, profile){
 // ---------------- POPULAR / TRENDING ----------------
 const ANILIST_TRENDING_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 
+async function searchAniList(query,provider){
+  return provider==='anime'?n172AnimeSource(()=>n172SearchAniListPrimary(query,provider),()=>n172TmdbAnimeCatalog(query)):n172SearchAniListPrimary(query,provider);
+}
+async function getPopularAniList(provider,page=1){
+  return provider==='anime'?n172AnimeSource(()=>n172PopularAniListPrimary(provider,page),()=>n172TmdbAnimeCatalog('',page)):n172PopularAniListPrimary(provider,page);
+}
+
 async function getPopularMovies(page = 1){ const genreMap = await loadMovieGenres(); return withCache(`popular:movie:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_KEY}&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
 async function getPopularTVProvider(provider, page = 1){
   const cfg = TV_PROVIDERS[provider];
@@ -3448,7 +3655,7 @@ async function getPopularTVProvider(provider, page = 1){
 }
 async function getPopularSeries(page = 1){ return getPopularTVProvider("series", page); }
 async function getPopularKDramas(page = 1){ return getPopularTVProvider("kdrama", page); }
-async function getPopularAniList(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function n172PopularAniListPrimary(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
 
 // Genre-filtered discover fetchers — same normalized shape as the popular
 // fetchers above, just scoped to one genre. Used only by Surprise Me's
@@ -3493,6 +3700,7 @@ function buildGenrePoolFetcher(currentMode){
     const raw = await getDeezerGenreChartTracks(matched.id, Math.floor(Math.random() * 4) * 25);
     return Promise.all(raw.map(t => normalizeDeezerTrack(t)));
   };
+  if(currentMode==='anime'&&Date.now()<n172AniListUnavailableUntil)return async()=>n172TmdbAnimeCatalog('',1+Math.floor(Math.random()*3));
   const provider = currentMode === "manga" ? "manga" : "anime";
   return async (genreName) => getAniListByGenre(provider, genreName, 1 + Math.floor(Math.random() * 3));
 }
@@ -3649,11 +3857,17 @@ async function searchByMode(mode, query){
   return mode === "manga" ? searchAniList(query, "manga") : searchAniList(query, "anime"); 
 }
 async function getRecommendationsFor(item){ 
+  if(n172IsTmdbAnime(item))return n172TmdbAnimeRecommendations(item);
   if (item.provider === "movie") return getMovieRecommendations(item.id); 
   if (item.provider === "series") return getSeriesRecommendations(item.id); 
   if (item.provider === "kdrama") return getKDramaRecommendations(item.id); 
   if (item.provider === "music") return getMusicRecommendations(item.id);
-  return item.provider === "manga" ? getAniListRecommendations(item.id, "manga") : getAniListRecommendations(item.id, "anime"); 
+  if(item.provider==='manga')return getAniListRecommendations(item.id,'manga');
+  return n172AnimeSource(()=>getAniListRecommendations(item.id,'anime'),async()=>{
+    const kind=item.animeFormat==='MOVIE'?'movie':'tv';
+    const id=await n113FindAnimeTmdb(item,n111NetflixCandidates(item),kind);
+    return id?n172TmdbAnimeRecommendations({...item,id,tmdbKind:kind}):[];
+  }); 
 }
 
 // ---------------- STATE MANAGEMENT ----------------
@@ -3842,7 +4056,7 @@ function nexusRestoreDiscovery(state){
   document.getElementById("nexusDiscoverYear").value=state?.year || "all";
   document.getElementById("nexusDiscoverSort").value=state?.sort || "default";
   document.getElementById("nexusDiscoverHideDisliked").checked=state?.hide ?? true;
-  document.getElementById("n109DiscoverNetflixOnly").checked=mode==="anime"&&!!state?.netflix;
+  document.getElementById("n109DiscoverNetflixOnly").checked=n171SupportsNetflix(mode)&&!!state?.netflix;
   nexusRefreshSearchClear();
 }
 function executeModeChange(newMode) {
@@ -3853,6 +4067,7 @@ function executeModeChange(newMode) {
   searchSpinner.classList.remove("active");
   // Invalidate in-flight Surprise Me fetches when changing the active category.
   surpriseRequestVersion++;
+  ++n172RecommendationVersion;findBtn.removeAttribute('aria-busy');setProgress('');
   // A cancelled shuffle's finally block is deliberately ignored. Restore
   // the button here so switching categories cannot leave it disabled.
   restoreSurpriseButton();
@@ -3866,6 +4081,18 @@ function executeModeChange(newMode) {
   else if (mode === "music") ph = "tracks or songs";
   searchBox.placeholder = `Search ${ph}...`; 
   nexusRestoreDiscovery(nexusDiscoveryByMode.get(mode));
+  ++n108FilterVersion;
+  const netflixEnabled=n109NetflixOnly();
+  n116SurpriseNetflixBox.checked=netflixEnabled;
+  n108NetflixCheckbox().checked=netflixEnabled;
+  n116SurpriseNetflixStatus.textContent='';
+  n116SyncSurpriseNetflix();
+  n109SyncDiscoverControl();
+  n108UpdateVisibility();
+  const moreCategories=document.querySelector('.n171-more-categories');
+  if(moreCategories&&['manga','music'].includes(mode))moreCategories.open=true;
+  renderSelectedStrip();
+  n172SyncCatalogNotice();
   hideSuggestions();
   stopPreview(); 
   // The year-cutoff filter only applies to movie/series/anime/etc metadata
@@ -4020,6 +4247,7 @@ searchBox.addEventListener("keydown", (e) => {
 searchBox.addEventListener("blur", () => { setTimeout(hideSuggestions, 150); });
 
 async function loadColdStart(){
+  document.getElementById('n173ShuffleStatus').textContent='';
   const coldToken = ++searchRequestSeq; // any runSearch already in flight is now stale and must not render over this
   renderPoolSkeletons(); loadMoreBtn.style.display = "none";
   const myMode = mode;
@@ -4032,11 +4260,17 @@ async function loadColdStart(){
     renderSearchResults(items, true);
   }catch(e){
     if(myMode !== mode || coldToken !== searchRequestSeq) return;
-    poolGrid.innerHTML = '<div class="error-note">Couldn\'t load titles right now — check your connection and try searching directly.</div>'; loadMoreBtn.style.display = "none";
+    poolGrid.replaceChildren();
+    const note=document.createElement('div');note.className='error-note nexus-discovery-empty';note.setAttribute('role','status');
+    const message=document.createElement('p');message.textContent='The catalog is temporarily unavailable. Your saved titles are still available.';
+    const retry=document.createElement('button');retry.type='button';retry.className='nexus-tool-btn';retry.textContent='Try loading again';retry.addEventListener('click',()=>loadColdStart());
+    const saved=document.createElement('a');saved.href='#watchlistSection';saved.className='nexus-tool-btn';saved.textContent='Open Watchlist';
+    note.append(message,retry,saved);poolGrid.append(note);loadMoreBtn.style.display='none';
   }
 }
 
-async function runSearch(query){ 
+async function runSearch(query){
+  document.getElementById('n173ShuffleStatus').textContent=''; 
   // Typing fast (or switching mode/clearing the box mid-request) can leave an
   // earlier, slower search still in flight when a newer one starts. Without a
   // freshness check, whichever network call happens to resolve last wins —
@@ -4117,12 +4351,12 @@ let nexusDiscoverPopular = true;
 // NEXUS 10.9: Discovery Netflix-TH filter. No unverified titles pass through.
 let n109AcceptedIds=new Set();
 let n109CheckVersion=0;
-const n109NetflixOnly=()=>mode==='anime'&&!!document.getElementById('n109DiscoverNetflixOnly')?.checked;
+const n109NetflixOnly=()=>n171SupportsNetflix(mode)&&!!document.getElementById('n109DiscoverNetflixOnly')?.checked;
 function n109SyncDiscoverControl(){
   const wrap=document.getElementById('n109DiscoverNetflixWrap');
   const status=document.getElementById('n109DiscoverNetflixStatus');
-  if(wrap)wrap.hidden=mode!=='anime';
-  if(status&&mode!=='anime')status.hidden=true;
+  if(wrap)wrap.hidden=!n171SupportsNetflix(mode);
+  if(status&&!n171SupportsNetflix(mode))status.hidden=true;
 }
 function n109StartDiscoveryCheck(){
   const version=++n109CheckVersion;
@@ -4134,7 +4368,7 @@ function n109StartDiscoveryCheck(){
     nexusReapplyDiscovery();
     return;
   }
-  const candidates=nexusDiscoverRawItems.filter(i=>i?.provider==='anime');
+  const candidates=nexusDiscoverRawItems.filter(i=>i?.provider===mode);
   if(status){status.hidden=false;status.textContent=(window.nexusUILanguage==='th'?'กำลังตรวจสอบ Netflix ประเทศไทย…':'Checking Netflix availability in Thailand…');}
   nexusReapplyDiscovery(); // immediately hide all unverified titles
   (async()=>{
@@ -4333,6 +4567,7 @@ function nexusRankSearchResults(items,query){
     .sort((a,b)=>b.rank-a.rank||a.index-b.index).map(entry=>entry.item);
 }
 function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = false){
+  n172SyncCatalogNotice(isLoadMore?nexusDiscoverRawItems:items);
   if(!isLoadMore){
     ++n109CheckVersion; n109AcceptedIds=new Set(); n109SyncDiscoverControl();
     nexusDiscoverRawItems = Array.isArray(items) ? items : [];
@@ -4355,7 +4590,9 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
     const note = document.createElement("div"); note.className = "empty-note nexus-discovery-empty";
     const msg = document.createElement("p");
     const filteredOut = nexusDiscoverRawItems.length > 0;
-    msg.textContent = filteredOut
+    msg.textContent = n109NetflixOnly()
+      ? "Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter."
+      : filteredOut
       ? "No titles match your current filters. Reset them to see all loaded results."
       : searchBox.value.trim()
         ? "No matches found. Try a shorter title, or browse popular picks."
@@ -4373,12 +4610,13 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
   const fragment = document.createDocumentFragment();
   visibleItems.forEach(item=>{
     const isSelected = selected.has(item.uid); const hasLiked = votedLikes.has(item.uid); const hasDisliked = votedDislikes.has(item.uid);
+    const isSaved=watchlist.has(item.uid);
     const el = document.createElement("div");
     el.className = "pool-item" + (isSelected ? " selected" : ""); el.setAttribute("data-uid", item.uid);
     el.setAttribute("role", "group"); el.removeAttribute("tabindex");
     let label = item.provider; if (item.provider === "series") label = "TV Series"; else if (item.provider === "kdrama") label = "K-Drama"; else if (item.provider === "music") label = "Music Track";
     
-    let metaContent = `${label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
+    let metaContent = `${n172IsTmdbAnime(item)?"Anime · TMDB":label} · ${item.year}${item.isOngoing ? " · Ongoing" : ""}${item.score ? " · ★" + item.score : ""}`;
     if (item.provider === "music" || item.uid.startsWith("music:")) {
       let artistName = item.artist || "Unknown Artist";
       metaContent = `Artist: ${artistName}${item.score ? " · ★" + item.score : ""}`;
@@ -4393,16 +4631,18 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
     // Surprise Me all used this pool-item card instead, which had no way to
     // listen at all until you'd already gone through "find similar" once.
     const poolAudioBtn = (item.provider === "music" && item.preview) ? `<button type="button" class="action-btn audio-preview-btn" onclick="event.stopPropagation(); togglePreview(decodeURIComponent('${encodeURIComponent(item.preview)}'), this, decodeURIComponent('${encodeURIComponent(item.url)}'))" aria-label="Preview ${escapeHtml(item.title)}">▶</button>` : "";
-    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><button type="button" class="p-title nexus-search-detail-title${item.provider === "music" ? " music-title" : ""}" title="View details for ${escapeHtml(item.title)}" aria-label="View details for ${escapeHtml(item.title)}">${escapeHtml(item.title)}</button><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><button type="button" class="nexus-search-select" aria-label="${isSelected ? 'Remove' : 'Add'} ${escapeHtml(item.title)} ${isSelected ? 'from' : 'to'} selection" aria-pressed="${isSelected}">${isSelected ? '✓ Selected' : '+ Select'}</button><div class="p-check">✓</div></div>`;
+    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><button type="button" class="p-title nexus-search-detail-title${item.provider === "music" ? " music-title" : ""}" title="View details for ${escapeHtml(item.title)}" aria-label="View details for ${escapeHtml(item.title)}">${escapeHtml(item.title)}</button><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><button type="button" class="nexus-search-select" aria-label="${isSelected ? 'Remove' : 'Add'} ${escapeHtml(item.title)} ${isSelected ? 'from' : 'to'} selection" aria-pressed="${isSelected}">${isSelected ? '✓ Selected' : '+ Select'}</button><button type="button" class="n173-pool-save" data-uid="${escapeHtml(item.uid)}" data-action="save-pool" aria-pressed="${isSaved}" aria-label="${escapeHtml((isSaved?'Remove ':'Save ')+item.title+(isSaved?' from Watchlist':' for later'))}" ${!isSaved&&n173Disliked(item)?'disabled':''}>${n173SaveButtonText(isSaved)}</button><div class="p-check">✓</div></div>`;
     el.querySelector(".nexus-search-detail-title")?.addEventListener("click",e=>{e.stopPropagation();openDetailModal(item.uid);});
     el.querySelector('[data-action="like"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'like'); refreshPoolCardVoteState(item); });
     el.querySelector('[data-action="dislike"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'dislike'); refreshPoolCardVoteState(item); });
+    el.querySelector('[data-action="save-pool"]').addEventListener('click',e=>{e.stopPropagation();handleWatchlist(item);});
     el.querySelector(".nexus-search-select")?.addEventListener("click",e=>{e.stopPropagation();toggleSelect(item);const btn=e.currentTarget;const on=selected.has(item.uid);btn.textContent=on?"✓ Selected":"+ Select";btn.setAttribute("aria-pressed",String(on));btn.setAttribute("aria-label",(on?"Remove ":"Add ")+item.title+(on?" from selection":" to selection"));});
     el.addEventListener("click", ()=> openDetailModal(item.uid));
     el.addEventListener("keydown", (e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetailModal(item.uid); } });
     fragment.appendChild(el);
   });
   poolGrid.appendChild(fragment);
+  n173SyncSaveButtons();
   loadMoreBtn.style.display = currentPoolItems.length > poolDisplayCount ? "inline-flex" : "none";
   wireHoverPreview(poolGrid);
 }
@@ -4417,6 +4657,7 @@ function refreshPoolCardVoteState(item){
   const likeBtn = card.querySelector('[data-action="like"]'); const dislikeBtn = card.querySelector('[data-action="dislike"]');
   if (likeBtn) { likeBtn.classList.toggle("active-like", hasLiked); likeBtn.setAttribute("aria-pressed", hasLiked); }
   if (dislikeBtn) { dislikeBtn.classList.toggle("active-dislike", hasDisliked); dislikeBtn.setAttribute("aria-pressed", hasDisliked); }
+  n173SyncSaveButtons();
 }
 
 loadMoreBtn.addEventListener("click", ()=>{
@@ -4459,8 +4700,27 @@ function renderSelectedStrip(){
     chip.querySelector(".star-btn").addEventListener("click", (e) => { e.stopPropagation(); toggleMasterpiece(item); });
     chip.querySelector(".close-btn").addEventListener("click", () => toggleSelect(item)); selectedStrip.appendChild(chip);
   });
-  findBtn.disabled = selected.size === 0;
+  findBtn.disabled = ![...selected.values()].some(item=>item.provider===mode);
+  n171UpdateGuide();
 }
+
+function n171UpdateGuide(){
+  const text=document.getElementById('n171GuideText');
+  if(!text)return;
+  const count=[...selected.values()].filter(item=>item.provider===mode).length;
+  text.textContent=window.nexusUILanguage==='th'
+    ?`เลือกเรื่องที่ชอบในหมวดนี้ 1–3 เรื่อง แล้วกดค้นหาเรื่องคล้ายกัน · เลือกแล้ว ${count} เรื่อง`
+    :`Choose 1–3 favorites in this category, then find similar titles · ${count} selected`;
+  document.getElementById('n171GuideFind').disabled=count===0;
+}
+document.getElementById('n171Similar').addEventListener('click',()=>{
+  document.getElementById('n171Guide').hidden=false;n171UpdateGuide();
+  document.getElementById('searchSection').scrollIntoView({behavior:'smooth',block:'start'});
+  searchBox.focus({preventScroll:true});
+});
+document.getElementById('n171GuideClose').addEventListener('click',()=>{document.getElementById('n171Guide').hidden=true;});
+document.getElementById('n171GuideFind').addEventListener('click',()=>findBtn.click());
+window.addEventListener('nexus:languagechange',n171UpdateGuide);
 
 function toggleMasterpiece(item) { if (selected.has(item.uid)) { selected.get(item.uid).isMasterpiece = !selected.get(item.uid).isMasterpiece; renderSelectedStrip(); saveState(); renderAnalytics(); resultsSection.style.display = "none"; } }
 
@@ -4476,13 +4736,13 @@ function toggleLikedMasterpiece(item) {
   saveState(); renderRatings(); renderAnalytics(); computeRecommendations();
 }
 
-clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
+clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");const item=titleIndex.get(b.dataset.uid);if(item)button.setAttribute('aria-label','Add '+item.title+' to selection');} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
 // NEXUS 14: one Netflix preference across discovery, recommendations and surprise.
 // Existing per-surface change handlers remain responsible for re-rendering.
 let n14NetflixSyncing=false;
 function n14SyncNetflixPreference(event){
-  if(n14NetflixSyncing||mode!=='anime')return;
+  if(n14NetflixSyncing||!n171SupportsNetflix(mode))return;
   const ids=['n109DiscoverNetflixOnly','n108NetflixOnly','n116SurpriseNetflixOnly'];
   if(!ids.includes(event.target?.id))return;
   n14NetflixSyncing=true;
@@ -4503,12 +4763,12 @@ const n116SurpriseNetflixBox=document.getElementById('n116SurpriseNetflixOnly');
 const n116SurpriseNetflixWrap=document.getElementById('n116SurpriseNetflixWrap');
 const n116SurpriseNetflixStatus=document.getElementById('n116SurpriseNetflixStatus');
 function n116SyncSurpriseNetflix(){
-  const anime=mode==='anime';
+  const anime=n171SupportsNetflix(mode);
   n116SurpriseNetflixWrap.hidden=!anime;
   n116SurpriseNetflixWrap.style.display=anime?'inline-flex':'none';
   if(!anime)n116SurpriseNetflixStatus.textContent='';
 }
-function n116SurpriseNetflixEnabled(requestedMode){return requestedMode==='anime'&&n116SurpriseNetflixBox.checked;}
+function n116SurpriseNetflixEnabled(requestedMode){return n171SupportsNetflix(requestedMode)&&n116SurpriseNetflixBox.checked;}
 // Check one bounded batch at a time; process all results before choosing
 // nine so timing of TMDB responses does not bias which titles get picked.
 async function n116FilterSurpriseNetflix(scored,requestVersion,requestedMode,progress){
@@ -4539,6 +4799,12 @@ async function n116FilterSurpriseNetflix(scored,requestVersion,requestedMode,pro
   if(progress)progress({checked,total:candidates.length,confirmed:matches.length,notListed,unknown});
   return matches;
 }
+const n173KnownCheckbox=document.getElementById('n173IncludeKnown');
+try{n173KnownCheckbox.checked=localStorage.getItem('nexus-shuffle-known')==='1';}catch(_){}
+n173KnownCheckbox.addEventListener('change',()=>{
+  try{localStorage.setItem('nexus-shuffle-known',n173KnownCheckbox.checked?'1':'0');}catch(_){}
+  ++surpriseRequestVersion;restoreSurpriseButton();document.getElementById('n173ShuffleStatus').textContent='';
+});
 const SURPRISE_PICK_COUNT = 9;
 const SURPRISE_RECENT_LIMIT = 45;
 const surpriseRecentByMode = new Map();
@@ -4549,12 +4815,16 @@ function restoreSurpriseButton(){
   surpriseBtn.removeAttribute("aria-busy");
   surpriseBtn.innerHTML = SURPRISE_BUTTON_IDLE_HTML;
   surpriseBtn.removeAttribute("aria-label");
+  const quickButton=document.getElementById('n171Tonight');
+  quickButton.disabled=false;quickButton.removeAttribute('aria-busy');
 }
 
 n116SurpriseNetflixBox.addEventListener('change',()=>{++surpriseRequestVersion;n116SurpriseNetflixStatus.textContent='';restoreSurpriseButton();});
-document.addEventListener('click',event=>{if(event.target.closest?.('[data-mode], .nav-item, .n102-nav-item, .mode-tab'))queueMicrotask(n116SyncSurpriseNetflix);});
+
 n116SyncSurpriseNetflix();
-surpriseBtn.addEventListener("click", async ()=>{
+surpriseBtn.addEventListener("click",()=>n171RunSurprise(SURPRISE_PICK_COUNT));
+document.getElementById('n171Tonight').addEventListener('click',()=>n171RunSurprise(3));
+async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
   if (surpriseBtn.disabled) return;
   surpriseBtn.disabled = true;
   surpriseBtn.setAttribute("aria-busy", "true");
@@ -4567,8 +4837,12 @@ surpriseBtn.addEventListener("click", async ()=>{
   document.getElementById("nexusDiscoverYear").value = "all";
   document.getElementById("nexusDiscoverSort").value = "default";
   document.getElementById("nexusDiscoverHideDisliked").checked = true;
-  const pickCount = SURPRISE_PICK_COUNT;
+  const quickButton=document.getElementById('n171Tonight');
+  quickButton.disabled=true;quickButton.setAttribute('aria-busy','true');
+  document.getElementById('searchSection').scrollIntoView({behavior:'smooth',block:'start'});
   const requestedMode = mode;
+  const includeKnown=n173KnownCheckbox.checked;
+  document.getElementById('n173ShuffleStatus').textContent='';
   const netflixSurprise=n116SurpriseNetflixEnabled(requestedMode);
   n116SurpriseNetflixStatus.textContent=netflixSurprise?"กำลังตรวจสอบ Netflix ประเทศไทย…":"";
   const requestVersion = ++surpriseRequestVersion;
@@ -4578,7 +4852,7 @@ surpriseBtn.addEventListener("click", async ()=>{
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
     const resolvedPool = await resolveOngoingFlags(fetchedPool);
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
-    const pool = applyModernFilter(Array.isArray(resolvedPool)?resolvedPool.filter(Boolean):[]);
+    const pool = applyModernFilter(Array.isArray(resolvedPool)?resolvedPool.filter(item=>item&&!n173SkipShuffle(item,includeKnown)):[]);
     const profile = buildSurpriseTasteProfile(requestedMode);
     // Score every pool item, then hard-drop anything hitting a disliked
     // collaborator/artist (see scoreSurpriseCandidate) — a "surprise" should
@@ -4589,11 +4863,11 @@ surpriseBtn.addEventListener("click", async ()=>{
       const requestIsCurrent=()=>requestVersion===surpriseRequestVersion&&requestedMode===mode&&n116SurpriseNetflixEnabled(requestedMode);
       let verified=await n116FilterSurpriseNetflix(scored,requestVersion,requestedMode);
       if(!requestIsCurrent())return;
-      if(verified.length<pickCount){
+      if(requestedMode==='anime'&&verified.length<pickCount){
         const alreadyScored=new Set(scored.map(s=>s.item.uid));
         await n12ExpandAnimeSurprisePool(pool,new Set(),requestIsCurrent,async(items,batchNumber)=>{
           if(!requestIsCurrent()||verified.length>=pickCount)return;
-          const newEntries=items.filter(item=>item?.uid&&!alreadyScored.has(item.uid)&&!votedDislikes.has(item.uid))
+          const newEntries=items.filter(item=>item?.uid&&!alreadyScored.has(item.uid)&&!n173SkipShuffle(item,includeKnown))
             .map(item=>({item,...scoreSurpriseCandidate(item,profile)})).filter(s=>!s.rejected);
           newEntries.forEach(s=>alreadyScored.add(s.item.uid));
           if(newEntries.length){
@@ -4602,8 +4876,8 @@ surpriseBtn.addEventListener("click", async ()=>{
             verified=[...new Map([...verified,...checked].map(s=>[s.item.uid,s])).values()];
           }
           n116SurpriseNetflixStatus.textContent=(window.nexusUILanguage==='th'
-            ?`กำลังค้นหาเพิ่มเติม ชุด ${batchNumber} · ยืนยันแล้ว ${verified.length}/9 เรื่อง`
-            :`Searching more anime, batch ${batchNumber} · ${verified.length}/9 verified`);
+            ?`กำลังค้นหาเพิ่มเติม ชุด ${batchNumber} · ยืนยันแล้ว ${verified.length}/${pickCount} เรื่อง`
+            :`Searching more anime, batch ${batchNumber} · ${verified.length}/${pickCount} verified`);
           return verified.length<pickCount;
         });
         if(!requestIsCurrent())return;
@@ -4614,7 +4888,7 @@ surpriseBtn.addEventListener("click", async ()=>{
     // Keep frequent shuffles fresh without making a disliked title reappear.
     // Session-only history avoids persisting extra personal data or affecting cloud sync.
     const recent = surpriseRecentByMode.get(requestedMode) || [];
-    const unique = [...new Map(scored.filter(s => s.item && s.item.uid != null).map(s => [s.item.uid, s])).values()];
+    const unique = [...new Map(scored.filter(s => s.item && s.item.uid != null&&!n173SkipShuffle(s.item,includeKnown)).map(s => [s.item.uid, s])).values()];
     const recentIds = new Set(recent);
     const eligible = unique.filter(s => !recentIds.has(s.item.uid) && !votedDislikes.has(s.item.uid));
     // Prefer unseen titles first; only recycle earlier picks when the pool
@@ -4627,8 +4901,9 @@ surpriseBtn.addEventListener("click", async ()=>{
     }
     surpriseRecentByMode.set(requestedMode, [...recent, ...picked.map(s => s.item.uid)].slice(-Math.max(SURPRISE_RECENT_LIMIT, pickCount * 2)));
     if (!picked.length) {
-      if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ไม่พบอนิเมะที่ยืนยัน Netflix ไทยได้จากข้อมูล TMDB ที่ตรวจสอบ':'No Netflix Thailand anime verified in the checked TMDB data';
+      if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ยังยืนยันรายการ Netflix ไทยไม่ได้จากข้อมูลที่ตรวจ ไม่ได้หมายความว่าไม่มีให้ดู':'No titles verified in the checked TMDB data. This does not mean they are unavailable.';
       poolGrid.innerHTML = '<div class="error-note" role="status">No matching surprise picks right now. Try another category or adjust your filters.</div>';
+      if(!netflixSurprise&&!includeKnown)poolGrid.firstElementChild.textContent='No new titles in this batch. Shuffle again or include familiar titles in Shuffle options.';
       poolCount.textContent = "0 surprise picks";
       poolCount.setAttribute("role", "status");
       poolCount.setAttribute("aria-live", "polite");
@@ -4637,15 +4912,16 @@ surpriseBtn.addEventListener("click", async ()=>{
     }
     picked.forEach(s => {
       if (s.matchedCollaborator) s.item._surpriseReason = `Because you like ${s.matchedCollaborator}`;
-      else if (s.matchedGenres.length) s.item._surpriseReason = `Because you like ${s.matchedGenres.join(" & ")}`;
+      else if (n173Informative(s.matchedGenres).length) s.item._surpriseReason = `Because you like ${n173Informative(s.matchedGenres).slice(0,2).join(" & ")}`;
       else s.item._surpriseReason = "Explore something new";
     });
-    renderSearchResults(picked.map(s => s.item), false, false, true);
     indexItems(picked.map(s => s.item));
+    renderSearchResults(picked.map(s => s.item), false, false, true);
     poolCount.textContent = `${picked.length} surprise picks`;
+    document.getElementById('n173ShuffleStatus').textContent=includeKnown?'Familiar titles included · disliked titles excluded':'Fresh picks · familiar titles skipped';
     if(netflixSurprise)n116SurpriseNetflixStatus.textContent=picked.length===pickCount
-      ?(window.nexusUILanguage==='th'?'Netflix ไทย: พบครบ 9 เรื่องจากข้อมูล TMDB':'Netflix TH: 9/9 verified in TMDB')
-      :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/9 เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/9 verified; no unverified filler`);
+      ?(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยัน ${picked.length}/${pickCount} เรื่องผ่าน TMDB · ควรตรวจอีกครั้งก่อนดู`:`Netflix TH: ${picked.length}/${pickCount} checked via TMDB · Availability can change`)
+      :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/${pickCount} เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/${pickCount} verified; no unverified filler`);
     poolCount.setAttribute("role", "status");
     poolCount.setAttribute("aria-live", "polite");
   }catch(e){
@@ -4663,7 +4939,7 @@ surpriseBtn.addEventListener("click", async ()=>{
     restoreSurpriseButton();
     }
   }
-});
+}
 
 // The slider's upper bound used to be hardcoded (2026, in 3 separate places:
 // the HTML max attribute, this percentage calc, and loadYearFilterPref's
@@ -4716,7 +4992,7 @@ function renderResults(ranked, totalPicks){
     // nothing here" — previously both cases just left a blank grid with a
     // "0 matches" count and no way to tell which one happened or how to
     // recover, indistinguishable from something being broken.
-    const filtersActive = activeGenre !== "all" || activeMinScore > 0 || (mode==="anime"&&!!n108NetflixCheckbox()?.checked);
+    const filtersActive = activeGenre !== "all" || activeMinScore > 0 || (n171SupportsNetflix(mode)&&!!n108NetflixCheckbox()?.checked);
     resultsGrid.innerHTML = filtersActive
       ? `<div class="empty-note">No matches with the current filters. <button type="button" class="filter-reset-btn" id="resetFiltersBtn">Reset filters</button></div>`
       : `<div class="empty-note">No matches found.</div>`;
@@ -4774,7 +5050,7 @@ function renderResults(ranked, totalPicks){
     }
 
     const card = document.createElement("div"); card.className = "ticket";
-    card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${likeIcon}</button><button class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${dislikeIcon}</button><button class="action-btn ${isInWatchlist ? 'active-watch' : ''}" data-action="watch" ${hasDisliked ? "disabled" : ""} aria-label="${hasDisliked ? `Can't watchlist a disliked title` : (isInWatchlist ? 'Remove' : 'Add') + ' ' + escapeHtml(item.title) + ' ' + (isInWatchlist ? 'from' : 'to') + ' watchlist'}" title="${hasDisliked ? "Disliked titles can't be watchlisted" : ""}" aria-pressed="${isInWatchlist}">${watchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div><div class="match-badge">${pct}% Match</div></div><div class="perf"></div><div class="ticket-bottom"><div class="why">${whyText(r)}</div>${signalBreakdownHtml(r)}${overviewHtml}${collabHtml}${franchiseHtml}<div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div>${streamsHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
+    card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${likeIcon}</button><button class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${dislikeIcon}</button><button class="action-btn ${isInWatchlist ? 'active-watch' : ''}" data-action="watch" ${hasDisliked ? "disabled" : ""} aria-label="${hasDisliked ? `Can't watchlist a disliked title` : (isInWatchlist ? 'Remove' : 'Add') + ' ' + escapeHtml(item.title) + ' ' + (isInWatchlist ? 'from' : 'to') + ' watchlist'}" title="${hasDisliked ? "Disliked titles can't be watchlisted" : ""}" aria-pressed="${isInWatchlist}">${watchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div><div class="match-badge">${r.sourceTitles?.length?"From your favorites":"For your taste"}</div></div><div class="perf"></div><div class="ticket-bottom"><div class="why">${whyText(r)}</div><details class="n173-match-details"><summary>How this was ranked</summary><p><span>Relative ranking score</span>: ${pct}/100. <span>This is not a probability that you will like it.</span></p>${signalBreakdownHtml(r)}</details>${overviewHtml}${collabHtml}${franchiseHtml}<div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div>${streamsHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
     card.querySelector('[data-action="like"]').addEventListener("click", () => handleVote(item, 'like')); card.querySelector('[data-action="dislike"]').addEventListener("click", () => handleVote(item, 'dislike')); card.querySelector('[data-action="watch"]').addEventListener("click", () => handleWatchlist(item)); resultsGrid.appendChild(card);
   });
   wireHoverPreview(resultsGrid);
@@ -4805,6 +5081,10 @@ function toggleOverview(paragraphEl, toggleLabelEl) {
 const YT_EMBED_ORIGIN = encodeURIComponent(window.location.origin);
 async function getDetailExtras(item){
   try {
+    if(n172IsTmdbAnime(item)){
+      const kind=n172TmdbAnimeKind(item);
+      return withCache(`detail-extras-anime-tmdb:${kind}:${item.id}`,async()=>extractTmdbDetailExtras(await queuedFetch(`${TMDB_BASE}/${kind}/${item.id}?api_key=${TMDB_KEY}&append_to_response=videos,credits`)));
+    }
     if (item.provider === "movie") {
       return withCache(`detail-extras-movie-v1:${item.id}`, async () => {
         const data = await queuedFetch(`${TMDB_BASE}/movie/${item.id}?api_key=${TMDB_KEY}&append_to_response=videos,credits`);
@@ -5072,6 +5352,12 @@ function nexusDetailFactsHtml(item,extras){
       if(artists.length)add("Artists",artists.map(x=>x.name).join(" · "));
       add("Creators / staff",roles.map(x=>x.name+" ("+x.role+")").join(" · "));
     }
+  }else if(n172IsTmdbAnime(item)){
+    add('Category','Anime');add('Release year',item.year);
+    add('Status',extras.tmdb?.status||'Not confirmed');
+    if(n172TmdbAnimeKind(item)==='movie')add('Runtime',extras.tmdb?.runtime?extras.tmdb.runtime+' min':'Not confirmed');
+    else add('Total episodes',extras.tmdb?.episodes||'Not confirmed');
+    add('Airing schedule','Not available from this source');
   }else if(item.provider==="anime"){
     add("Category","Anime");add("First aired",nexusPublicationDate(extras.airing?.startDate));
     add("Status",extras.airing?.status?.replaceAll("_"," ")||"Not confirmed");
@@ -5094,7 +5380,7 @@ function nexusDetailFactsHtml(item,extras){
     }
   }
   if(item.score!==null&&item.score!==undefined)add("Rating",item.score);
-  return `<section class="nexus-detail-facts" aria-label="${escapeHtml(item.provider)} information"><h3>${item.provider==="manga"?"Manga publication details":"Title information"}</h3><dl>${rows.join("")}</dl><small>Source: ${item.provider==="manga"||item.provider==="anime"?"AniList":item.provider==="music"?"Deezer":"TMDB"}. Unknown values are not estimated.</small></section>`;
+  return `<section class="nexus-detail-facts" aria-label="${escapeHtml(item.provider)} information"><h3>${item.provider==="manga"?"Manga publication details":"Title information"}</h3><dl>${rows.join("")}</dl><small>Source: ${(item.provider==="manga"||item.provider==="anime")&&!n172IsTmdbAnime(item)?"AniList":item.provider==="music"?"Deezer":"TMDB"}. Unknown values are not estimated.</small></section>`;
 }
 function buildDetailModalHtml(item, extras){
   const backdrop = extras.backdrop || item.image;
@@ -5106,7 +5392,7 @@ function buildDetailModalHtml(item, extras){
   // stripping that header before the request ever leaves the browser.
   const trailerHtml = extras.trailerUrl ? `<div class="detail-trailer-wrap"><iframe src="${extras.trailerUrl}" title="Trailer" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>${extras.trailerWatchUrl ? `<a class="detail-trailer-fallback-link" href="${escapeHtml(extras.trailerWatchUrl)}" target="_blank" rel="noopener">Trailer not playing? Watch it on YouTube →</a>` : ""}` : "";
   const genresHtml = (item.genres || []).filter(g => g !== "Unknown Genre").slice(0, 5).map(g => `<span class="tag match">${escapeHtml(g)}</span>`).join("");
-  const providerLabel = (item.provider === "anime" || item.provider === "manga") ? "AniList" : item.provider === "music" ? "Deezer" : "TMDB";
+  const providerLabel = (item.provider === "anime" || item.provider === "manga")&&!n172IsTmdbAnime(item) ? "AniList" : item.provider === "music" ? "Deezer" : "TMDB";
   const metaLine = item.provider === "music" ? `by ${escapeHtml(item.artist || "Unknown")}` : `${escapeHtml(String(item.year || ""))}${item.score ? ` · ★${item.score}` : ""}`;
 
   // Previously the only way to record an opinion on something was to close
@@ -5261,7 +5547,17 @@ async function openDetailModal(uid, onBack){
   if (detailModal.style.display === "none" || detailRequestId !== nexusDetailRequestId) return; // stale or closed request
   if(["series","kdrama"].includes(item.provider)&&Number.isSafeInteger(extras.tmdb?.episodes)&&extras.tmdb.episodes>0){item.episodes=extras.tmdb.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
   if(item.provider === "manga" && Number.isSafeInteger(extras.manga?.chapters) && extras.manga.chapters>0){item.chapters=extras.manga.chapters;const saved=watchlist.get(item.uid);if(saved)saved.chapters=item.chapters;}
-  if(item.provider === "anime" && Number.isSafeInteger(extras.airing?.episodes) && extras.airing.episodes > 0){item.episodes=extras.airing.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
+  const animeEpisodes=n172AnimeEpisodes(item,extras);
+  if(item.provider === "anime" && animeEpisodes){
+    item.episodes=animeEpisodes;
+    const saved=watchlist.get(item.uid);
+    if(saved&&saved.episodes!==animeEpisodes){
+      saved.episodes=animeEpisodes;
+      // Cache confirmed title metadata locally; opening details does not write a cloud profile.
+      idbSet('rm-watchlist',[...watchlist.values()]).catch(()=>{});
+      renderWatchlist();
+    }
+  }
   const backBtnHtml = onBack ? `<button type="button" class="detail-back-btn" id="detailBackBtn">← Back to Taste Map</button>` : "";
   detailModalBody.innerHTML = backBtnHtml + buildDetailModalHtml(item, extras);
   nexusWireQuickSelect(item);
@@ -5551,14 +5847,17 @@ function signalBreakdownHtml(r){
 }
 
 function whyText(r){
-  const names = [...new Set(r.sourceTitles || [])].map(escapeHtml); const sharedGenres = [...new Set(r.genreOverlap || [])].slice(0, 2).map(escapeHtml); const sharedTags = [...new Set(r.matchedTags || [])].slice(0, 2).map(escapeHtml); const sharedCollabs = [...new Set(r.matchedCollaborators || [])].slice(0, 2).map(escapeHtml);
-  let mpLabel = r.derivedFromMasterpiece ? "<span style='color:var(--gold); font-weight:700;'>Recommended from one of your all-time favorites</span><br>" : "";
-  let unit = mode === "music" ? "track" : "title";
-  let base = "Matches your overall taste profile"; if (names.length) { base = `Similar in style to <strong>${names[0]}</strong>${names.length > 1 ? ` and ${names.length - 1} other liked ${unit}${names.length - 1 > 1 ? "s" : ""}` : ""}`; }
-  let labelPrefix = mode === "music" ? "Artist" : "Genre";
-  let details = []; if(sharedGenres.length) details.push(`${labelPrefix}: ${sharedGenres.join(" & ")}`); if(sharedTags.length) details.push(`Themes: ${sharedTags.join(", ")}`); if(sharedCollabs.length) details.push(`Shared crew: ${sharedCollabs.join(", ")}`);
-  if(r.watchlistGenres?.length)details.push(`Watchlist interest: ${r.watchlistGenres.map(escapeHtml).join(", ")}`);
-  return details.length ? `${mpLabel}${base} <br><span style="color:var(--gold); font-size:11px; margin-top:4px; display:inline-block; font-weight:500;">→ ${details.join(" | ")}</span>` : mpLabel + base;
+  const names=[...new Set(r.sourceTitles||[])].slice(0,2);
+  const themes=n173Informative(r.matchedTags).slice(0,2),genres=n173Informative(r.genreOverlap).slice(0,2);
+  const people=n173Informative(r.matchedCollaborators).slice(0,2);
+  const line=(label,values)=>`<div><span>${label}</span>: <span data-n103-no-translate>${values.map(escapeHtml).join(' · ')}</span></div>`;
+  let text=names.length?line('Based on your favorites',names):'<span>Related to your saved taste</span>';
+  if(r.derivedFromMasterpiece)text='<div class="n173-favorite-note">From an all-time favorite</div>'+text;
+  if(themes.length)text+=line('Shared themes',themes);
+  if(people.length)text+=line('Shared people',people);
+  if(genres.length)text+=line('Shared genres',genres);
+  if(!themes.length&&!people.length&&!genres.length)text+='<div><span>Related title from the source catalog</span></div>';
+  return text;
 }
 
 function handleVote(item, type) {
@@ -5583,7 +5882,7 @@ function handleVote(item, type) {
     if (votedDislikes.has(item.uid)) votedDislikes.delete(item.uid);
     else { votedDislikes.set(item.uid, item); votedLikes.delete(item.uid); watchlist.delete(item.uid); }
   }
-  saveState(); renderWatchlist(); renderRatings(); renderAnalytics(); computeRecommendations();
+  saveState(); renderWatchlist(); renderRatings(); renderAnalytics(); n173SyncSaveButtons(); computeRecommendations();
   const verb = type === 'like' ? (wasActive ? 'Removed like' : 'Liked') : (wasActive ? 'Removed dislike' : 'Disliked');
   showToast(`${verb}: ${item.title}`, () => handleVote(item, type));
 }
@@ -5801,8 +6100,10 @@ document.getElementById("vaultSortOrder").addEventListener("change", (e) => { va
 
 function handleWatchlist(item) {
   const wasInWatchlist = watchlist.has(item.uid);
-  if (wasInWatchlist) watchlist.delete(item.uid); else if (!votedDislikes.has(item.uid)) watchlist.set(item.uid, item);
-  saveState(); renderWatchlist(); renderAnalytics(); renderResults(applyFilters(lastRanked), lastTotalPicks);
+  if(!wasInWatchlist&&n173Disliked(item))return;
+  if (wasInWatchlist) watchlist.delete(item.uid); else watchlist.set(item.uid, item);
+  saveState(); renderWatchlist(); renderNexusHome(); renderAnalytics(); renderResults(applyFilters(lastRanked), lastTotalPicks);
+  n173SyncSaveButtons();
   if (wasInWatchlist || !votedDislikes.has(item.uid)) {
     showToast(wasInWatchlist ? `Removed from watchlist: ${item.title}` : `Added to watchlist: ${item.title}`, () => handleWatchlist(item));
   }
@@ -7116,7 +7417,8 @@ function nexusRenderAiringDashboard(){
   const root=document.getElementById("nexusAiringCards"),status=document.getElementById("nexusAiringStatus"),batch=document.getElementById("nexusAiringBatch");
   if(!root||!status)return;
   root.replaceChildren();
-  const anime=[...watchlist.values()].filter(i=>i.provider==="anime");
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&!n172IsTmdbAnime(i));
+  root.closest('.nexus-airing-dashboard')?.classList.toggle('n172-no-airings',anime.length===0);
   const window=document.getElementById("nexusAiringWindow")?.value||"all";
   const checked=anime.map(item=>({item,media:nexusAiringDashboard.cache.get(String(item.uid))?.media})).filter(x=>x.media);
   const selectedDay=nexusAiringDashboard.selectedDay;
@@ -7190,7 +7492,7 @@ function nexusRenderAiringDashboard(){
     const partial=checked.filter(({media})=>!media.scheduleComplete).length;
     batch.textContent=checked.length+" / "+anime.length+" checked · "+confirmed+" confirmed unwatched aired EP"+(partial?" · "+partial+" partial schedule(s)":"")+" · Last check: "+lastChecked+(stale?" · Schedule may be outdated — refresh recommended":"")+" · Fresh: "+fresh+" · Older: "+old+" · Failed: "+failures;
   }
-  if(!anime.length)status.textContent="Save anime to your Watchlist to track broadcasts.";
+  if(!anime.length)status.textContent=[...watchlist.values()].some(n172IsTmdbAnime)?'Airing schedules require an AniList title. TMDB backup titles remain in your Watchlist.':"Save anime to your Watchlist to track broadcasts.";
   else if(!nexusAiringDashboard.cache.size&&!nexusAiringDashboard.loading)status.textContent="Select ‘Check airings’ to load confirmed schedules.";
   else if(!nexusAiringDashboard.loading)status.textContent=entries.length+" matching anime. Unwatched counts reflect confirmed episodes in checked schedule pages, not an estimate of missing episodes.";
 }
@@ -7214,7 +7516,7 @@ async function nexusFetchAiringMedia(id){
 async function nexusRefreshAiringDashboard(){
   if(nexusAiringDashboard.loading)return;
   const button=document.getElementById("nexusAiringRefresh"),status=document.getElementById("nexusAiringStatus");
-  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
+  const anime=[...watchlist.values()].filter(i=>i.provider==="anime"&&!n172IsTmdbAnime(i)&&Number.isSafeInteger(Number(i.id))&&Number(i.id)>0);
   if(!anime.length){nexusRenderAiringDashboard();return;}
   if(nexusAiringDashboard.cursor>=anime.length)nexusAiringDashboard.cursor=0;
   const retry=(nexusAiringDashboard.lastFailures||[]).map(uid=>anime.find(i=>i.uid===uid)).filter(Boolean);
@@ -7259,7 +7561,11 @@ document.getElementById("nexusAiringWindow")?.addEventListener("change",()=>{nex
 function renderWatchlist(){
   nexusPurgeOrphanProgress();
   indexItems([...watchlist.values()]);
-  watchlistCount.textContent = watchlist.size ? `${watchlist.size} title${watchlist.size===1?'':'s'}` : ""; watchlistSection.style.display = watchlist.size ? "block" : "none"; watchlistGrid.innerHTML = "";
+  watchlistCount.textContent = watchlist.size ? `${watchlist.size} title${watchlist.size===1?'':'s'}` : "";
+  watchlistSection.style.display = "block";
+  watchlistSection.classList.toggle('n171-list-empty',watchlist.size===0);
+  document.getElementById('n171WatchlistDiscover').hidden=watchlist.size!==0;
+  watchlistGrid.innerHTML = "";
   const vaultQuery = (document.getElementById("nexusVaultSearch")?.value || "").trim().toLocaleLowerCase();
   const vaultCategory = document.getElementById("nexusVaultCategory")?.value || "all";
   const vaultSort = document.getElementById("nexusVaultSort")?.value || "title";
@@ -7835,8 +8141,61 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
   'use strict';
   const STORAGE_KEY='nexus-ui-language-v1';
   const th={
+    'Saved on this device':'บันทึกบนเครื่องนี้',
+    'What should you watch tonight? Start with three picks.':'คืนนี้ดูอะไรดี? เริ่มจาก 3 เรื่องที่เลือกให้คุณ',
+    'Start discovering':'เริ่มค้นหาเรื่องที่อยากดู',
+    'Pick 3 for me':'เลือกให้ 3 เรื่อง',
+    'Three choices, with reasons. No account needed.':'3 ตัวเลือก พร้อมเหตุผล เริ่มได้โดยไม่ต้องสมัคร',
+    'More like my favorites':'หาเรื่องคล้ายที่ชอบ',
+    'Choose up to three favorites to get started.':'เริ่มจากเลือกเรื่องโปรดสัก 3 เรื่อง',
+    'Choose from my Watchlist':'เลือกจากรายการที่บันทึก',
+    'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
+    'More categories':'หมวดอื่น ๆ',
+    'Close guide':'ปิดคำแนะนำ',
+    'Save for later':'บันทึกไว้ทีหลัง','Save':'บันทึก','Saved':'บันทึกแล้ว',
+    'Shuffle options':'ตัวเลือกการสุ่ม','Include familiar titles':'รวมเรื่องที่รู้จักแล้ว',
+    'Normally skips liked, selected, in-progress and completed titles. Disliked titles stay excluded.':'ปกติจะข้ามเรื่องที่ถูกใจ เลือกไว้ กำลังติดตาม และดูจบแล้ว โดยไม่แนะนำเรื่องที่ไม่ชอบ',
+    'Fresh picks · familiar titles skipped':'เรื่องใหม่สำหรับคุณ · ข้ามเรื่องที่รู้จักแล้ว',
+    'Familiar titles included · disliked titles excluded':'รวมเรื่องที่รู้จักแล้ว · ยังข้ามเรื่องที่ไม่ชอบ',
+    'No new titles in this batch. Shuffle again or include familiar titles in Shuffle options.':'ชุดนี้ไม่มีเรื่องใหม่ ลองสุ่มอีกครั้ง หรือเปิดรวมเรื่องที่รู้จักแล้วในตัวเลือกการสุ่ม',
+    'From your favorites':'จากเรื่องโปรดของคุณ','For your taste':'คัดตามรสนิยมของคุณ',
+    'Based on your favorites':'อ้างอิงจากเรื่องโปรด','Related to your saved taste':'อ้างอิงจากรสนิยมที่คุณบันทึก',
+    'From an all-time favorite':'แนะนำต่อจากเรื่องโปรดตลอดกาล',
+    'Shared themes':'มีประเด็นร่วมกัน','Shared genres':'มีแนวเรื่องร่วมกัน','Shared people':'มีนักแสดงหรือทีมงานร่วมกัน',
+    'Related title from the source catalog':'เรื่องที่แหล่งข้อมูลแนะนำว่ามีความเกี่ยวข้องกัน',
+    'How this was ranked':'ดูที่มาของการจัดอันดับ','Relative ranking score':'คะแนนจัดอันดับภายในชุดนี้',
+    'This is not a probability that you will like it.':'คะแนนนี้ไม่ใช่โอกาสที่คุณจะชอบเรื่องนี้',
+    'Anime catalog: TMDB backup. Airing schedules require an AniList title.':'กำลังแสดงข้อมูลอนิเมะสำรองจาก TMDB · ตารางออกอากาศต้องใช้รายการจาก AniList',
+    'Airing schedules require an AniList title. TMDB backup titles remain in your Watchlist.':'ตารางออกอากาศต้องใช้รายการจาก AniList ส่วนเรื่องจาก TMDB ยังบันทึกและติดตามได้ตามปกติ',
+    'Not available from this source':'แหล่งข้อมูลนี้ไม่มีข้อมูลยืนยัน',
+    'The catalog is temporarily unavailable. Your saved titles are still available.':'แค็ตตาล็อกยังไม่พร้อมใช้งานชั่วคราว คุณยังเปิดรายการที่บันทึกไว้ได้',
+    'Try loading again':'ลองโหลดอีกครั้ง',
+    'Finding titles that fit your favorites…':'กำลังหาเรื่องที่เข้ากับเรื่องโปรดของคุณ…',
+    'Refining your recommendations…':'กำลังปรับคำแนะนำให้ตรงรสนิยม…',
+    'Open Watchlist':'เปิดรายการที่บันทึก',
+    'Discover your first title →':'ค้นหาเรื่องแรกที่อยากดู →',
+    'Start by liking a few titles. Your personal taste insights will appear here.':'กดถูกใจเรื่องที่ชอบ เพื่อให้เราเริ่มเรียนรู้รสนิยมของคุณ',
+    'Titles you like':'เรื่องที่ถูกใจ',
+    'Saved for later':'บันทึกไว้ดูทีหลัง',
+    'Categories explored':'หมวดที่สำรวจแล้ว',
+    'PICK UP WHERE YOU LEFT OFF':'กลับมาติดตามเรื่องที่ค้างไว้',
+    'Continue your journey':'ดูต่อจากที่ค้างไว้',
+    'Nothing in progress yet. Mark a saved title as In Progress in Watchlist to see it here.':'ยังไม่มีเรื่องที่กำลังดู เปลี่ยนสถานะเรื่องในรายการที่บันทึกเป็นกำลังติดตาม เพื่อดูต่อได้จากที่นี่',
+    'Explore your taste profile':'ดูรายละเอียดรสนิยมของคุณ',
+    'Your profile is private to your browser unless you sign in and sync.':'ข้อมูลอยู่ในเบราว์เซอร์นี้ จนกว่าคุณจะเข้าสู่ระบบและซิงก์',
+    'Preferences are stored on this device.':'บันทึกข้อมูลไว้บนเครื่องนี้',
+    'Saved on this device only':'บันทึกบนเครื่องนี้เท่านั้น',
+    'Your list is empty. Save a title from Discover to start collecting favorites.':'ยังไม่มีเรื่องที่บันทึก เลือกเรื่องที่สนใจจากหน้าค้นพบเพื่อเก็บไว้ดูภายหลัง',
+    'Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter.':'แสดงเฉพาะเรื่องที่ TMDB ยืนยัน Netflix ไทย ตรวจสถานะการตรวจสอบหรือปิดตัวกรอง Netflix เพื่อดูเรื่องอื่น',
+    'My taste':'รสนิยมของฉัน',
+    'Your recommendations':'เรื่องที่แนะนำสำหรับคุณ',
+    'Watchlist →':'รายการที่บันทึก →',
+    'Netflix TH · TMDB':'Netflix ไทย · ข้อมูล TMDB',
+    'Netflix TH only · checked via TMDB':'เฉพาะ Netflix ไทย · ตรวจผ่าน TMDB',
+    'Explore something new':'ลองค้นพบเรื่องใหม่',
+
     'EXPLORE':'สำรวจ','YOUR SPACE':'พื้นที่ของคุณ','Home':'หน้าแรก','Movies':'ภาพยนตร์','TV Series':'ซีรีส์','Anime':'อนิเมะ','K-Dramas':'ซีรีส์เกาหลี','Manga':'มังงะ','Music':'เพลง','My Vault':'คลังของฉัน','Watchlist':'รายการที่บันทึก','Taste insights':'วิเคราะห์รสนิยม','Discover something new.':'ค้นพบสิ่งใหม่ที่คุณชอบ','Menu':'เมนู',
-    'Language':'ภาษา','Sign in with Google':'เข้าสู่ระบบด้วย Google','Running in Local Mode (Offline)':'โหมดออฟไลน์ (เฉพาะเครื่อง)','PREPARING TASTE PROFILE':'กำลังเตรียมข้อมูลรสนิยม',
+    'Language':'ภาษา','Sign in with Google':'เข้าสู่ระบบด้วย Google','Saved on this device':'บันทึกบนเครื่องนี้','PREPARING TASTE PROFILE':'กำลังเตรียมข้อมูลรสนิยม',
     'YOUR PERSONAL DISCOVERY SPACE':'พื้นที่ค้นพบความบันเทิงสำหรับคุณ','A universe of stories. Curated by your curiosity.':'โลกแห่งเรื่องราวที่คัดสรรจากความสนใจของคุณ','EXPLORE THE UNEXPECTED':'เปิดประสบการณ์ใหม่','Discover':'ค้นพบ','Backup & restore':'สำรองและกู้คืนข้อมูล',
     'Your space':'พื้นที่ของคุณ','Curated for your taste':'คัดสรรตามรสนิยม','Continue exploring':'ติดตามต่อ','View list ↗':'ดูรายการ ↗','Save titles to your Watchlist to see them here.':'บันทึกเรื่องที่สนใจไว้ในรายการ แล้วจะเห็นที่นี่','Quick access':'ทางลัด','For you':'สำหรับคุณ','Liked & disliked':'ถูกใจและไม่ถูกใจ','Taste profile':'โปรไฟล์รสนิยม','Your picks, not a streaming service. Discover, save and keep track.':'ค้นหา บันทึก และติดตามความบันเทิงที่คุณสนใจ',
     'Your Taste Insights':'วิเคราะห์รสนิยมของคุณ','Show details':'แสดงรายละเอียด','Hide details':'ซ่อนรายละเอียด','⬇ Download Wrapped Card':'⬇ ดาวน์โหลดการ์ดสรุป','✦ View Taste Map':'✦ ดูแผนที่รสนิยม','🎬 Pair two favorites':'🎬 จับคู่เรื่องโปรด','Top Genres / Artists':'แนวเรื่อง / ศิลปินยอดนิยม','Mood / Vibe':'อารมณ์ / บรรยากาศ','Core Tropes & Archetypes':'รูปแบบเรื่องที่ชอบ','Genres You Avoid':'แนวเรื่องที่ไม่ชอบ','Top Cast & Crew':'นักแสดงและทีมงานที่ชอบ','Favorite Eras':'ยุคที่ชอบ','Match Signal Weights':'น้ำหนักการจับคู่',
@@ -7938,6 +8297,11 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     if(!text)return text;
     const exact=Object.prototype.hasOwnProperty.call(th,text)?th[text]:null;if(exact)return exact;
     const trimmed=text.trim();if(th[trimmed])return text.replace(trimmed,th[trimmed]);
+    if(trimmed.startsWith('Because you like '))return text.replace(trimmed,'เพราะคุณชอบ '+trimmed.slice(17));
+    const surpriseCount=/^(\d+) surprise picks$/.exec(trimmed);
+    if(surpriseCount)return `${surpriseCount[1]} เรื่องที่เลือกให้คุณ`;
+    const savedCount=/^(\d+) of (\d+) saved$/.exec(trimmed);
+    if(savedCount)return `แสดง ${savedCount[1]} จาก ${savedCount[2]} เรื่องที่บันทึก`;
     const count=/^(\\d+) titles?$/.exec(trimmed);
     if(count)return text.replace(trimmed,`${count[1]} เรื่อง`);
     const match=/^Search (anime|movies|series|kdramas|manga|music)\\.\\.\\.$/i.exec(trimmed);
