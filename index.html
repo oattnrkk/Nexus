@@ -1363,7 +1363,8 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 .n172-catalog-notice{padding:12px 15px;border:1px solid rgba(223,184,119,.3);border-radius:12px;color:var(--gold);font-size:12px;line-height:1.7}.n172-catalog-notice[hidden]{display:none!important}
 .n172-no-airings .nexus-airing-controls,.n172-no-airings .nexus-airing-daily,.n172-no-airings #nexusAiringRefresh{display:none!important}
 @media(max-width:650px){.n102-rail{display:none}.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
-.n173-pool-save{border:1px solid var(--line-strong);border-radius:8px;background:transparent;color:var(--text-dim);padding:7px 9px;font:inherit;font-size:11px;cursor:pointer;min-height:36px}
+.pool-item-controls{flex-wrap:wrap}.pool-item-controls .p-check{display:none}
+.n173-pool-save{white-space:nowrap;border:1px solid var(--line-strong);border-radius:8px;background:transparent;color:var(--text-dim);padding:7px 9px;font:inherit;font-size:11px;cursor:pointer;min-height:36px}
 .n173-pool-save[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}.n173-pool-save:disabled{opacity:.4;cursor:not-allowed}
 .n173-pool-save:focus-visible,.n173-shuffle-settings summary:focus-visible,.n173-match-details summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .n173-shuffle-settings{font-size:12px;color:var(--text-dim);max-width:400px}.n173-shuffle-settings summary{padding:10px;cursor:pointer}.n173-shuffle-settings label{display:flex;align-items:center;gap:8px;padding:8px}.n173-shuffle-settings input{width:20px;height:20px;accent-color:var(--gold)}.n173-shuffle-settings p{font-size:11px;line-height:1.6;margin:0;padding:0 8px 8px}
@@ -2525,7 +2526,7 @@ const n173GenericSignals=new Set(['animation','anime','manga','japanese animatio
 function n173Informative(values){
   return [...new Set((values||[]).filter(v=>typeof v==='string'&&v.trim()&&!n173GenericSignals.has(v.trim().toLowerCase())))];
 }
-function n173SaveButtonText(saved){return saved?'Saved':'Save for later';}
+function n173SaveButtonText(saved){return saved?'Saved':'Save';}
 function n173SyncSaveButtons(){
   document.querySelectorAll('.n173-pool-save').forEach(button=>{
     const item=titleIndex.get(button.dataset.uid);if(!item)return;
@@ -8151,7 +8152,7 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
     'More categories':'หมวดอื่น ๆ',
     'Close guide':'ปิดคำแนะนำ',
-    'Save for later':'บันทึกไว้ทีหลัง','Saved':'บันทึกแล้ว',
+    'Save for later':'บันทึกไว้ทีหลัง','Save':'บันทึก','Saved':'บันทึกแล้ว',
     'Shuffle options':'ตัวเลือกการสุ่ม','Include familiar titles':'รวมเรื่องที่รู้จักแล้ว',
     'Normally skips liked, selected, in-progress and completed titles. Disliked titles stay excluded.':'ปกติจะข้ามเรื่องที่ถูกใจ เลือกไว้ กำลังติดตาม และดูจบแล้ว โดยไม่แนะนำเรื่องที่ไม่ชอบ',
     'Fresh picks · familiar titles skipped':'เรื่องใหม่สำหรับคุณ · ข้ามเรื่องที่รู้จักแล้ว',
