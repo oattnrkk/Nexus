@@ -6101,7 +6101,7 @@ function handleWatchlist(item) {
   const wasInWatchlist = watchlist.has(item.uid);
   if(!wasInWatchlist&&n173Disliked(item))return;
   if (wasInWatchlist) watchlist.delete(item.uid); else watchlist.set(item.uid, item);
-  saveState(); renderWatchlist(); renderAnalytics(); renderResults(applyFilters(lastRanked), lastTotalPicks);
+  saveState(); renderWatchlist(); renderNexusHome(); renderAnalytics(); renderResults(applyFilters(lastRanked), lastTotalPicks);
   n173SyncSaveButtons();
   if (wasInWatchlist || !votedDislikes.has(item.uid)) {
     showToast(wasInWatchlist ? `Removed from watchlist: ${item.title}` : `Added to watchlist: ${item.title}`, () => handleWatchlist(item));
