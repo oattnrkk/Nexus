@@ -1375,6 +1375,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 .n171-data-tools{margin:20px 0;color:var(--text-dim)}.n171-data-tools>summary{font-size:13px;cursor:pointer;padding:14px 0}
 #watchlistSection.n171-list-empty .nexus-airing-dashboard,#watchlistSection.n171-list-empty .nexus-list-overview,#watchlistSection.n171-list-empty .nexus-manga-dashboard,#watchlistSection.n171-list-empty .nexus-vault-controls,#watchlistSection.n171-list-empty #nexusVaultEmptyReset,#watchlistSection.n171-list-empty #nexusVaultFilterStatus{display:none!important}
 #n116SurpriseNetflixWrap[hidden]{display:none!important}
+#n171WatchlistDiscover[hidden]{display:none!important}
 @media(max-width:650px){.n171-start{grid-template-columns:1fr;gap:8px;margin:20px 0}.n171-start-card{padding:14px;gap:5px}.n171-start-card>span{display:none}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px}.n171-more-categories summary{min-height:44px;box-sizing:border-box}.n171-more-categories>div{justify-content:center}}
 @media(prefers-reduced-motion:reduce){.n171-start-card{transition:none}.n171-start-card:hover{transform:none}}
 </style>
@@ -7940,6 +7941,18 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'More categories':'หมวดอื่น ๆ',
     'Close guide':'ปิดคำแนะนำ',
     'Discover your first title →':'ค้นหาเรื่องแรกที่อยากดู →',
+    'Start by liking a few titles. Your personal taste insights will appear here.':'กดถูกใจเรื่องที่ชอบ เพื่อให้เราเริ่มเรียนรู้รสนิยมของคุณ',
+    'Titles you like':'เรื่องที่ถูกใจ',
+    'Saved for later':'บันทึกไว้ดูทีหลัง',
+    'Categories explored':'หมวดที่สำรวจแล้ว',
+    'PICK UP WHERE YOU LEFT OFF':'กลับมาติดตามเรื่องที่ค้างไว้',
+    'Continue your journey':'ดูต่อจากที่ค้างไว้',
+    'Nothing in progress yet. Mark a saved title as In Progress in Watchlist to see it here.':'ยังไม่มีเรื่องที่กำลังดู เปลี่ยนสถานะเรื่องในรายการที่บันทึกเป็นกำลังติดตาม เพื่อดูต่อได้จากที่นี่',
+    'Explore your taste profile':'ดูรายละเอียดรสนิยมของคุณ',
+    'Your profile is private to your browser unless you sign in and sync.':'ข้อมูลอยู่ในเบราว์เซอร์นี้ จนกว่าคุณจะเข้าสู่ระบบและซิงก์',
+    'Preferences are stored on this device.':'บันทึกข้อมูลไว้บนเครื่องนี้',
+    'Saved on this device only':'บันทึกบนเครื่องนี้เท่านั้น',
+    'Your list is empty. Save a title from Discover to start collecting favorites.':'ยังไม่มีเรื่องที่บันทึก เลือกเรื่องที่สนใจจากหน้าค้นพบเพื่อเก็บไว้ดูภายหลัง',
     'Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter.':'แสดงเฉพาะเรื่องที่ TMDB ยืนยัน Netflix ไทย ตรวจสถานะการตรวจสอบหรือปิดตัวกรอง Netflix เพื่อดูเรื่องอื่น',
     'My taste':'รสนิยมของฉัน',
     'Your recommendations':'เรื่องที่แนะนำสำหรับคุณ',
@@ -8054,6 +8067,8 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     if(trimmed.startsWith('Because you like '))return text.replace(trimmed,'เพราะคุณชอบ '+trimmed.slice(17));
     const surpriseCount=/^(\d+) surprise picks$/.exec(trimmed);
     if(surpriseCount)return `${surpriseCount[1]} เรื่องที่เลือกให้คุณ`;
+    const savedCount=/^(\d+) of (\d+) saved$/.exec(trimmed);
+    if(savedCount)return `แสดง ${savedCount[1]} จาก ${savedCount[2]} เรื่องที่บันทึก`;
     const count=/^(\\d+) titles?$/.exec(trimmed);
     if(count)return text.replace(trimmed,`${count[1]} เรื่อง`);
     const match=/^Search (anime|movies|series|kdramas|manga|music)\\.\\.\\.$/i.exec(trimmed);
