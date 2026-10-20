@@ -21,7 +21,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>NEXUS — Find your next favorite</title>
 <meta name="description" content="Find your next movie, series or anime. Get three picks for your taste, check Netflix Thailand availability via TMDB, and keep your Watchlist in one place.">
-<meta name="nexus-version" content="17.2">
+<meta name="nexus-version" content="17.3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1363,6 +1363,13 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 .n172-catalog-notice{padding:12px 15px;border:1px solid rgba(223,184,119,.3);border-radius:12px;color:var(--gold);font-size:12px;line-height:1.7}.n172-catalog-notice[hidden]{display:none!important}
 .n172-no-airings .nexus-airing-controls,.n172-no-airings .nexus-airing-daily,.n172-no-airings #nexusAiringRefresh{display:none!important}
 @media(max-width:650px){.n102-rail{display:none}.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
+.n173-pool-save{border:1px solid var(--line-strong);border-radius:8px;background:transparent;color:var(--text-dim);padding:7px 9px;font:inherit;font-size:11px;cursor:pointer;min-height:36px}
+.n173-pool-save[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}.n173-pool-save:disabled{opacity:.4;cursor:not-allowed}
+.n173-pool-save:focus-visible,.n173-shuffle-settings summary:focus-visible,.n173-match-details summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.n173-shuffle-settings{font-size:12px;color:var(--text-dim);max-width:400px}.n173-shuffle-settings summary{padding:10px;cursor:pointer}.n173-shuffle-settings label{display:flex;align-items:center;gap:8px;padding:8px}.n173-shuffle-settings input{width:20px;height:20px;accent-color:var(--gold)}.n173-shuffle-settings p{font-size:11px;line-height:1.6;margin:0;padding:0 8px 8px}
+.n173-shuffle-status{flex:1 1 100%;font-size:12px;line-height:1.5;color:var(--text-dim)}.n173-shuffle-status:empty{display:none}
+.n173-match-details{margin:10px 0;font-size:11px;color:var(--text-dim)}.n173-match-details summary{cursor:pointer;padding:8px 0}.n173-match-details p{font-size:11px;line-height:1.7}.n173-favorite-note{color:var(--gold)}.why>div{margin-top:4px;line-height:1.6}
+@media(max-width:650px){.n173-pool-save{min-height:44px;padding:9px}.n173-shuffle-settings{flex:1 1 100%}.n173-shuffle-settings summary{min-height:44px;box-sizing:border-box}}
 /* NEXUS 17.1: three clear starting points and progressive disclosure. */
 .auth-bar{left:auto!important;right:auto!important;margin-left:var(--n102-left);margin-right:var(--n102-right);width:auto!important}
 .wrap>footer{margin-left:0!important;margin-right:0!important}
@@ -1568,6 +1575,11 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
         <span>Netflix TH only · checked via TMDB</span>
       </label>
       <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
+      <details class="n173-shuffle-settings"><summary>Shuffle options</summary>
+        <label><input type="checkbox" id="n173IncludeKnown" aria-describedby="n173KnownHint"> <span>Include familiar titles</span></label>
+        <p id="n173KnownHint">Normally skips liked, selected, in-progress and completed titles. Disliked titles stay excluded.</p>
+      </details>
+      <span id="n173ShuffleStatus" class="n173-shuffle-status" role="status" aria-live="polite"></span>
       <button class="btn-ghost" id="clearBtn">Clear picks</button>
       <span class="helper-text" id="capHint"></span>
     </div>
@@ -2485,6 +2497,45 @@ async function anilistQuery(query, variables){
   }
 }
 // Alternate catalog records keep a separate identity and never masquerade as AniList IDs.
+// Conservative cross-catalog identity: only exact aliases, year and screen format.
+// Existing records keep their IDs; no automatic preference migration or fuzzy merge.
+function n173SameTitle(a,b){
+  if(!a||!b)return false;
+  if(a.uid&&a.uid===b.uid)return true;
+  if(a.provider!=='anime'||b.provider!=='anime'||n172IsTmdbAnime(a)===n172IsTmdbAnime(b))return false;
+  const yearA=Number(a.year),yearB=Number(b.year);
+  if(!Number.isInteger(yearA)||yearA<1900||yearA!==yearB||!a.animeFormat||!b.animeFormat)return false;
+  if((a.animeFormat==='MOVIE')!==(b.animeFormat==='MOVIE'))return false;
+  const names=new Set(n111NetflixCandidates(a).map(n110NormalizeName).filter(Boolean));
+  return n111NetflixCandidates(b).some(name=>names.has(n110NormalizeName(name)));
+}
+function n173Equivalent(map,item){
+  if(map.has(item.uid))return map.get(item.uid);
+  if(item.provider!=='anime')return null;
+  return [...map.values()].find(known=>n173SameTitle(item,known))||null;
+}
+function n173Disliked(item){return !!n173Equivalent(votedDislikes,item);}
+function n173Familiar(item){
+  if(n173Equivalent(selected,item)||n173Equivalent(votedLikes,item))return true;
+  const saved=n173Equivalent(watchlist,item);
+  return !!saved&&['progress','done'].includes(nexusGetListStatus(saved.uid));
+}
+function n173SkipShuffle(item,includeKnown=false){return n173Disliked(item)||(!includeKnown&&n173Familiar(item));}
+const n173GenericSignals=new Set(['animation','anime','manga','japanese animation','unknown genre','อนิเมะ','แอนิเมชัน','แอนิเมชั่น']);
+function n173Informative(values){
+  return [...new Set((values||[]).filter(v=>typeof v==='string'&&v.trim()&&!n173GenericSignals.has(v.trim().toLowerCase())))];
+}
+function n173SaveButtonText(saved){return saved?'Saved':'Save for later';}
+function n173SyncSaveButtons(){
+  document.querySelectorAll('.n173-pool-save').forEach(button=>{
+    const item=titleIndex.get(button.dataset.uid);if(!item)return;
+    const saved=watchlist.has(item.uid);
+    button.textContent=n173SaveButtonText(saved);
+    button.setAttribute('aria-pressed',String(saved));
+    button.setAttribute('aria-label',(saved?'Remove ':'Save ')+item.title+(saved?' from Watchlist':' for later'));
+    button.disabled=!saved&&n173Disliked(item);
+  });
+}
 function n172IsTmdbAnime(item){return item?.provider==='anime'&&item.metadataSource==='tmdb';}
 function n172TmdbAnimeKind(item){return item.tmdbKind==='movie'?'movie':'tv';}
 function n172AnimeEpisodes(item,extras){
@@ -2649,7 +2700,7 @@ async function computeRecommendations(){
       completedInputs++;
       setProgress(`Analyzing connections for "${item.title}" (${completedInputs}/${allInputs.length})...`);
       recs.forEach(r=>{
-        if(selected.has(r.item.uid) || votedDislikes.has(r.item.uid) || votedLikes.has(r.item.uid)) return;
+        if(n173SkipShuffle(r.item,false))return;
         const itemYear = parseInt(r.item.year); if (mode !== "music" && STRICT_MODERN_MODE && !r.item.isOngoing && !isNaN(itemYear) && itemYear < START_YEAR_CUTOFF) return;
         if(!candidates.has(r.item.uid)){ candidates.set(r.item.uid, { item: r.item, weight: 0, sources: 0, sourceTitles: [], derivedFromMasterpiece: false }); }
         const c = candidates.get(r.item.uid); c.weight += (r.weight * inputWeight); c.sources += inputWeight; c.sourceTitles.push(item.title); if(isMP) c.derivedFromMasterpiece = true;
@@ -4195,6 +4246,7 @@ searchBox.addEventListener("keydown", (e) => {
 searchBox.addEventListener("blur", () => { setTimeout(hideSuggestions, 150); });
 
 async function loadColdStart(){
+  document.getElementById('n173ShuffleStatus').textContent='';
   const coldToken = ++searchRequestSeq; // any runSearch already in flight is now stale and must not render over this
   renderPoolSkeletons(); loadMoreBtn.style.display = "none";
   const myMode = mode;
@@ -4216,7 +4268,8 @@ async function loadColdStart(){
   }
 }
 
-async function runSearch(query){ 
+async function runSearch(query){
+  document.getElementById('n173ShuffleStatus').textContent=''; 
   // Typing fast (or switching mode/clearing the box mid-request) can leave an
   // earlier, slower search still in flight when a newer one starts. Without a
   // freshness check, whichever network call happens to resolve last wins —
@@ -4513,7 +4566,7 @@ function nexusRankSearchResults(items,query){
     .sort((a,b)=>b.rank-a.rank||a.index-b.index).map(entry=>entry.item);
 }
 function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = false){
-  n172SyncCatalogNotice(items);
+  n172SyncCatalogNotice(isLoadMore?nexusDiscoverRawItems:items);
   if(!isLoadMore){
     ++n109CheckVersion; n109AcceptedIds=new Set(); n109SyncDiscoverControl();
     nexusDiscoverRawItems = Array.isArray(items) ? items : [];
@@ -4556,6 +4609,7 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
   const fragment = document.createDocumentFragment();
   visibleItems.forEach(item=>{
     const isSelected = selected.has(item.uid); const hasLiked = votedLikes.has(item.uid); const hasDisliked = votedDislikes.has(item.uid);
+    const isSaved=watchlist.has(item.uid);
     const el = document.createElement("div");
     el.className = "pool-item" + (isSelected ? " selected" : ""); el.setAttribute("data-uid", item.uid);
     el.setAttribute("role", "group"); el.removeAttribute("tabindex");
@@ -4576,16 +4630,18 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
     // Surprise Me all used this pool-item card instead, which had no way to
     // listen at all until you'd already gone through "find similar" once.
     const poolAudioBtn = (item.provider === "music" && item.preview) ? `<button type="button" class="action-btn audio-preview-btn" onclick="event.stopPropagation(); togglePreview(decodeURIComponent('${encodeURIComponent(item.preview)}'), this, decodeURIComponent('${encodeURIComponent(item.url)}'))" aria-label="Preview ${escapeHtml(item.title)}">▶</button>` : "";
-    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><button type="button" class="p-title nexus-search-detail-title${item.provider === "music" ? " music-title" : ""}" title="View details for ${escapeHtml(item.title)}" aria-label="View details for ${escapeHtml(item.title)}">${escapeHtml(item.title)}</button><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><button type="button" class="nexus-search-select" aria-label="${isSelected ? 'Remove' : 'Add'} ${escapeHtml(item.title)} ${isSelected ? 'from' : 'to'} selection" aria-pressed="${isSelected}">${isSelected ? '✓ Selected' : '+ Select'}</button><div class="p-check">✓</div></div>`;
+    el.innerHTML = `<div class="p-poster-wrap" data-uid="${item.uid}"><img class="p-poster" role="button" tabindex="0" aria-label="${escapeHtml('View details for '+item.title)}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDetailModal('${item.uid}')}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;this.classList.add('loaded');this.parentElement.classList.add('loaded');" onload="this.classList.add('loaded');this.parentElement.classList.add('loaded');" onclick="event.stopPropagation(); openDetailModal('${item.uid}')"></div><div class="p-main"><button type="button" class="p-title nexus-search-detail-title${item.provider === "music" ? " music-title" : ""}" title="View details for ${escapeHtml(item.title)}" aria-label="View details for ${escapeHtml(item.title)}">${escapeHtml(item.title)}</button><div class="p-meta">${escapeHtml(metaContent)}</div>${surpriseBadge}${tasteBadge}</div><div class="pool-item-controls"><div class="pool-vote-actions">${poolAudioBtn}<button type="button" class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${poolLikeIcon}</button><button type="button" class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${poolDislikeIcon}</button></div><button type="button" class="nexus-search-select" aria-label="${isSelected ? 'Remove' : 'Add'} ${escapeHtml(item.title)} ${isSelected ? 'from' : 'to'} selection" aria-pressed="${isSelected}">${isSelected ? '✓ Selected' : '+ Select'}</button><button type="button" class="n173-pool-save" data-uid="${escapeHtml(item.uid)}" data-action="save-pool" aria-pressed="${isSaved}" aria-label="${escapeHtml((isSaved?'Remove ':'Save ')+item.title+(isSaved?' from Watchlist':' for later'))}" ${!isSaved&&n173Disliked(item)?'disabled':''}>${n173SaveButtonText(isSaved)}</button><div class="p-check">✓</div></div>`;
     el.querySelector(".nexus-search-detail-title")?.addEventListener("click",e=>{e.stopPropagation();openDetailModal(item.uid);});
     el.querySelector('[data-action="like"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'like'); refreshPoolCardVoteState(item); });
     el.querySelector('[data-action="dislike"]').addEventListener("click", (e) => { e.stopPropagation(); handleVote(item, 'dislike'); refreshPoolCardVoteState(item); });
+    el.querySelector('[data-action="save-pool"]').addEventListener('click',e=>{e.stopPropagation();handleWatchlist(item);});
     el.querySelector(".nexus-search-select")?.addEventListener("click",e=>{e.stopPropagation();toggleSelect(item);const btn=e.currentTarget;const on=selected.has(item.uid);btn.textContent=on?"✓ Selected":"+ Select";btn.setAttribute("aria-pressed",String(on));btn.setAttribute("aria-label",(on?"Remove ":"Add ")+item.title+(on?" from selection":" to selection"));});
     el.addEventListener("click", ()=> openDetailModal(item.uid));
     el.addEventListener("keydown", (e) => { if (e.target !== e.currentTarget) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDetailModal(item.uid); } });
     fragment.appendChild(el);
   });
   poolGrid.appendChild(fragment);
+  n173SyncSaveButtons();
   loadMoreBtn.style.display = currentPoolItems.length > poolDisplayCount ? "inline-flex" : "none";
   wireHoverPreview(poolGrid);
 }
@@ -4600,6 +4656,7 @@ function refreshPoolCardVoteState(item){
   const likeBtn = card.querySelector('[data-action="like"]'); const dislikeBtn = card.querySelector('[data-action="dislike"]');
   if (likeBtn) { likeBtn.classList.toggle("active-like", hasLiked); likeBtn.setAttribute("aria-pressed", hasLiked); }
   if (dislikeBtn) { dislikeBtn.classList.toggle("active-dislike", hasDisliked); dislikeBtn.setAttribute("aria-pressed", hasDisliked); }
+  n173SyncSaveButtons();
 }
 
 loadMoreBtn.addEventListener("click", ()=>{
@@ -4678,7 +4735,7 @@ function toggleLikedMasterpiece(item) {
   saveState(); renderRatings(); renderAnalytics(); computeRecommendations();
 }
 
-clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
+clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");const item=titleIndex.get(b.dataset.uid);if(item)button.setAttribute('aria-label','Add '+item.title+' to selection');} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
 // NEXUS 14: one Netflix preference across discovery, recommendations and surprise.
 // Existing per-surface change handlers remain responsible for re-rendering.
@@ -4741,6 +4798,12 @@ async function n116FilterSurpriseNetflix(scored,requestVersion,requestedMode,pro
   if(progress)progress({checked,total:candidates.length,confirmed:matches.length,notListed,unknown});
   return matches;
 }
+const n173KnownCheckbox=document.getElementById('n173IncludeKnown');
+try{n173KnownCheckbox.checked=localStorage.getItem('nexus-shuffle-known')==='1';}catch(_){}
+n173KnownCheckbox.addEventListener('change',()=>{
+  try{localStorage.setItem('nexus-shuffle-known',n173KnownCheckbox.checked?'1':'0');}catch(_){}
+  ++surpriseRequestVersion;restoreSurpriseButton();document.getElementById('n173ShuffleStatus').textContent='';
+});
 const SURPRISE_PICK_COUNT = 9;
 const SURPRISE_RECENT_LIMIT = 45;
 const surpriseRecentByMode = new Map();
@@ -4777,6 +4840,8 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
   quickButton.disabled=true;quickButton.setAttribute('aria-busy','true');
   document.getElementById('searchSection').scrollIntoView({behavior:'smooth',block:'start'});
   const requestedMode = mode;
+  const includeKnown=n173KnownCheckbox.checked;
+  document.getElementById('n173ShuffleStatus').textContent='';
   const netflixSurprise=n116SurpriseNetflixEnabled(requestedMode);
   n116SurpriseNetflixStatus.textContent=netflixSurprise?"กำลังตรวจสอบ Netflix ประเทศไทย…":"";
   const requestVersion = ++surpriseRequestVersion;
@@ -4786,7 +4851,7 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
     const resolvedPool = await resolveOngoingFlags(fetchedPool);
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
-    const pool = applyModernFilter(Array.isArray(resolvedPool)?resolvedPool.filter(Boolean):[]);
+    const pool = applyModernFilter(Array.isArray(resolvedPool)?resolvedPool.filter(item=>item&&!n173SkipShuffle(item,includeKnown)):[]);
     const profile = buildSurpriseTasteProfile(requestedMode);
     // Score every pool item, then hard-drop anything hitting a disliked
     // collaborator/artist (see scoreSurpriseCandidate) — a "surprise" should
@@ -4801,7 +4866,7 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
         const alreadyScored=new Set(scored.map(s=>s.item.uid));
         await n12ExpandAnimeSurprisePool(pool,new Set(),requestIsCurrent,async(items,batchNumber)=>{
           if(!requestIsCurrent()||verified.length>=pickCount)return;
-          const newEntries=items.filter(item=>item?.uid&&!alreadyScored.has(item.uid)&&!votedDislikes.has(item.uid))
+          const newEntries=items.filter(item=>item?.uid&&!alreadyScored.has(item.uid)&&!n173SkipShuffle(item,includeKnown))
             .map(item=>({item,...scoreSurpriseCandidate(item,profile)})).filter(s=>!s.rejected);
           newEntries.forEach(s=>alreadyScored.add(s.item.uid));
           if(newEntries.length){
@@ -4822,7 +4887,7 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
     // Keep frequent shuffles fresh without making a disliked title reappear.
     // Session-only history avoids persisting extra personal data or affecting cloud sync.
     const recent = surpriseRecentByMode.get(requestedMode) || [];
-    const unique = [...new Map(scored.filter(s => s.item && s.item.uid != null).map(s => [s.item.uid, s])).values()];
+    const unique = [...new Map(scored.filter(s => s.item && s.item.uid != null&&!n173SkipShuffle(s.item,includeKnown)).map(s => [s.item.uid, s])).values()];
     const recentIds = new Set(recent);
     const eligible = unique.filter(s => !recentIds.has(s.item.uid) && !votedDislikes.has(s.item.uid));
     // Prefer unseen titles first; only recycle earlier picks when the pool
@@ -4837,6 +4902,7 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
     if (!picked.length) {
       if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ยังยืนยันรายการ Netflix ไทยไม่ได้จากข้อมูลที่ตรวจ ไม่ได้หมายความว่าไม่มีให้ดู':'No titles verified in the checked TMDB data. This does not mean they are unavailable.';
       poolGrid.innerHTML = '<div class="error-note" role="status">No matching surprise picks right now. Try another category or adjust your filters.</div>';
+      if(!netflixSurprise&&!includeKnown)poolGrid.firstElementChild.textContent='No new titles in this batch. Shuffle again or include familiar titles in Shuffle options.';
       poolCount.textContent = "0 surprise picks";
       poolCount.setAttribute("role", "status");
       poolCount.setAttribute("aria-live", "polite");
@@ -4845,12 +4911,13 @@ async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
     }
     picked.forEach(s => {
       if (s.matchedCollaborator) s.item._surpriseReason = `Because you like ${s.matchedCollaborator}`;
-      else if (s.matchedGenres.length) s.item._surpriseReason = `Because you like ${s.matchedGenres.join(" & ")}`;
+      else if (n173Informative(s.matchedGenres).length) s.item._surpriseReason = `Because you like ${n173Informative(s.matchedGenres).slice(0,2).join(" & ")}`;
       else s.item._surpriseReason = "Explore something new";
     });
-    renderSearchResults(picked.map(s => s.item), false, false, true);
     indexItems(picked.map(s => s.item));
+    renderSearchResults(picked.map(s => s.item), false, false, true);
     poolCount.textContent = `${picked.length} surprise picks`;
+    document.getElementById('n173ShuffleStatus').textContent=includeKnown?'Familiar titles included · disliked titles excluded':'Fresh picks · familiar titles skipped';
     if(netflixSurprise)n116SurpriseNetflixStatus.textContent=picked.length===pickCount
       ?(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยัน ${picked.length}/${pickCount} เรื่องผ่าน TMDB · ควรตรวจอีกครั้งก่อนดู`:`Netflix TH: ${picked.length}/${pickCount} checked via TMDB · Availability can change`)
       :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/${pickCount} เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/${pickCount} verified; no unverified filler`);
@@ -4982,7 +5049,7 @@ function renderResults(ranked, totalPicks){
     }
 
     const card = document.createElement("div"); card.className = "ticket";
-    card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${likeIcon}</button><button class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${dislikeIcon}</button><button class="action-btn ${isInWatchlist ? 'active-watch' : ''}" data-action="watch" ${hasDisliked ? "disabled" : ""} aria-label="${hasDisliked ? `Can't watchlist a disliked title` : (isInWatchlist ? 'Remove' : 'Add') + ' ' + escapeHtml(item.title) + ' ' + (isInWatchlist ? 'from' : 'to') + ' watchlist'}" title="${hasDisliked ? "Disliked titles can't be watchlisted" : ""}" aria-pressed="${isInWatchlist}">${watchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div><div class="match-badge">${pct}% Match</div></div><div class="perf"></div><div class="ticket-bottom"><div class="why">${whyText(r)}</div>${signalBreakdownHtml(r)}${overviewHtml}${collabHtml}${franchiseHtml}<div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div>${streamsHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
+    card.innerHTML = `<div class="card-shine"></div><div class="ticket-top"><div class="ticket-actions"><button class="action-btn ${hasLiked ? 'active-like' : ''}" data-action="like" aria-label="Like ${escapeHtml(item.title)}" aria-pressed="${hasLiked}">${likeIcon}</button><button class="action-btn ${hasDisliked ? 'active-dislike' : ''}" data-action="dislike" aria-label="Dislike ${escapeHtml(item.title)}" aria-pressed="${hasDisliked}">${dislikeIcon}</button><button class="action-btn ${isInWatchlist ? 'active-watch' : ''}" data-action="watch" ${hasDisliked ? "disabled" : ""} aria-label="${hasDisliked ? `Can't watchlist a disliked title` : (isInWatchlist ? 'Remove' : 'Add') + ' ' + escapeHtml(item.title) + ' ' + (isInWatchlist ? 'from' : 'to') + ' watchlist'}" title="${hasDisliked ? "Disliked titles can't be watchlisted" : ""}" aria-pressed="${isInWatchlist}">${watchIcon}</button></div><div class="ticket-poster-wrap" data-uid="${item.uid}"><img class="ticket-poster" alt="${escapeHtml(item.title)}" src="${escapeHtml(item.image)}" onerror="this.onerror=null;this.src=POSTER_FALLBACK;" style="cursor:pointer;"></div><div class="ticket-info" style="--accent:${accentFor(item.provider)}"><div class="t-type">${escapeHtml(label)}</div><div class="t-title${item.provider === "music" ? " music-title" : ""}" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div><div class="t-year">${escapeHtml(subTitleText)}</div></div><div class="match-badge">${r.sourceTitles?.length?"From your favorites":"For your taste"}</div></div><div class="perf"></div><div class="ticket-bottom"><div class="why">${whyText(r)}</div><details class="n173-match-details"><summary>How this was ranked</summary><p><span>Relative ranking score</span>: ${pct}/100. <span>This is not a probability that you will like it.</span></p>${signalBreakdownHtml(r)}</details>${overviewHtml}${collabHtml}${franchiseHtml}<div class="tag-row">${genreTags.map(t=>`<span class="tag match">${escapeHtml(t)}</span>`).join("")} ${audioPlayerHtml}</div>${streamsHtml}<a class="ticket-link" href="${escapeHtml(item.url)}" target="_blank" rel="noopener">View Details →</a></div>`;
     card.querySelector('[data-action="like"]').addEventListener("click", () => handleVote(item, 'like')); card.querySelector('[data-action="dislike"]').addEventListener("click", () => handleVote(item, 'dislike')); card.querySelector('[data-action="watch"]').addEventListener("click", () => handleWatchlist(item)); resultsGrid.appendChild(card);
   });
   wireHoverPreview(resultsGrid);
@@ -5779,14 +5846,17 @@ function signalBreakdownHtml(r){
 }
 
 function whyText(r){
-  const names = [...new Set(r.sourceTitles || [])].map(escapeHtml); const sharedGenres = [...new Set(r.genreOverlap || [])].slice(0, 2).map(escapeHtml); const sharedTags = [...new Set(r.matchedTags || [])].slice(0, 2).map(escapeHtml); const sharedCollabs = [...new Set(r.matchedCollaborators || [])].slice(0, 2).map(escapeHtml);
-  let mpLabel = r.derivedFromMasterpiece ? "<span style='color:var(--gold); font-weight:700;'>Recommended from one of your all-time favorites</span><br>" : "";
-  let unit = mode === "music" ? "track" : "title";
-  let base = "Matches your overall taste profile"; if (names.length) { base = `Similar in style to <strong>${names[0]}</strong>${names.length > 1 ? ` and ${names.length - 1} other liked ${unit}${names.length - 1 > 1 ? "s" : ""}` : ""}`; }
-  let labelPrefix = mode === "music" ? "Artist" : "Genre";
-  let details = []; if(sharedGenres.length) details.push(`${labelPrefix}: ${sharedGenres.join(" & ")}`); if(sharedTags.length) details.push(`Themes: ${sharedTags.join(", ")}`); if(sharedCollabs.length) details.push(`Shared crew: ${sharedCollabs.join(", ")}`);
-  if(r.watchlistGenres?.length)details.push(`Watchlist interest: ${r.watchlistGenres.map(escapeHtml).join(", ")}`);
-  return details.length ? `${mpLabel}${base} <br><span style="color:var(--gold); font-size:11px; margin-top:4px; display:inline-block; font-weight:500;">→ ${details.join(" | ")}</span>` : mpLabel + base;
+  const names=[...new Set(r.sourceTitles||[])].slice(0,2);
+  const themes=n173Informative(r.matchedTags).slice(0,2),genres=n173Informative(r.genreOverlap).slice(0,2);
+  const people=n173Informative(r.matchedCollaborators).slice(0,2);
+  const line=(label,values)=>`<div><span>${label}</span>: <span data-n103-no-translate>${values.map(escapeHtml).join(' · ')}</span></div>`;
+  let text=names.length?line('Based on your favorites',names):'<span>Related to your saved taste</span>';
+  if(r.derivedFromMasterpiece)text='<div class="n173-favorite-note">From an all-time favorite</div>'+text;
+  if(themes.length)text+=line('Shared themes',themes);
+  if(people.length)text+=line('Shared people',people);
+  if(genres.length)text+=line('Shared genres',genres);
+  if(!themes.length&&!people.length&&!genres.length)text+='<div><span>Related title from the source catalog</span></div>';
+  return text;
 }
 
 function handleVote(item, type) {
@@ -5811,7 +5881,7 @@ function handleVote(item, type) {
     if (votedDislikes.has(item.uid)) votedDislikes.delete(item.uid);
     else { votedDislikes.set(item.uid, item); votedLikes.delete(item.uid); watchlist.delete(item.uid); }
   }
-  saveState(); renderWatchlist(); renderRatings(); renderAnalytics(); computeRecommendations();
+  saveState(); renderWatchlist(); renderRatings(); renderAnalytics(); n173SyncSaveButtons(); computeRecommendations();
   const verb = type === 'like' ? (wasActive ? 'Removed like' : 'Liked') : (wasActive ? 'Removed dislike' : 'Disliked');
   showToast(`${verb}: ${item.title}`, () => handleVote(item, type));
 }
@@ -6029,8 +6099,10 @@ document.getElementById("vaultSortOrder").addEventListener("change", (e) => { va
 
 function handleWatchlist(item) {
   const wasInWatchlist = watchlist.has(item.uid);
-  if (wasInWatchlist) watchlist.delete(item.uid); else if (!votedDislikes.has(item.uid)) watchlist.set(item.uid, item);
+  if(!wasInWatchlist&&n173Disliked(item))return;
+  if (wasInWatchlist) watchlist.delete(item.uid); else watchlist.set(item.uid, item);
   saveState(); renderWatchlist(); renderAnalytics(); renderResults(applyFilters(lastRanked), lastTotalPicks);
+  n173SyncSaveButtons();
   if (wasInWatchlist || !votedDislikes.has(item.uid)) {
     showToast(wasInWatchlist ? `Removed from watchlist: ${item.title}` : `Added to watchlist: ${item.title}`, () => handleWatchlist(item));
   }
@@ -8079,6 +8151,19 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
     'More categories':'หมวดอื่น ๆ',
     'Close guide':'ปิดคำแนะนำ',
+    'Save for later':'บันทึกไว้ทีหลัง','Saved':'บันทึกแล้ว',
+    'Shuffle options':'ตัวเลือกการสุ่ม','Include familiar titles':'รวมเรื่องที่รู้จักแล้ว',
+    'Normally skips liked, selected, in-progress and completed titles. Disliked titles stay excluded.':'ปกติจะข้ามเรื่องที่ถูกใจ เลือกไว้ กำลังติดตาม และดูจบแล้ว โดยไม่แนะนำเรื่องที่ไม่ชอบ',
+    'Fresh picks · familiar titles skipped':'เรื่องใหม่สำหรับคุณ · ข้ามเรื่องที่รู้จักแล้ว',
+    'Familiar titles included · disliked titles excluded':'รวมเรื่องที่รู้จักแล้ว · ยังข้ามเรื่องที่ไม่ชอบ',
+    'No new titles in this batch. Shuffle again or include familiar titles in Shuffle options.':'ชุดนี้ไม่มีเรื่องใหม่ ลองสุ่มอีกครั้ง หรือเปิดรวมเรื่องที่รู้จักแล้วในตัวเลือกการสุ่ม',
+    'From your favorites':'จากเรื่องโปรดของคุณ','For your taste':'คัดตามรสนิยมของคุณ',
+    'Based on your favorites':'อ้างอิงจากเรื่องโปรด','Related to your saved taste':'อ้างอิงจากรสนิยมที่คุณบันทึก',
+    'From an all-time favorite':'แนะนำต่อจากเรื่องโปรดตลอดกาล',
+    'Shared themes':'มีประเด็นร่วมกัน','Shared genres':'มีแนวเรื่องร่วมกัน','Shared people':'มีนักแสดงหรือทีมงานร่วมกัน',
+    'Related title from the source catalog':'เรื่องที่แหล่งข้อมูลแนะนำว่ามีความเกี่ยวข้องกัน',
+    'How this was ranked':'ดูที่มาของการจัดอันดับ','Relative ranking score':'คะแนนจัดอันดับภายในชุดนี้',
+    'This is not a probability that you will like it.':'คะแนนนี้ไม่ใช่โอกาสที่คุณจะชอบเรื่องนี้',
     'Anime catalog: TMDB backup. Airing schedules require an AniList title.':'กำลังแสดงข้อมูลอนิเมะสำรองจาก TMDB · ตารางออกอากาศต้องใช้รายการจาก AniList',
     'Airing schedules require an AniList title. TMDB backup titles remain in your Watchlist.':'ตารางออกอากาศต้องใช้รายการจาก AniList ส่วนเรื่องจาก TMDB ยังบันทึกและติดตามได้ตามปกติ',
     'Not available from this source':'แหล่งข้อมูลนี้ไม่มีข้อมูลยืนยัน',
