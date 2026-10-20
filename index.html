@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script id="nexus106-language-bootstrap">
+/* Resolve the saved language before any application scripts can fetch TMDB data. */
+(function(){
+  var stored=null;
+  try{stored=localStorage.getItem('nexus-ui-language-v1')}catch(_){}
+  var lang=(stored==='th'||stored==='en')?stored:(/^th(?:-|$)/i.test(navigator.language||'')?'th':'en');
+  window.nexusUILanguage=lang;
+  document.documentElement.lang=lang;
+  document.documentElement.dataset.nexusLanguage=lang;
+})();
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Second layer of the YouTube Error 153 fix (see the iframe referrerpolicy
@@ -1279,6 +1291,72 @@ body::before{opacity:.35}
 }
 @media(prefers-reduced-motion:reduce){.n102-sidebar{transition:none}}
 </style>
+<style id="nexus103-bilingual">
+/* NEXUS 10.3 — bilingual interface, compact and consistent with dashboard */
+.n103-language{display:flex;align-items:center;gap:3px;padding:4px;border:1px solid rgba(226,182,93,.22);border-radius:10px;background:#11151d;margin-left:auto;white-space:nowrap}
+.n103-language-label{font-size:10px;color:#aab0bb;margin:0 9px 0 6px}
+.n103-lang-btn{border:0;border-radius:7px;background:transparent;color:#aeb3be;min-height:30px;min-width:37px;padding:5px 8px;font-size:11px;font-weight:700;cursor:pointer}
+.n103-lang-btn[aria-pressed="true"]{background:#e2b65d;color:#14100a}
+.n103-lang-btn:focus-visible{outline:2px solid #e2b65d;outline-offset:2px}
+html[lang="th"] body{font-family:"Noto Sans Thai","Sarabun","Tahoma",sans-serif}
+html[lang="th"] .n102-nav-link,html[lang="th"] button,html[lang="th"] input,html[lang="th"] select{font-family:inherit}
+html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans",sans-serif}
+@media(max-width:650px){
+ .auth-bar{padding-left:93px!important;gap:6px;flex-wrap:wrap}
+ .n103-language{margin-left:auto}
+ .n103-language-label{display:none}
+ .n103-lang-btn{min-width:40px;min-height:38px;padding:6px 8px}
+}
+</style>
+<style>
+.nexus-music-player-status{display:grid;gap:10px;margin:12px 0 18px;padding:12px;border:1px solid rgba(207,170,93,.28);border-radius:12px}
+.nexus-music-player-status #nexusPreviewHelp{justify-self:start}
+.nexus-season-progress progress{display:block;width:100%;height:9px;margin:8px 0 12px;accent-color:#d8ae5c}
+.nexus-progress-warning{padding:9px 12px;border-left:3px solid #d8ae5c;background:rgba(216,174,92,.08);border-radius:4px}
+</style>
+
+<style>.nexus-music-player-status #nexusPreviewAudit{min-height:38px}</style>
+<style id="nexus108-netflix-style">.n108-netflix-wrap{align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(229,185,98,.38);border-radius:10px;color:var(--gold,#dfb877);font-size:12px;cursor:pointer;min-height:40px}.n108-netflix-wrap:not([hidden]){display:inline-flex}.n108-netflix-wrap input{accent-color:#e2b65d;width:17px;height:17px}.n108-netflix-wrap:focus-within{outline:2px solid #dfb877;outline-offset:2px}</style>
+<style id="nexus109-netflix-discovery-style">
+.n109-netflix-status{font-size:12px;color:var(--muted,#aaa);margin:8px 0 12px;line-height:1.55}
+#n109DiscoverNetflixWrap:not([hidden]){display:inline-flex}
+#n109DiscoverNetflixWrap input{width:18px;height:18px}
+@media(max-width:650px){#n109DiscoverNetflixWrap{min-height:44px;max-width:100%;white-space:normal}}
+
+/* NEXUS 11.2 — accessible touch controls and stable Netflix verification layout */
+#n109DiscoverNetflixWrap,#n108NetflixWrap{align-items:center;gap:9px;cursor:pointer;line-height:1.4}
+#n109DiscoverNetflixWrap input,#n108NetflixWrap input{flex:0 0 20px;width:20px;height:20px;accent-color:#d9b768}
+#n109DiscoverNetflixStatus,#n108NetflixStatus{line-height:1.5;overflow-wrap:anywhere;min-height:1.5em}
+#n109DiscoverNetflixWrap:focus-within,#n108NetflixWrap:focus-within{outline:2px solid #d9b768;outline-offset:3px}
+@media(max-width:650px){
+ #n109DiscoverNetflixWrap:not([hidden]),#n108NetflixWrap:not([hidden]){display:inline-flex;min-height:48px;box-sizing:border-box;padding:9px 12px;max-width:100%;white-space:normal}
+ #n109DiscoverNetflixStatus,#n108NetflixStatus{font-size:12px;max-width:100%;}
+}
+</style>
+<style id="n14-simplification">
+/* NEXUS 14.0: progressive simplification; no features or user data deleted. */
+.n14-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.nexus-refine>summary{min-height:48px;display:flex;align-items:center;gap:8px;cursor:pointer}
+#surpriseBtn{min-height:48px;min-width:145px;font-weight:700}
+#findBtn,#clearBtn{min-height:44px}
+#n116SurpriseNetflixWrap{border-radius:10px;padding:3px 10px;background:rgba(215,172,89,.07)}
+@media(max-width:650px){
+ .nexus-jump{position:fixed!important;bottom:0!important;top:auto!important;left:0;right:0;z-index:85!important;justify-content:space-around!important;padding:8px 5px max(8px,env(safe-area-inset-bottom))!important;gap:3px!important;background:rgba(9,11,18,.97)!important;box-shadow:0 -8px 28px rgba(0,0,0,.3)}
+ .nexus-jump a{font-size:11px!important;padding:11px 9px!important;min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+ body{padding-bottom:calc(85px + env(safe-area-inset-bottom))}
+ .cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+ #surpriseBtn{order:-2;flex:1 1 150px}
+ #findBtn{order:-1;flex:1 1 150px}
+ #n116SurpriseNetflixWrap{flex:1 1 100%;min-height:44px}
+ #n116SurpriseNetflixStatus{flex:1 1 100%}
+ #clearBtn{margin-left:auto}
+ .nexus-discovery-controls{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .nexus-discovery-controls label{min-width:0}
+ .nexus-discovery-controls select{max-width:100%}
+ #searchBox{min-height:48px}
+ .n102-mobile-menu{min-height:44px}
+}
+</style>
 </head>
 <body>
 <button class="n102-mobile-menu" id="n102MenuToggle" type="button" aria-expanded="false" aria-controls="n102Sidebar">☰ <span>Menu</span></button>
@@ -1310,6 +1388,11 @@ body::before{opacity:.35}
   <div class="auth-status-wrap">
     <span class="status-dot"></span>
     <span id="authStatus">Running in Local Mode (Offline)</span>
+  </div>
+  <div class="n103-language" role="group" aria-label="Language / ภาษา">
+    <span class="n103-language-label" data-n103-label>Language</span>
+    <button type="button" class="n103-lang-btn" data-n103-lang="th" lang="th" aria-label="ภาษาไทย" aria-pressed="false">TH</button>
+    <button type="button" class="n103-lang-btn" data-n103-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
   </div>
   <div id="authActions">
     <button class="google-btn" id="googleLoginBtn">
@@ -1442,7 +1525,7 @@ body::before{opacity:.35}
       <input type="text" class="search-input" id="searchBox" placeholder="Search anime..." aria-label="Search titles" autocomplete="off">
       <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
       <div class="search-spinner" id="searchSpinner"></div>
-      <button type="button" class="cmdk-hint" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
+      <button type="button" class="cmdk-hint n14-visually-hidden" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
       <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
     </div>
     <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
@@ -1463,10 +1546,12 @@ body::before{opacity:.35}
       <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
       <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
       <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
+      <label id="n109DiscoverNetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n109DiscoverNetflixOnly" aria-describedby="n109DiscoverNetflixStatus"> <span data-n109-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
       <label class="nexus-discovery-toggle"><input type="checkbox" id="nexusDiscoverHideDisliked" checked> Hide disliked</label>
       <button type="button" id="nexusDiscoverReset" class="nexus-tool-btn">Reset filters</button>
     </div>
-    <div class="nexus-discovery-presets" role="group" aria-label="Quick discovery filters">
+    <p id="n109DiscoverNetflixStatus" role="status" aria-live="polite" hidden class="n109-netflix-status"></p>
+    <div class="nexus-discovery-presets n14-visually-hidden" role="group" aria-label="Quick discovery filters">
       <button type="button" data-nexus-preset="top" class="nexus-tool-btn">★ Top rated</button>
       <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
       <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
@@ -1486,6 +1571,11 @@ body::before{opacity:.35}
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
         <span>Surprise me</span>
       </button>
+      <label id="n116SurpriseNetflixWrap" hidden style="display:none;align-items:center;gap:8px;min-height:48px;cursor:pointer;flex-wrap:wrap;">
+        <input id="n116SurpriseNetflixOnly" type="checkbox" style="width:20px;height:20px;accent-color:var(--gold);">
+        <span>Netflix ไทยเท่านั้น · Surprise Me</span>
+      </label>
+      <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
       <button class="btn-ghost" id="clearBtn">Clear picks</button>
       <span class="helper-text" id="capHint"></span>
     </div>
@@ -1560,6 +1650,7 @@ body::before{opacity:.35}
       <span class="count" id="resultsCount"></span>
     </div>
     <div class="filter-row" id="filterRow" style="display:none;">
+      <label id="n108NetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n108NetflixOnly"> <span data-n108-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
       <select class="filter-select" id="genreFilter"><option value="all">All genres</option></select>
       <select class="filter-select" id="scoreFilter">
         <option value="0">Any score</option>
@@ -1572,6 +1663,7 @@ body::before{opacity:.35}
         <option value="year">Sort by: Newest</option>
       </select>
     </div>
+    <p id="n108NetflixStatus" role="status" aria-live="polite" hidden style="font-size:12px;color:var(--muted);margin:10px 0"></p>
     <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
     <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
     <div class="filmstrip" id="filmstripWrap" style="display:none;">
@@ -2108,6 +2200,170 @@ async function getLocalizedWatchProviders(id, type) {
   });
 }
 
+// NEXUS 10.8: Strict Netflix Thailand anime availability. A missing or ambiguous
+// match is UNKNOWN, not "not on Netflix". Never use AniList externalLinks as proof.
+const n108NetflixProviderId=8; // TMDB Netflix provider; only flatrate availability for TH counts.
+const n108NetflixCache=new Map();
+// 11.0: Anime series use TV providers; anime films use MOVIE providers.
+// Strict title/year/type matching avoids confusing live-action remakes or similarly named works.
+// 11.3: Preserve strict matching while accepting official TMDB alternative titles.
+// Unicode folding helps romanized Japanese names with macrons (e.g. Ō -> o).
+function n110NormalizeName(v){
+  return String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+}
+function n110NameMatches(candidates, detail, kind, alternateTitles=[]){
+  const aliases=new Set(candidates.map(n110NormalizeName).filter(Boolean));
+  const names=kind==='movie'?[detail.title,detail.original_title]:[detail.name,detail.original_name];
+  return [...names,...alternateTitles].some(name=>aliases.has(n110NormalizeName(name)));
+}
+const n113AltTitleCache=new Map();
+async function n113AlternativeTitles(kind,id){
+  const key=kind+':'+id;
+  if(n113AltTitleCache.has(key))return n113AltTitleCache.get(key);
+  const promise=(async()=>{
+    try{
+      const data=await queuedFetch(`${TMDB_BASE}/${kind}/${id}/alternative_titles?api_key=${TMDB_KEY}`);
+      const records=kind==='movie'?data?.titles:data?.results;
+      // Only explicitly catalogued titles; do not fuzzy-match unrelated anime.
+      return (Array.isArray(records)?records:[]).map(x=>x.title).filter(Boolean);
+    }catch(_){n113AltTitleCache.delete(key);return [];}
+  })();
+  n113AltTitleCache.set(key,promise);
+  return promise;
+}
+async function n113FindAnimeTmdb(item,names,kind){
+  const wantedYear=Number(item.year);
+  // A missing AniList year cannot safely disambiguate remakes and sequels.
+  if(!Number.isInteger(wantedYear)||wantedYear<1900)return null;
+  const searched=new Set(), inspected=new Set(), matched=new Set();
+  for(const title of names.slice(0,6)){
+    const normalized=n110NormalizeName(title);
+    if(!normalized||searched.has(normalized))continue;
+    searched.add(normalized);
+    try{
+      const language=/[\u3040-\u30ff\u3400-\u9fff]/u.test(title)?'ja-JP':'en-US';
+      const data=await queuedFetch(`${TMDB_BASE}/search/${kind}?api_key=${TMDB_KEY}&query=${encodeURIComponent(title)}&include_adult=false&language=${language}`);
+      for(const result of (data.results||[]).slice(0,10)){
+        if(result.original_language!=='ja'||!(result.genre_ids||[]).includes(16))continue;
+        const actual=Number(String((kind==='movie'?result.release_date:result.first_air_date)||'').slice(0,4));
+        // Missing TMDB release year must not pass as a valid match.
+        if(!Number.isInteger(actual)||actual<1900||Math.abs(wantedYear-actual)>2)continue;
+        if(n110NameMatches(names,result,kind)){matched.add(result.id);continue;}
+        if(inspected.size>=6||inspected.has(result.id))continue;
+        inspected.add(result.id);
+        const alt=await n113AlternativeTitles(kind,result.id);
+        if(n110NameMatches(names,result,kind,alt))matched.add(result.id);
+      }
+    }catch(_){/* Continue with other AniList aliases. */}
+  }
+  // Multiple plausible IDs are ambiguous; never arbitrarily select the first.
+  return matched.size===1?[...matched][0]:null;
+}
+async function n110FindTmdbAnimeMovie(item,candidates){
+  return n113FindAnimeTmdb(item,candidates,'movie');
+}
+// 11.1: tri-state availability. A negative match is UNKNOWN unless TMDB explicitly
+// lists the title for Thailand without Netflix flatrate; TMDB is not Netflix itself.
+const n111NetflixStatusCache=new Map();
+const n111NetflixCacheTTL=30*60*1000;
+const n111NetflixUnknownTTL=2*60*1000;
+const n111NetflixStates=Object.freeze({CONFIRMED:'confirmed',NOT_LISTED:'not_listed',UNKNOWN:'unknown'});
+function n111NetflixCandidates(item){
+  return [...new Set([item.title,item.originalTitle,...(item.aliases||[])].filter(Boolean))].slice(0,8);
+}
+async function n111FindStrictAnimeTv(item,names){
+  return n113FindAnimeTmdb(item,names,'tv');
+}
+async function n111NetflixThailandStatus(item){
+  if(!item||item.provider!=='anime')return n111NetflixStates.UNKNOWN;
+  const key='v115:'+item.uid+':'+(item.animeFormat||'UNKNOWN')+':'+(item.year||'')+':'+n111NetflixCandidates(item).map(n110NormalizeName).join('|');
+  const old=n111NetflixStatusCache.get(key);
+  if(old&&Date.now()-old.time<(old.unknown?n111NetflixUnknownTTL:n111NetflixCacheTTL))return old.promise;
+  const promise=(async()=>{
+    const names=n111NetflixCandidates(item);
+    if(!item.animeFormat||!['MOVIE','TV','TV_SHORT','ONA','OVA','SPECIAL'].includes(item.animeFormat))return n111NetflixStates.UNKNOWN;
+    const movie=item.animeFormat==='MOVIE';
+    const kind=movie?'movie':'tv';
+    const id=movie?await n110FindTmdbAnimeMovie(item,names):await n111FindStrictAnimeTv(item,names);
+    if(!id)return n111NetflixStates.UNKNOWN;
+    try{
+      const detail=await queuedFetch(`${TMDB_BASE}/${kind}/${id}?api_key=${TMDB_KEY}&language=en-US`);
+      if(detail.original_language!=='ja'||!detail.genres?.some(g=>Number(g.id)===16))return n111NetflixStates.UNKNOWN;
+      if(!n110NameMatches(names,detail,kind,await n113AlternativeTitles(kind,id)))return n111NetflixStates.UNKNOWN;
+      const wanted=Number(item.year),actual=Number(String((movie?detail.release_date:detail.first_air_date)||'').slice(0,4));
+      if(!Number.isInteger(wanted)||wanted<1900||!Number.isInteger(actual)||actual<1900||Math.abs(wanted-actual)>2)return n111NetflixStates.UNKNOWN;
+      const data=await queuedFetch(`${TMDB_BASE}/${kind}/${id}/watch/providers?api_key=${TMDB_KEY}`);
+      const th=data?.results?.TH;
+      if(!th)return n111NetflixStates.UNKNOWN;
+      return Array.isArray(th.flatrate)&&th.flatrate.some(p=>Number(p.provider_id)===n108NetflixProviderId)
+        ?n111NetflixStates.CONFIRMED:n111NetflixStates.NOT_LISTED;
+    }catch(_){return n111NetflixStates.UNKNOWN;}
+  })();
+  const entry={time:Date.now(),promise,unknown:false};
+  n111NetflixStatusCache.set(key,entry);
+  promise.then(state=>{entry.unknown=state===n111NetflixStates.UNKNOWN;},()=>{entry.unknown=true;});
+  return promise;
+}
+async function n108NetflixThailand(item){return (await n111NetflixThailandStatus(item))===n111NetflixStates.CONFIRMED;}
+function n111StatusText(checked,total,confirmed,notListed){
+  const unknown=checked-confirmed-notListed;
+  if(window.nexusUILanguage==='th')return `ตรวจแล้ว ${checked}/${total} · พบ Netflix ไทย ${confirmed} · ไม่พบในข้อมูล TMDB ${notListed} · ยังยืนยันไม่ได้ ${unknown}`;
+  return `Checked ${checked}/${total} · Netflix TH ${confirmed} · Not listed by TMDB ${notListed} · Unknown ${unknown}`;
+}
+
+let n108FilterVersion=0;
+const n108NetflixCheckbox=()=>document.getElementById('n108NetflixOnly');
+document.getElementById('n108NetflixOnly')?.addEventListener('change',()=>{
+  const status=document.getElementById('n108NetflixStatus');
+  if(status)status.hidden=!n108NetflixCheckbox()?.checked;
+  n108RefreshNetflixResults();
+});
+function n108UpdateVisibility(){
+  const wrap=document.getElementById('n108NetflixWrap');
+  if(!wrap)return;
+  wrap.hidden=mode!=='anime';
+  if(mode!=='anime'&&n108NetflixCheckbox()){n108NetflixCheckbox().checked=false;++n108FilterVersion;const status=document.getElementById('n108NetflixStatus');if(status)status.hidden=true;}
+}
+async function n108RefreshNetflixResults(){
+  const version=++n108FilterVersion;
+  n108UpdateVisibility();
+  const check=n108NetflixCheckbox();
+  if(!check?.checked||mode!=='anime'){
+    renderResults(applyFilters(lastRanked),lastTotalPicks);
+    return;
+  }
+  const status=document.getElementById('n108NetflixStatus');
+  if(status){status.hidden=false;status.textContent='กำลังตรวจสอบ Netflix ประเทศไทย…';}
+  const selected=lastRanked.filter(r=>r.item.provider==='anime');
+  if(!selected.length){renderResults([],lastTotalPicks);if(status)status.textContent=n111StatusText(0,0,0,0);return;}
+  // Never leave unverified recommendations visible while Netflix verification runs.
+  renderResults([],lastTotalPicks);
+  // Bound requests to protect API rate limits when Your Reel contains many picks.
+  const availability=new Array(selected.length).fill(n111NetflixStates.UNKNOWN);
+  let next=0;
+  let completed=0;
+  async function checkWorker(){while(next<selected.length){
+    const i=next++;
+    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    try{availability[i]=await n111NetflixThailandStatus(selected[i].item);}catch(_){availability[i]=n111NetflixStates.UNKNOWN;}
+    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    const checked=++completed;
+    // Update visible matches incrementally, avoiding a render after every API request.
+    if((checked%4===0||checked===selected.length)&&status){
+      const confirmed=selected.filter((_,j)=>availability[j]===n111NetflixStates.CONFIRMED);
+      const notListed=availability.filter(x=>x===n111NetflixStates.NOT_LISTED).length;
+      status.textContent=n111StatusText(checked,selected.length,confirmed.length,notListed);
+      renderResults(applyFilters(confirmed),lastTotalPicks);
+    }
+  }}
+  await Promise.all(Array.from({length:Math.min(4,selected.length)},()=>checkWorker()));
+  if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+  const eligible=selected.filter((_,i)=>availability[i]===n111NetflixStates.CONFIRMED);
+  const notListed=availability.filter(x=>x===n111NetflixStates.NOT_LISTED).length;
+  if(status){status.hidden=false;status.textContent=n111StatusText(selected.length,selected.length,eligible.length,notListed)+(window.nexusUILanguage==='th'?' · อ้างอิง TMDB ไม่ใช่ Netflix โดยตรง':' · TMDB data, not direct Netflix verification');}
+  renderResults(applyFilters(eligible),lastTotalPicks);
+}
 async function resolveTmdbTvIdForAnime(title, year){
   return withCache(`anime-tmdb-match-v2:${title.toLowerCase()}:${year||""}`, async () => {
     try {
@@ -2170,14 +2426,14 @@ function normalizeAniListMedia(m, provider){
   // studios-only exactly like before if either is missing.
   const staffNames = nexusSafeArray(m.staff?.edges).map(e => e?.node?.name?.full).filter(Boolean);
   const vaNames = nexusSafeArray(m.characters?.edges).flatMap(e => nexusSafeArray(e?.voiceActors).map(va => va?.name?.full)).filter(Boolean);
-  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji || m.title.native)) || "Untitled", originalTitle: m.title?.romaji || m.title?.native || "", aliases: [...new Set([m.title?.english,m.title?.romaji,m.title?.native,...(m.synonyms||[])].filter(Boolean))], image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: nexusSafeArray(m.genres), url: nexusSafeExternalUrl(m.siteUrl) || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: nexusSafeArray(m.tags).filter(Boolean).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
+  return { uid: provider + ":" + m.id, id: m.id, provider, title: (m.title && (m.title.english || m.title.romaji || m.title.native)) || "Untitled", originalTitle: m.title?.romaji || m.title?.native || "", aliases: [...new Set([m.title?.english,m.title?.romaji,m.title?.native,...(m.synonyms||[])].filter(Boolean))], image: m.coverImage ? (m.coverImage.large || m.coverImage.medium) : "", year: (m.startDate && m.startDate.year) || "—", animeFormat: m.format || null, isOngoing: m.status === "RELEASING", score: m.averageScore ? Math.round(m.averageScore) / 10 : null, genres: nexusSafeArray(m.genres), url: nexusSafeExternalUrl(m.siteUrl) || `https://anilist.co/${provider}/${m.id}`, streams: cleanStreams, tags: nexusSafeArray(m.tags).filter(Boolean).map(t => ({ name: t.name, rank: t.rank })), overview: (m.description || "").replace(/<[^>]+>/g, " "), collaborators: [...new Set([...studioNames, ...staffNames, ...vaNames])] };
 }
 
 const ANILIST_SEARCH_QUERY = `query ($search: String, $type: MediaType) { Page(perPage: 20) { media(search: $search, type: $type, sort: SEARCH_MATCH) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore popularity genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 const ANILIST_RECS_QUERY = `query ($id: Int, $type: MediaType) { Media(id: $id, type: $type) { recommendations(sort: RATING_DESC, perPage: 25) { nodes { rating mediaRecommendation { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } } } }`;
 
-async function searchAniList(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).filter(m => !(provider === "anime" && m.format === "MOVIE")).map(m => normalizeAniListMedia(m, provider)); }); }
-async function getAniListRecommendations(id, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-recs:` + id, async () => { const data = await anilistQuery(ANILIST_RECS_QUERY, { id: Number(id), type }); return ((data.data?.Media?.recommendations?.nodes) || []).filter(n => n.mediaRecommendation && !(provider === "anime" && n.mediaRecommendation.format === "MOVIE")).map(n => ({ item: normalizeAniListMedia(n.mediaRecommendation, provider), weight: n.rating || 0 })); }); }
+async function searchAniList(query, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-search-v4:` + query.toLowerCase(), async () => { const data = await anilistQuery(ANILIST_SEARCH_QUERY, { search: query, type }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function getAniListRecommendations(id, provider){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`${provider}-recs:` + id, async () => { const data = await anilistQuery(ANILIST_RECS_QUERY, { id: Number(id), type }); return ((data.data?.Media?.recommendations?.nodes) || []).filter(n => n.mediaRecommendation).map(n => ({ item: normalizeAniListMedia(n.mediaRecommendation, provider), weight: n.rating || 0 })); }); }
 
 function renderSkeletons() { resultsGrid.innerHTML = ""; filmstripWrap.style.display = "block"; for(let i=0; i<6; i++) { const sk = document.createElement("div"); sk.className = "sk-card"; sk.innerHTML = `<div class="sk-anim"></div><div style="display:flex; gap:12px; padding:14px;"><div class="sk-block" style="width:64px; height:90px; flex-shrink:0;"></div><div style="flex:1; display:flex; flex-direction:column; gap:8px; margin-top:4px;"><div class="sk-block" style="width:40px; height:10px;"></div><div class="sk-block" style="width:80%; height:16px;"></div><div class="sk-block" style="width:60%; height:12px;"></div></div></div><div class="sk-block" style="margin:12px 14px; height:24px;"></div>`; resultsGrid.appendChild(sk); } }
 // Same shimmer treatment as renderSkeletons above, sized for the compact
@@ -2457,15 +2713,16 @@ async function computeRecommendations(){
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
       }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
-    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); renderResults(applyFilters(ranked), totalPicksWeight);
+    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&mode==="anime") await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
   } catch(e) { setProgress(""); resultsGrid.innerHTML = `<div class="error-note">Processing failed. Click primary action to retry.</div>`; }
 }
 
 // ---------------- DATA PROVIDERS ----------------
 let movieGenreMap = null; let tvGenreMap = null;
+window.addEventListener("nexus:languagechange",()=>{ movieGenreMap=null; tvGenreMap=null; });
 
-async function loadMovieGenres(){ if(movieGenreMap) return movieGenreMap; const data = await queuedFetch(`${TMDB_BASE}/genre/movie/list?api_key=${TMDB_KEY}`); movieGenreMap = {}; (data.genres || []).forEach(g => movieGenreMap[g.id] = g.name); return movieGenreMap; }
-async function loadTVGenres(){ if(tvGenreMap) return tvGenreMap; const data = await queuedFetch(`${TMDB_BASE}/genre/tv/list?api_key=${TMDB_KEY}`); tvGenreMap = {}; (data.genres || []).forEach(g => tvGenreMap[g.id] = g.name); return tvGenreMap; }
+async function loadMovieGenres(){ if(movieGenreMap) return movieGenreMap; const data = await queuedFetch(`${TMDB_BASE}/genre/movie/list?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); movieGenreMap = {}; (data.genres || []).forEach(g => movieGenreMap[g.id] = g.name); return movieGenreMap; }
+async function loadTVGenres(){ if(tvGenreMap) return tvGenreMap; const data = await queuedFetch(`${TMDB_BASE}/genre/tv/list?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); tvGenreMap = {}; (data.genres || []).forEach(g => tvGenreMap[g.id] = g.name); return tvGenreMap; }
 
 // Movies/series/kdramas carried NO tag data at all (unlike anime/manga, which get
 // rich tags from AniList) — meaning the tag-matching third of the scoring formula
@@ -2716,7 +2973,7 @@ function normalizeTVItem(d, genreMap, customProvider = "series"){ return { uid: 
 // loosely-related result. Trusting the provider's own order — preserved here
 // through the Map's insertion order even after merging multiple query
 // variants — fixes that without needing to reimplement relevance scoring.
-async function searchMovies(query){ const genreMap = await loadMovieGenres(); return withCache("movie-search-v2:" + query.toLowerCase(), async () => { const variants = buildQueryVariants(query); const byId = new Map(); for(const q of variants){ const data = await queuedFetch(`${TMDB_BASE}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(q)}&include_adult=false`); (data.results || []).forEach(d => { if(!byId.has(d.id)) byId.set(d.id, d); }); } return [...byId.values()].filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
+async function searchMovies(query){ const genreMap = await loadMovieGenres(); return withCache("movie-search-v3:" + (window.nexusUILanguage||"en") + ":" + query.toLowerCase(), async () => { const variants = buildQueryVariants(query); const byId = new Map(); for(const q of variants){ const data = await queuedFetch(`${TMDB_BASE}/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(q)}&include_adult=false&language=${encodeURIComponent(window.nexusUILanguage==="th"?"th-TH":"en-US")}`); (data.results || []).forEach(d => { if(!byId.has(d.id)) byId.set(d.id, d); }); } return [...byId.values()].filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
 // series/kdrama fetch functions (search, popular, by-genre) used to be 6
 // near-identical copies differing only in the TMDB endpoint shape and the
 // Korean-origin filter — a fix or a new field had to be applied in two
@@ -2730,22 +2987,22 @@ function excludeAnimation(d){ return !d.genre_ids || !d.genre_ids.includes(ANIMA
 const TV_PROVIDERS = {
   series: {
     extraFilter: d => !d.origin_country || !d.origin_country.includes("KR"),
-    popularUrl: (page) => `${TMDB_BASE}/tv/popular?api_key=${TMDB_KEY}&page=${page}`,
-    genreUrl: (genreId, page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`,
+    popularUrl: (page) => `${TMDB_BASE}/tv/popular?api_key=${TMDB_KEY}&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`,
+    genreUrl: (genreId, page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`,
   },
   kdrama: {
     extraFilter: d => d.origin_country && d.origin_country.includes("KR"),
-    popularUrl: (page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_origin_country=KR&sort_by=popularity.desc&page=${page}`,
-    genreUrl: (genreId, page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_genres=${genreId}&with_origin_country=KR&sort_by=popularity.desc&page=${page}`,
+    popularUrl: (page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_origin_country=KR&sort_by=popularity.desc&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`,
+    genreUrl: (genreId, page) => `${TMDB_BASE}/discover/tv?api_key=${TMDB_KEY}&with_genres=${genreId}&with_origin_country=KR&sort_by=popularity.desc&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`,
   },
 };
 async function searchTVProvider(query, provider){
   const cfg = TV_PROVIDERS[provider];
   const genreMap = await loadTVGenres();
-  return withCache(`${provider}-search-v2:` + query.toLowerCase(), async () => {
+  return withCache(`${provider}-search-v3:${window.nexusUILanguage||"en"}:` + query.toLowerCase(), async () => {
     const variants = buildQueryVariants(query);
     const byId = new Map();
-    for(const q of variants){ const data = await queuedFetch(`${TMDB_BASE}/search/tv?api_key=${TMDB_KEY}&query=${encodeURIComponent(q)}&include_adult=false`); (data.results || []).forEach(d => { if(!byId.has(d.id)) byId.set(d.id, d); }); }
+    for(const q of variants){ const data = await queuedFetch(`${TMDB_BASE}/search/tv?api_key=${TMDB_KEY}&query=${encodeURIComponent(q)}&include_adult=false&language=${encodeURIComponent(window.nexusUILanguage==="th"?"th-TH":"en-US")}`); (data.results || []).forEach(d => { if(!byId.has(d.id)) byId.set(d.id, d); }); }
     // No popularity re-sort here (see searchMovies above for why) — TMDB's
     // /search/tv already returns results ordered by match relevance, and the
     // Map above preserves that order across merged singular/plural variants.
@@ -2767,12 +3024,12 @@ function tmdbRecPositionWeight(index, total, voteAverage) {
   return Math.min(10, (rankScore * 0.85) + (qualityNudge * 1.5));
 }
 
-async function getMovieRecommendations(id){ const genreMap = await loadMovieGenres(); return withCache("movie-recs-v2:" + id, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/${id}/recommendations?api_key=${TMDB_KEY}`); const list = (data.results || []).filter(excludeAnimation); return list.map((d, idx) => ({ item: normalizeMovieItem(d, genreMap), weight: tmdbRecPositionWeight(idx, list.length, d.vote_average) })); }); }
+async function getMovieRecommendations(id){ const genreMap = await loadMovieGenres(); return withCache("movie-recs-v3:" + (window.nexusUILanguage||"en") + ":" + id, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/${id}/recommendations?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); const list = (data.results || []).filter(excludeAnimation); return list.map((d, idx) => ({ item: normalizeMovieItem(d, genreMap), weight: tmdbRecPositionWeight(idx, list.length, d.vote_average) })); }); }
 async function getTVRecommendationsProvider(provider, id){
   const cfg = TV_PROVIDERS[provider];
   const genreMap = await loadTVGenres();
-  return withCache(`${provider}-recs-v2:` + id, async () => {
-    const data = await queuedFetch(`${TMDB_BASE}/tv/${id}/recommendations?api_key=${TMDB_KEY}`);
+  return withCache(`${provider}-recs-v3:${window.nexusUILanguage||"en"}:` + id, async () => {
+    const data = await queuedFetch(`${TMDB_BASE}/tv/${id}/recommendations?api_key=${TMDB_KEY}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`);
     const list = (data.results || []).filter(d => cfg.extraFilter(d) && excludeAnimation(d));
     return list.map((d, idx) => ({ item: normalizeTVItem(d, genreMap, provider), weight: tmdbRecPositionWeight(idx, list.length, d.vote_average) }));
   });
@@ -3129,12 +3386,13 @@ function diverseSurpriseSample(items, count, alreadyPicked = []){
 function buildSurpriseTasteProfile(currentMode){
   const tasteBase = [...new Map([...selected, ...votedLikes]).values()].filter(i => i.provider === currentMode);
   const dislikedItems = [...votedDislikes.values()].filter(i => i.provider === currentMode);
-  const likedGenreWeights = new Map(); const likedTagWeights = new Map(); const likedCollaboratorSet = new Set();
+  const likedGenreWeights = new Map(); const likedTagWeights = new Map(); const likedCollaboratorSet = new Set(); const likedArtists = new Set();
   tasteBase.forEach(item => {
     const w = item.isMasterpiece ? 3 : 1;
     (item.genres || []).forEach(g => { if (g && g !== "Unknown Genre") likedGenreWeights.set(g, (likedGenreWeights.get(g) || 0) + w); });
     (item.tags || []).forEach(t => { likedTagWeights.set(t.name, (likedTagWeights.get(t.name) || 0) + ((t.rank || 50) * w)); });
     (item.collaborators || []).forEach(c => likedCollaboratorSet.add(c));
+    if(item.provider === "music" && item.artist) likedArtists.add(item.artist);
   });
   const dislikedGenres = new Set(); const dislikedTags = new Set(); const dislikedCollaborators = new Set(); const dislikedArtists = new Set();
   dislikedItems.forEach(item => {
@@ -3143,7 +3401,7 @@ function buildSurpriseTasteProfile(currentMode){
     (item.collaborators || []).forEach(c => dislikedCollaborators.add(c));
     if (item.provider === "music" && item.artist) dislikedArtists.add(item.artist);
   });
-  return { tasteBase, likedGenreWeights, likedTagWeights, likedCollaboratorSet, dislikedGenres, dislikedTags, dislikedCollaborators, dislikedArtists };
+  return { tasteBase, likedGenreWeights, likedTagWeights, likedCollaboratorSet, likedArtists, dislikedGenres, dislikedTags, dislikedCollaborators, dislikedArtists };
 }
 
 // Scores one surprise-pool item against the taste profile. rejected=true means
@@ -3179,27 +3437,27 @@ function scoreSurpriseCandidate(item, profile){
 // ---------------- POPULAR / TRENDING ----------------
 const ANILIST_TRENDING_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
 
-async function getPopularMovies(page = 1){ const genreMap = await loadMovieGenres(); return withCache(`popular:movie:${page}`, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_KEY}&page=${page}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
+async function getPopularMovies(page = 1){ const genreMap = await loadMovieGenres(); return withCache(`popular:movie:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await queuedFetch(`${TMDB_BASE}/movie/popular?api_key=${TMDB_KEY}&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); }); }
 async function getPopularTVProvider(provider, page = 1){
   const cfg = TV_PROVIDERS[provider];
   const genreMap = await loadTVGenres();
-  return withCache(`popular:${provider}:${page}`, async () => {
+  return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => {
     const data = await queuedFetch(cfg.popularUrl(page));
     return (data.results || []).filter(d => cfg.extraFilter(d) && excludeAnimation(d)).map(d => normalizeTVItem(d, genreMap, provider));
   });
 }
 async function getPopularSeries(page = 1){ return getPopularTVProvider("series", page); }
 async function getPopularKDramas(page = 1){ return getPopularTVProvider("kdrama", page); }
-async function getPopularAniList(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: provider === "anime" ? "MOVIE" : null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
+async function getPopularAniList(provider, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`popular:${provider}:${window.nexusUILanguage||"en"}:${page}`, async () => { const data = await anilistQuery(ANILIST_TRENDING_QUERY, { type, format_not: null, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); }); }
 
 // Genre-filtered discover fetchers — same normalized shape as the popular
 // fetchers above, just scoped to one genre. Used only by Surprise Me's
 // personalized path (see below) to pull from a genre you actually like.
-async function getMoviesByGenre(genreId, page = 1){ const genreMap = await loadMovieGenres(); return withCache(`discover:movie:${genreId}:${page}`, async () => { try { const data = await queuedFetch(`${TMDB_BASE}/discover/movie?api_key=${TMDB_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); } catch(e) { return []; } }); }
+async function getMoviesByGenre(genreId, page = 1){ const genreMap = await loadMovieGenres(); return withCache(`discover:movie:${window.nexusUILanguage||"en"}:${genreId}:${page}`, async () => { try { const data = await queuedFetch(`${TMDB_BASE}/discover/movie?api_key=${TMDB_KEY}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}&language=${window.nexusUILanguage==="th"?"th-TH":"en-US"}`); return (data.results || []).filter(excludeAnimation).map(d => normalizeMovieItem(d, genreMap)); } catch(e) { return []; } }); }
 async function getTVByGenreProvider(provider, genreId, page = 1){
   const cfg = TV_PROVIDERS[provider];
   const genreMap = await loadTVGenres();
-  return withCache(`discover:${provider}:${genreId}:${page}`, async () => {
+  return withCache(`discover:${provider}:${window.nexusUILanguage||"en"}:${genreId}:${page}`, async () => {
     try { const data = await queuedFetch(cfg.genreUrl(genreId, page)); return (data.results || []).filter(d => cfg.extraFilter(d) && excludeAnimation(d)).map(d => normalizeTVItem(d, genreMap, provider)); }
     catch(e) { return []; }
   });
@@ -3207,7 +3465,7 @@ async function getTVByGenreProvider(provider, genreId, page = 1){
 async function getSeriesByGenre(genreId, page = 1){ return getTVByGenreProvider("series", genreId, page); }
 async function getKDramasByGenre(genreId, page = 1){ return getTVByGenreProvider("kdrama", genreId, page); }
 const ANILIST_BY_GENRE_QUERY = `query ($type: MediaType, $format_not: MediaFormat, $genre: String, $page: Int) { Page(page: $page, perPage: 20) { media(type: $type, format_not: $format_not, genre_in: [$genre], sort: TRENDING_DESC) { id format title { english romaji native } synonyms coverImage { large medium } startDate { year } status averageScore genres siteUrl externalLinks { site url type } tags { name rank } description(asHtml: false) studios(isMain: true) { nodes { name } } staff(sort: RELEVANCE, perPage: 3) { edges { role node { name { full } } } } characters(sort: ROLE, perPage: 5) { edges { voiceActors(language: JAPANESE, sort: RELEVANCE) { name { full } } } } } } }`;
-async function getAniListByGenre(provider, genreName, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`genre:${provider}:${genreName}:${page}`, async () => { try { const data = await anilistQuery(ANILIST_BY_GENRE_QUERY, { type, format_not: provider === "anime" ? "MOVIE" : null, genre: genreName, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); } catch(e) { return []; } }); }
+async function getAniListByGenre(provider, genreName, page = 1){ const type = provider === "manga" ? "MANGA" : "ANIME"; return withCache(`genre:${provider}:${genreName}:${page}`, async () => { try { const data = await anilistQuery(ANILIST_BY_GENRE_QUERY, { type, format_not: null, genre: genreName, page }); return ((data.data?.Page?.media) || []).map(m => normalizeAniListMedia(m, provider)); } catch(e) { return []; } }); }
 
 async function getPopularByMode(currentMode){
   if(currentMode === "movie") return getPopularMovies();
@@ -3298,9 +3556,89 @@ async function getDiscoveryPoolByMode(currentMode){
   return [...byUid.values()];
 }
 
+// NEXUS 12.0: expand the Netflix anime pool in bounded, independently
+// recoverable batches instead of treating the first two pages as the catalog.
+const N12_NETFLIX_MAX_EXTRA_PAGES=8;
+const N12_NETFLIX_BATCH_SIZE=2;
+async function n12ExpandAnimeSurprisePool(existing, seenPages, requestIsCurrent, onBatch){
+  const byUid=new Map(existing.filter(x=>x?.uid).map(x=>[x.uid,x]));
+  const pages=Array.from({length:N12_NETFLIX_MAX_EXTRA_PAGES},(_,i)=>i+1)
+    .filter(p=>!seenPages.has(p));
+  for(let i=0;i<pages.length;i+=N12_NETFLIX_BATCH_SIZE){
+    if(!requestIsCurrent())break;
+    const batch=pages.slice(i,i+N12_NETFLIX_BATCH_SIZE);
+    const results=await Promise.allSettled(batch.map(page=>getPopularAniList('anime',page)));
+    if(!requestIsCurrent())break;
+    results.forEach((result,j)=>{
+      if(result.status==='fulfilled'){
+        seenPages.add(batch[j]);
+        for(const item of result.value||[])if(item?.uid)byUid.set(item.uid,item);
+      }
+    });
+    if(onBatch){const keepGoing=await onBatch([...byUid.values()],i/N12_NETFLIX_BATCH_SIZE+1);if(keepGoing===false)break;}
+  }
+  return [...byUid.values()];
+}
+// NEXUS 13.0: do not let likes turn Surprise Me into a single-genre echo
+// chamber. Blend personalized candidates with independent discovery for
+// every provider. A failed discovery source must not break the whole shuffle.
 async function getSurprisePoolByMode(currentMode){
-  const personalized = await getPersonalizedSurprisePool(currentMode, buildGenrePoolFetcher(currentMode));
-  return personalized || getDiscoveryPoolByMode(currentMode);
+  // Independent sources run concurrently. One failed source never blanks
+  // the other; this also avoids waiting for sequential API round-trips.
+  const [personalizedResult,discoveryResult]=await Promise.allSettled([
+    getPersonalizedSurprisePool(currentMode,buildGenrePoolFetcher(currentMode)),
+    getDiscoveryPoolByMode(currentMode)
+  ]);
+  const personalized=personalizedResult.status==='fulfilled'?personalizedResult.value:[];
+  const discovery=discoveryResult.status==='fulfilled'?discoveryResult.value:[];
+  const byUid=new Map();
+  [...(Array.isArray(personalized)?personalized:[]),...(Array.isArray(discovery)?discovery:[])].forEach(item=>{
+    if(item?.uid&&item.provider===currentMode)byUid.set(item.uid,item);
+  });
+  return [...byUid.values()];
+}
+
+// 4 familiar, 3 adjacent, 2 exploratory. The counts are targets rather than
+// promises: small or tightly filtered catalogs redistribute unused slots.
+// Genre matching is based on the actual user's likes, not assumed categories.
+function n13SurpriseLane(item,profile){
+  const genres=(item.genres||[]).filter(g=>g&&g!=='Unknown Genre');
+  if(!profile.likedGenreWeights.size)return 'explore';
+  if(genres.some(g=>profile.likedGenreWeights.has(g)))return 'familiar';
+  if(item.provider==='music'&&item.artist&&profile.likedArtists?.has(item.artist))return 'adjacent';
+  if((item.tags||[]).some(t=>profile.likedTagWeights.has(t.name))||
+     (item.collaborators||[]).some(c=>profile.likedCollaboratorSet.has(c)))
+    return 'adjacent';
+  return 'explore';
+}
+// NEXUS 15: remaining count is total target minus already selected.
+// Earlier versions passed a smaller count with existing picks and could
+// return zero fallback results, even when valid candidates were available.
+function n13TasteExplorationSample(candidates,count,profile,alreadyPicked=[]){
+  const result=[...alreadyPicked];
+  const used=new Set(result.map(s=>s.item.uid));
+  const remaining=Math.max(0,count-result.length);
+  if(!remaining)return [];
+  // The original 4/3/2 targets apply to the full nine picks, not to each
+  // fallback pass; otherwise the second pass can accidentally skew the mix.
+  const laneTargets=profile.likedGenreWeights.size
+    ?{familiar:Math.round(count*4/9),adjacent:Math.round(count*3/9),explore:0}
+    :{familiar:0,adjacent:0,explore:count};
+  if(profile.likedGenreWeights.size)laneTargets.explore=Math.max(0,count-laneTargets.familiar-laneTargets.adjacent);
+  const laneCounts={familiar:0,adjacent:0,explore:0};
+  for(const s of result)laneCounts[n13SurpriseLane(s.item,profile)]++;
+  const add=(items,n)=>{
+    if(n<=0)return;
+    const eligible=items.filter(s=>s?.item?.uid&&!used.has(s.item.uid));
+    const picks=diverseSurpriseSample(eligible,n,result);
+    for(const s of picks){used.add(s.item.uid);result.push(s);laneCounts[n13SurpriseLane(s.item,profile)]++;}
+  };
+  for(const lane of ['explore','adjacent','familiar']){
+    const deficit=Math.max(0,laneTargets[lane]-laneCounts[lane]);
+    add(candidates.filter(s=>n13SurpriseLane(s.item,profile)===lane),Math.min(deficit,count-result.length));
+  }
+  if(result.length<count)add(candidates,count-result.length);
+  return result.slice(alreadyPicked.length,count);
 }
 
 async function searchByMode(mode, query){ 
@@ -3495,7 +3833,7 @@ function setMode(newMode){
 }
 const nexusDiscoveryByMode = new Map();
 function nexusCaptureDiscovery(){
-  return {query:searchBox.value,genre:document.getElementById("nexusDiscoverGenre").value,score:document.getElementById("nexusDiscoverScore").value,year:document.getElementById("nexusDiscoverYear").value,sort:document.getElementById("nexusDiscoverSort").value,hide:document.getElementById("nexusDiscoverHideDisliked").checked};
+  return {query:searchBox.value,genre:document.getElementById("nexusDiscoverGenre").value,score:document.getElementById("nexusDiscoverScore").value,year:document.getElementById("nexusDiscoverYear").value,sort:document.getElementById("nexusDiscoverSort").value,hide:document.getElementById("nexusDiscoverHideDisliked").checked,netflix:!!document.getElementById("n109DiscoverNetflixOnly")?.checked};
 }
 function nexusRestoreDiscovery(state){
   searchBox.value=state?.query || "";
@@ -3504,12 +3842,14 @@ function nexusRestoreDiscovery(state){
   document.getElementById("nexusDiscoverYear").value=state?.year || "all";
   document.getElementById("nexusDiscoverSort").value=state?.sort || "default";
   document.getElementById("nexusDiscoverHideDisliked").checked=state?.hide ?? true;
+  document.getElementById("n109DiscoverNetflixOnly").checked=mode==="anime"&&!!state?.netflix;
   nexusRefreshSearchClear();
 }
 function executeModeChange(newMode) {
   nexusDiscoveryByMode.set(mode,nexusCaptureDiscovery());
   clearTimeout(debounceTimer);
   ++searchRequestSeq;
+  ++n109CheckVersion; n109AcceptedIds=new Set();
   searchSpinner.classList.remove("active");
   // Invalidate in-flight Surprise Me fetches when changing the active category.
   surpriseRequestVersion++;
@@ -3774,6 +4114,65 @@ function applyModernFilter(items){
 let currentPoolItems = [];
 let nexusDiscoverRawItems = [];
 let nexusDiscoverPopular = true;
+// NEXUS 10.9: Discovery Netflix-TH filter. No unverified titles pass through.
+let n109AcceptedIds=new Set();
+let n109CheckVersion=0;
+const n109NetflixOnly=()=>mode==='anime'&&!!document.getElementById('n109DiscoverNetflixOnly')?.checked;
+function n109SyncDiscoverControl(){
+  const wrap=document.getElementById('n109DiscoverNetflixWrap');
+  const status=document.getElementById('n109DiscoverNetflixStatus');
+  if(wrap)wrap.hidden=mode!=='anime';
+  if(status&&mode!=='anime')status.hidden=true;
+}
+function n109StartDiscoveryCheck(){
+  const version=++n109CheckVersion;
+  n109SyncDiscoverControl();
+  const status=document.getElementById('n109DiscoverNetflixStatus');
+  n109AcceptedIds=new Set();
+  if(!n109NetflixOnly()){
+    if(status)status.hidden=true;
+    nexusReapplyDiscovery();
+    return;
+  }
+  const candidates=nexusDiscoverRawItems.filter(i=>i?.provider==='anime');
+  if(status){status.hidden=false;status.textContent=(window.nexusUILanguage==='th'?'กำลังตรวจสอบ Netflix ประเทศไทย…':'Checking Netflix availability in Thailand…');}
+  nexusReapplyDiscovery(); // immediately hide all unverified titles
+  (async()=>{
+    const accepted=new Set();
+    let checked=0;
+    let notListed=0;
+    // Small worker pool: avoid firing dozens of provider API calls at once.
+    let cursor=0;
+    async function worker(){
+      while(cursor<candidates.length){
+        if(version!==n109CheckVersion||!n109NetflixOnly())return;
+        const item=candidates[cursor++];
+        try{const result=await n111NetflixThailandStatus(item);if(result===n111NetflixStates.CONFIRMED)accepted.add(item.uid);else if(result===n111NetflixStates.NOT_LISTED)notListed++;}catch(_){}
+        checked++;
+        if(version===n109CheckVersion&&n109NetflixOnly()){
+          // Publish confirmed matches in small batches instead of holding all results until the last request.
+          if(checked%4===0||checked===candidates.length){
+            n109AcceptedIds=new Set(accepted);
+            nexusReapplyDiscovery();
+          }
+          if(status&&(checked%4===0||checked===candidates.length)){
+            status.textContent=n111StatusText(checked,candidates.length,accepted.size,notListed);
+          }
+        }
+      }
+    }
+    await Promise.all(Array.from({length:Math.min(4,candidates.length)},()=>worker()));
+    if(version!==n109CheckVersion||!n109NetflixOnly())return;
+    n109AcceptedIds=accepted;
+    nexusReapplyDiscovery();
+    if(status)status.textContent=n111StatusText(checked,candidates.length,accepted.size,notListed)+(window.nexusUILanguage==='th'?' · แสดงเฉพาะรายการที่พบ · ข้อมูล TMDB อาจคลาดเคลื่อน':' · Showing confirmed matches only · TMDB data may be incomplete');
+  })();
+}
+document.getElementById('n109DiscoverNetflixOnly')?.addEventListener('change',n109StartDiscoveryCheck);
+window.addEventListener('nexus:languagechange',()=>{
+  const status=document.getElementById('n109DiscoverNetflixStatus');
+  if(n109NetflixOnly()&&status&&!status.hidden)n109StartDiscoveryCheck();
+});
 let poolDisplayCount = 12; const POOL_PAGE_SIZE = 12;
 // Explainable, on-device taste matching based only on existing vote history.
 // No external profiling, guessed ratings or new cloud fields.
@@ -3814,6 +4213,7 @@ function nexusDiscoveryFiltered(items) {
   const sort = document.getElementById("nexusDiscoverSort").value;
   const hideDisliked = document.getElementById("nexusDiscoverHideDisliked").checked;
   const filtered = applyModernFilter(items).filter(item => {
+    if(n109NetflixOnly()&&!n109AcceptedIds.has(item.uid))return false;
     const score = Number(item.score);
     const year = Number.parseInt(item.year, 10);
     if (genre !== "all" && !(Array.isArray(item.genres) && item.genres.includes(genre))) return false;
@@ -3853,7 +4253,8 @@ document.getElementById("nexusDiscoverReset").addEventListener("click", () => {
   document.getElementById("nexusDiscoverYear").value = "all";
   document.getElementById("nexusDiscoverSort").value = "default";
   document.getElementById("nexusDiscoverHideDisliked").checked = true;
-  nexusReapplyDiscovery();
+  const n109Box=document.getElementById("n109DiscoverNetflixOnly");if(n109Box)n109Box.checked=false;
+  n109StartDiscoveryCheck();
 });
 document.querySelectorAll("[data-nexus-preset]").forEach(button => button.addEventListener("click", () => {
   document.getElementById("nexusDiscoverGenre").value = "all";
@@ -3931,18 +4332,22 @@ function nexusRankSearchResults(items,query){
   return items.map((item,index)=>({item,index,rank:nexusSearchRank(item,query)}))
     .sort((a,b)=>b.rank-a.rank||a.index-b.index).map(entry=>entry.item);
 }
-function renderSearchResults(items, isPopular, isLoadMore = false){
+function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = false){
   if(!isLoadMore){
+    ++n109CheckVersion; n109AcceptedIds=new Set(); n109SyncDiscoverControl();
     nexusDiscoverRawItems = Array.isArray(items) ? items : [];
     nexusDiscoverPopular = Boolean(isPopular);
-    currentPoolItems = nexusDiscoveryFiltered(nexusDiscoverRawItems);
+    // Surprise Me has already enforced its own hard filters, including
+    // Netflix TH verification. Discovery controls must not hide verified picks.
+    currentPoolItems = isSurprise ? nexusDiscoverRawItems.filter(item=>!votedDislikes.has(item.uid)) : nexusDiscoveryFiltered(nexusDiscoverRawItems);
     poolDisplayCount = POOL_PAGE_SIZE;
+    if(!isSurprise&&n109NetflixOnly())queueMicrotask(n109StartDiscoveryCheck);
   }
   const visibleItems = currentPoolItems.slice(0, poolDisplayCount);
-  const hasFilters = document.getElementById("nexusDiscoverScore").value !== "0" ||
+  const hasFilters = !isSurprise && (n109NetflixOnly() || document.getElementById("nexusDiscoverScore").value !== "0" ||
     document.getElementById("nexusDiscoverYear").value !== "all" ||
     document.getElementById("nexusDiscoverSort").value !== "default" ||
-    (document.getElementById("nexusDiscoverHideDisliked").checked && nexusDiscoverRawItems.some(i => votedDislikes.has(i.uid)));
+    (document.getElementById("nexusDiscoverHideDisliked").checked && nexusDiscoverRawItems.some(i => votedDislikes.has(i.uid))));
   poolCount.textContent = `${currentPoolItems.length} shown${hasFilters ? " · filtered (reset filters to see more)" : ""}${isPopular ? " · Popular" : ""}`; 
   poolGrid.innerHTML = "";
   if(visibleItems.length===0){
@@ -4073,6 +4478,67 @@ function toggleLikedMasterpiece(item) {
 
 clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelectorAll(".pool-item").forEach(b => { b.classList.remove("selected"); const button=b.querySelector(".nexus-search-select"); if(button){button.textContent="+ Select";button.setAttribute("aria-pressed","false");} }); renderSelectedStrip(); resultsSection.style.display = "none"; saveState(); renderAnalytics(); });
 
+// NEXUS 14: one Netflix preference across discovery, recommendations and surprise.
+// Existing per-surface change handlers remain responsible for re-rendering.
+let n14NetflixSyncing=false;
+function n14SyncNetflixPreference(event){
+  if(n14NetflixSyncing||mode!=='anime')return;
+  const ids=['n109DiscoverNetflixOnly','n108NetflixOnly','n116SurpriseNetflixOnly'];
+  if(!ids.includes(event.target?.id))return;
+  n14NetflixSyncing=true;
+  try{
+    const checked=event.target.checked;
+    ids.forEach(id=>{
+      const checkbox=document.getElementById(id);
+      if(checkbox&&checkbox!==event.target&&checkbox.checked!==checked){
+        checkbox.checked=checked;
+        checkbox.dispatchEvent(new Event('change',{bubbles:false}));
+      }
+    });
+  }finally{n14NetflixSyncing=false;}
+}
+document.addEventListener('change',n14SyncNetflixPreference,true);
+// Surprise Me Netflix preference is synchronized with the other anime surfaces.
+const n116SurpriseNetflixBox=document.getElementById('n116SurpriseNetflixOnly');
+const n116SurpriseNetflixWrap=document.getElementById('n116SurpriseNetflixWrap');
+const n116SurpriseNetflixStatus=document.getElementById('n116SurpriseNetflixStatus');
+function n116SyncSurpriseNetflix(){
+  const anime=mode==='anime';
+  n116SurpriseNetflixWrap.hidden=!anime;
+  n116SurpriseNetflixWrap.style.display=anime?'inline-flex':'none';
+  if(!anime)n116SurpriseNetflixStatus.textContent='';
+}
+function n116SurpriseNetflixEnabled(requestedMode){return requestedMode==='anime'&&n116SurpriseNetflixBox.checked;}
+// Check one bounded batch at a time; process all results before choosing
+// nine so timing of TMDB responses does not bias which titles get picked.
+async function n116FilterSurpriseNetflix(scored,requestVersion,requestedMode,progress){
+  const candidates=[...new Map(scored.filter(s=>s.item?.uid&&!votedDislikes.has(s.item.uid))
+    .map(s=>[s.item.uid,s])).values()];
+  const results=new Array(candidates.length).fill(false);
+  let checked=0,notListed=0,unknown=0,cursor=0;
+  const isCurrent=()=>requestVersion===surpriseRequestVersion&&requestedMode===mode&&n116SurpriseNetflixEnabled(requestedMode);
+  async function worker(){
+    while(cursor<candidates.length){
+      if(!isCurrent())return;
+      const index=cursor++;
+      let state=n111NetflixStates.UNKNOWN;
+      try{state=await n111NetflixThailandStatus(candidates[index].item);}catch(_){}
+      if(!isCurrent())return;
+      results[index]=state===n111NetflixStates.CONFIRMED;
+      checked++;
+      if(state===n111NetflixStates.NOT_LISTED)notListed++;
+      if(state===n111NetflixStates.UNKNOWN)unknown++;
+      if(checked%3===0||checked===candidates.length){
+        n116SurpriseNetflixStatus.textContent=n111StatusText(checked,candidates.length,results.filter(Boolean).length,notListed);
+      }
+    }
+  }
+  await Promise.all(Array.from({length:Math.min(4,candidates.length)},()=>worker()));
+  if(!isCurrent())return [];
+  const matches=candidates.filter((_,i)=>results[i]);
+  if(progress)progress({checked,total:candidates.length,confirmed:matches.length,notListed,unknown});
+  return matches;
+}
 const SURPRISE_PICK_COUNT = 9;
 const SURPRISE_RECENT_LIMIT = 45;
 const surpriseRecentByMode = new Map();
@@ -4082,13 +4548,18 @@ function restoreSurpriseButton(){
   surpriseBtn.disabled = false;
   surpriseBtn.removeAttribute("aria-busy");
   surpriseBtn.innerHTML = SURPRISE_BUTTON_IDLE_HTML;
+  surpriseBtn.removeAttribute("aria-label");
 }
 
+n116SurpriseNetflixBox.addEventListener('change',()=>{++surpriseRequestVersion;n116SurpriseNetflixStatus.textContent='';restoreSurpriseButton();});
+document.addEventListener('click',event=>{if(event.target.closest?.('[data-mode], .nav-item, .n102-nav-item, .mode-tab'))queueMicrotask(n116SyncSurpriseNetflix);});
+n116SyncSurpriseNetflix();
 surpriseBtn.addEventListener("click", async ()=>{
   if (surpriseBtn.disabled) return;
   surpriseBtn.disabled = true;
   surpriseBtn.setAttribute("aria-busy", "true");
   surpriseBtn.innerHTML = `<span>Shuffling...</span>`;
+  surpriseBtn.setAttribute("aria-label",window.nexusUILanguage==="th"?"กำลังสุ่มรายการ":"Shuffling recommendations");
   searchBox.value = "";
   // Surprise Me always shows its own nine picks; unrelated Discovery filters
   // must not silently hide some of them after the shuffle.
@@ -4098,6 +4569,8 @@ surpriseBtn.addEventListener("click", async ()=>{
   document.getElementById("nexusDiscoverHideDisliked").checked = true;
   const pickCount = SURPRISE_PICK_COUNT;
   const requestedMode = mode;
+  const netflixSurprise=n116SurpriseNetflixEnabled(requestedMode);
+  n116SurpriseNetflixStatus.textContent=netflixSurprise?"กำลังตรวจสอบ Netflix ประเทศไทย…":"";
   const requestVersion = ++surpriseRequestVersion;
   renderPoolSkeletons(pickCount);
   try{
@@ -4105,13 +4578,39 @@ surpriseBtn.addEventListener("click", async ()=>{
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
     const resolvedPool = await resolveOngoingFlags(fetchedPool);
     if (requestVersion !== surpriseRequestVersion || requestedMode !== mode) return;
-    const pool = applyModernFilter(resolvedPool);
+    const pool = applyModernFilter(Array.isArray(resolvedPool)?resolvedPool.filter(Boolean):[]);
     const profile = buildSurpriseTasteProfile(requestedMode);
     // Score every pool item, then hard-drop anything hitting a disliked
     // collaborator/artist (see scoreSurpriseCandidate) — a "surprise" should
     // never mean resurfacing something from a director/artist you already
     // told the app you don't like.
-    const scored = pool.map(item => ({ item, ...scoreSurpriseCandidate(item, profile) })).filter(s => !s.rejected);
+    let scored = pool.map(item => ({ item, ...scoreSurpriseCandidate(item, profile) })).filter(s => !s.rejected);
+    if(netflixSurprise){
+      const requestIsCurrent=()=>requestVersion===surpriseRequestVersion&&requestedMode===mode&&n116SurpriseNetflixEnabled(requestedMode);
+      let verified=await n116FilterSurpriseNetflix(scored,requestVersion,requestedMode);
+      if(!requestIsCurrent())return;
+      if(verified.length<pickCount){
+        const alreadyScored=new Set(scored.map(s=>s.item.uid));
+        await n12ExpandAnimeSurprisePool(pool,new Set(),requestIsCurrent,async(items,batchNumber)=>{
+          if(!requestIsCurrent()||verified.length>=pickCount)return;
+          const newEntries=items.filter(item=>item?.uid&&!alreadyScored.has(item.uid)&&!votedDislikes.has(item.uid))
+            .map(item=>({item,...scoreSurpriseCandidate(item,profile)})).filter(s=>!s.rejected);
+          newEntries.forEach(s=>alreadyScored.add(s.item.uid));
+          if(newEntries.length){
+            const checked=await n116FilterSurpriseNetflix(newEntries,requestVersion,requestedMode);
+            if(!requestIsCurrent())return;
+            verified=[...new Map([...verified,...checked].map(s=>[s.item.uid,s])).values()];
+          }
+          n116SurpriseNetflixStatus.textContent=(window.nexusUILanguage==='th'
+            ?`กำลังค้นหาเพิ่มเติม ชุด ${batchNumber} · ยืนยันแล้ว ${verified.length}/9 เรื่อง`
+            :`Searching more anime, batch ${batchNumber} · ${verified.length}/9 verified`);
+          return verified.length<pickCount;
+        });
+        if(!requestIsCurrent())return;
+      }
+      scored=verified;
+
+    }
     // Keep frequent shuffles fresh without making a disliked title reappear.
     // Session-only history avoids persisting extra personal data or affecting cloud sync.
     const recent = surpriseRecentByMode.get(requestedMode) || [];
@@ -4120,14 +4619,15 @@ surpriseBtn.addEventListener("click", async ()=>{
     const eligible = unique.filter(s => !recentIds.has(s.item.uid) && !votedDislikes.has(s.item.uid));
     // Prefer unseen titles first; only recycle earlier picks when the pool
     // cannot fill the requested batch. Never repeat within the same batch.
-    const picked = diverseSurpriseSample(eligible, pickCount);
+    const picked = n13TasteExplorationSample(eligible, pickCount, profile);
     if (picked.length < pickCount) {
       const pickedIds = new Set(picked.map(s => s.item.uid));
       const fallback = unique.filter(s => !votedDislikes.has(s.item.uid) && !pickedIds.has(s.item.uid));
-      picked.push(...diverseSurpriseSample(fallback, pickCount - picked.length, picked));
+      picked.push(...n13TasteExplorationSample(fallback, pickCount, profile, picked));
     }
     surpriseRecentByMode.set(requestedMode, [...recent, ...picked.map(s => s.item.uid)].slice(-Math.max(SURPRISE_RECENT_LIMIT, pickCount * 2)));
     if (!picked.length) {
+      if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ไม่พบอนิเมะที่ยืนยัน Netflix ไทยได้จากข้อมูล TMDB ที่ตรวจสอบ':'No Netflix Thailand anime verified in the checked TMDB data';
       poolGrid.innerHTML = '<div class="error-note" role="status">No matching surprise picks right now. Try another category or adjust your filters.</div>';
       poolCount.textContent = "0 surprise picks";
       poolCount.setAttribute("role", "status");
@@ -4138,15 +4638,19 @@ surpriseBtn.addEventListener("click", async ()=>{
     picked.forEach(s => {
       if (s.matchedCollaborator) s.item._surpriseReason = `Because you like ${s.matchedCollaborator}`;
       else if (s.matchedGenres.length) s.item._surpriseReason = `Because you like ${s.matchedGenres.join(" & ")}`;
-      else s.item._surpriseReason = "Wildcard pick";
+      else s.item._surpriseReason = "Explore something new";
     });
-    renderSearchResults(picked.map(s => s.item), false);
+    renderSearchResults(picked.map(s => s.item), false, false, true);
     indexItems(picked.map(s => s.item));
     poolCount.textContent = `${picked.length} surprise picks`;
+    if(netflixSurprise)n116SurpriseNetflixStatus.textContent=picked.length===pickCount
+      ?(window.nexusUILanguage==='th'?'Netflix ไทย: พบครบ 9 เรื่องจากข้อมูล TMDB':'Netflix TH: 9/9 verified in TMDB')
+      :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/9 เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/9 verified; no unverified filler`);
     poolCount.setAttribute("role", "status");
     poolCount.setAttribute("aria-live", "polite");
   }catch(e){
     if (requestVersion === surpriseRequestVersion && requestedMode === mode) {
+      if(netflixSurprise)n116SurpriseNetflixStatus.textContent='ตรวจสอบ Netflix ไทยไม่สำเร็จ กรุณาลองใหม่';
       poolGrid.innerHTML = '<div class="error-note" role="alert">Could not fetch surprise picks — try again.</div>';
       poolCount.textContent = "0 surprise picks";
       poolCount.setAttribute("role", "status");
@@ -4203,6 +4707,7 @@ async function loadYearFilterPref(){
 }
 
 function renderResults(ranked, totalPicks){
+  n108UpdateVisibility();
   indexItems(ranked.map(r => r.item));
   resultsCount.textContent = `${ranked.length} match${ranked.length===1?'':'es'}`;
   filmstripWrap.style.display = "block";
@@ -4211,13 +4716,13 @@ function renderResults(ranked, totalPicks){
     // nothing here" — previously both cases just left a blank grid with a
     // "0 matches" count and no way to tell which one happened or how to
     // recover, indistinguishable from something being broken.
-    const filtersActive = activeGenre !== "all" || activeMinScore > 0;
+    const filtersActive = activeGenre !== "all" || activeMinScore > 0 || (mode==="anime"&&!!n108NetflixCheckbox()?.checked);
     resultsGrid.innerHTML = filtersActive
       ? `<div class="empty-note">No matches with the current filters. <button type="button" class="filter-reset-btn" id="resetFiltersBtn">Reset filters</button></div>`
       : `<div class="empty-note">No matches found.</div>`;
     if (filtersActive) {
       document.getElementById("resetFiltersBtn").addEventListener("click", () => {
-        activeGenre = "all"; activeMinScore = 0; activeSort = "match";
+        activeGenre = "all"; activeMinScore = 0; activeSort = "match"; if(n108NetflixCheckbox())n108NetflixCheckbox().checked=false;
         genreFilter.value = "all"; scoreFilter.value = "0"; sortOrder.value = "match";
         renderResults(applyFilters(lastRanked), lastTotalPicks);
       });
@@ -5354,7 +5859,8 @@ function populateFilters(ranked){
   const firstLabel = "All genres";
   genreFilter.innerHTML = `<option value="all">${escapeHtml(firstLabel)}</option>` + [...genreSet].sort().map(g => `<option value="${escapeHtml(g)}">${escapeHtml(g)}</option>`).join("");
   genreFilter.value = activeGenre; scoreFilter.value = String(activeMinScore); sortOrder.value = activeSort;
-  filterRow.style.display = ranked.length > 1 ? "flex" : "none";
+  filterRow.style.display = ranked.length > 0 ? "flex" : "none";
+  n108UpdateVisibility();
 }
 
 function applyFilters(ranked){
@@ -5363,9 +5869,9 @@ function applyFilters(ranked){
   if (activeSort === "year") return filtered.sort((a, b) => (parseInt(b.item.year)||0) - (parseInt(a.item.year)||0));
   return diversifyByMatch(filtered);
 }
-genreFilter.addEventListener("change", ()=>{ activeGenre = genreFilter.value; renderResults(applyFilters(lastRanked), lastTotalPicks); });
-scoreFilter.addEventListener("change", ()=>{ activeMinScore = Number(scoreFilter.value); renderResults(applyFilters(lastRanked), lastTotalPicks); });
-sortOrder.addEventListener("change", ()=>{ activeSort = sortOrder.value; renderResults(applyFilters(lastRanked), lastTotalPicks); });
+genreFilter.addEventListener("change", ()=>{ activeGenre = genreFilter.value; n108RefreshNetflixResults(); });
+scoreFilter.addEventListener("change", ()=>{ activeMinScore = Number(scoreFilter.value); n108RefreshNetflixResults(); });
+sortOrder.addEventListener("change", ()=>{ activeSort = sortOrder.value; n108RefreshNetflixResults(); });
 
 function renderAnalytics() {
   const currentModePicks = [...selected.values()].filter(i => i.provider === mode); 
@@ -7323,12 +7829,199 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
   if(list){new MutationObserver(syncWatchlist).observe(list,{childList:true,subtree:false});syncWatchlist()}
 })();
 </script>
-</body>
-</html><style>
-.nexus-music-player-status{display:grid;gap:10px;margin:12px 0 18px;padding:12px;border:1px solid rgba(207,170,93,.28);border-radius:12px}
-.nexus-music-player-status #nexusPreviewHelp{justify-self:start}
-.nexus-season-progress progress{display:block;width:100%;height:9px;margin:8px 0 12px;accent-color:#d8ae5c}
-.nexus-progress-warning{padding:9px 12px;border-left:3px solid #d8ae5c;background:rgba(216,174,92,.08);border-radius:4px}
-</style>
+<script id="nexus103-i18n">
+/* NEXUS 10.3 — Thai / English interface. No external translation service. */
+(function(){
+  'use strict';
+  const STORAGE_KEY='nexus-ui-language-v1';
+  const th={
+    'EXPLORE':'สำรวจ','YOUR SPACE':'พื้นที่ของคุณ','Home':'หน้าแรก','Movies':'ภาพยนตร์','TV Series':'ซีรีส์','Anime':'อนิเมะ','K-Dramas':'ซีรีส์เกาหลี','Manga':'มังงะ','Music':'เพลง','My Vault':'คลังของฉัน','Watchlist':'รายการที่บันทึก','Taste insights':'วิเคราะห์รสนิยม','Discover something new.':'ค้นพบสิ่งใหม่ที่คุณชอบ','Menu':'เมนู',
+    'Language':'ภาษา','Sign in with Google':'เข้าสู่ระบบด้วย Google','Running in Local Mode (Offline)':'โหมดออฟไลน์ (เฉพาะเครื่อง)','PREPARING TASTE PROFILE':'กำลังเตรียมข้อมูลรสนิยม',
+    'YOUR PERSONAL DISCOVERY SPACE':'พื้นที่ค้นพบความบันเทิงสำหรับคุณ','A universe of stories. Curated by your curiosity.':'โลกแห่งเรื่องราวที่คัดสรรจากความสนใจของคุณ','EXPLORE THE UNEXPECTED':'เปิดประสบการณ์ใหม่','Discover':'ค้นพบ','Backup & restore':'สำรองและกู้คืนข้อมูล',
+    'Your space':'พื้นที่ของคุณ','Curated for your taste':'คัดสรรตามรสนิยม','Continue exploring':'ติดตามต่อ','View list ↗':'ดูรายการ ↗','Save titles to your Watchlist to see them here.':'บันทึกเรื่องที่สนใจไว้ในรายการ แล้วจะเห็นที่นี่','Quick access':'ทางลัด','For you':'สำหรับคุณ','Liked & disliked':'ถูกใจและไม่ถูกใจ','Taste profile':'โปรไฟล์รสนิยม','Your picks, not a streaming service. Discover, save and keep track.':'ค้นหา บันทึก และติดตามความบันเทิงที่คุณสนใจ',
+    'Your Taste Insights':'วิเคราะห์รสนิยมของคุณ','Show details':'แสดงรายละเอียด','Hide details':'ซ่อนรายละเอียด','⬇ Download Wrapped Card':'⬇ ดาวน์โหลดการ์ดสรุป','✦ View Taste Map':'✦ ดูแผนที่รสนิยม','🎬 Pair two favorites':'🎬 จับคู่เรื่องโปรด','Top Genres / Artists':'แนวเรื่อง / ศิลปินยอดนิยม','Mood / Vibe':'อารมณ์ / บรรยากาศ','Core Tropes & Archetypes':'รูปแบบเรื่องที่ชอบ','Genres You Avoid':'แนวเรื่องที่ไม่ชอบ','Top Cast & Crew':'นักแสดงและทีมงานที่ชอบ','Favorite Eras':'ยุคที่ชอบ','Match Signal Weights':'น้ำหนักการจับคู่',
+    '01 / THE DISCOVERY ROOM':'01 / พื้นที่ค้นพบ','Find something ':'ค้นพบสิ่ง','extraordinary.':'พิเศษสำหรับคุณ','One search. Endless stories, sounds, and worlds.':'ค้นหาครั้งเดียว เปิดโลกแห่งเรื่องราวและเสียงเพลง','✦ FROM YOUR DISCOVERIES':'✦ จากผลการค้นหาของคุณ','View details ↗':'ดูรายละเอียด ↗',
+    '⚙ Refine results':'⚙ ปรับผลการค้นหา','Genre · Rating · Year · Sort':'ประเภท · คะแนน · ปี · เรียงลำดับ','Genre':'ประเภท','Rating':'คะแนน','Release':'ปีที่ออก','Sort':'เรียงตาม','All genres':'ทุกประเภท','Any rating':'ทุกคะแนน','Any year':'ทุกปี','2020 onward':'ตั้งแต่ปี 2020','2010 onward':'ตั้งแต่ปี 2010','2000 onward':'ตั้งแต่ปี 2000','Default order':'ค่าเริ่มต้น','Best for your taste':'ตรงรสนิยมที่สุด','Highest rated':'คะแนนสูงสุด','Newest':'ใหม่ล่าสุด','Title A–Z':'ชื่อ ก–ฮ / A–Z','Hide disliked':'ซ่อนรายการที่ไม่ชอบ','Reset filters':'ล้างตัวกรอง','★ Top rated':'★ คะแนนสูง','✦ Recent releases':'✦ ออกใหม่','♡ Fresh picks':'♡ เรื่องน่าสนใจ',
+    'Start typing above to search.':'พิมพ์ชื่อเรื่องหรือศิลปินเพื่อค้นหา','Load more':'โหลดเพิ่มเติม','Find similar titles':'ค้นหาเรื่องคล้ายกัน','Surprise me':'สุ่มให้ฉัน','Clear picks':'ล้างรายการที่เลือก','Only show titles from':'แสดงเรื่องตั้งแต่ปี','2015 onward':'ตั้งแต่ปี 2015',
+    '02 / YOUR COLLECTION':'02 / คอลเลกชันของคุณ','Curated ':'คัดสรร','for you.':'เพื่อคุณ','Your next discovery starts with your taste.':'การค้นพบครั้งใหม่เริ่มจากสิ่งที่คุณชอบ','Explore now →':'เริ่มสำรวจ →',
+    'View in Watchlist ↗':'ดูในรายการที่บันทึก ↗','Search suggestions':'คำแนะนำการค้นหา','Clear search':'ล้างคำค้น','Open command palette':'เปิดเมนูคำสั่ง','Close details':'ปิดรายละเอียด','Title details':'รายละเอียดเรื่อง','Skip to discovery':'ข้ามไปยังการค้นหา',
+    'Search anime...':'ค้นหาอนิเมะ...','Search movies...':'ค้นหาภาพยนตร์...','Search series...':'ค้นหาซีรีส์...','Search kdramas...':'ค้นหาซีรีส์เกาหลี...','Search manga...':'ค้นหามังงะ...','Search music...':'ค้นหาเพลง...','Search titles':'ค้นหาชื่อเรื่อง','Type a command… (switch mode, watchlist, surprise me)':'พิมพ์คำสั่ง… (เปลี่ยนหมวด รายการที่บันทึก สุ่มให้ฉัน)',
+    'Selected':'เลือกแล้ว','Select':'เลือก','Remove':'นำออก','Add to Watchlist':'เพิ่มในรายการที่บันทึก','Remove from Watchlist':'นำออกจากรายการที่บันทึก','Add to Selection':'เพิ่มในรายการที่เลือก','Remove from Selection':'นำออกจากรายการที่เลือก','Liked':'ถูกใจ','Disliked':'ไม่ถูกใจ','Like':'ถูกใจ','Dislike':'ไม่ถูกใจ','Details':'รายละเอียด','Overview':'เรื่องย่อ','Recommendations':'คำแนะนำ','Recommended for you':'แนะนำสำหรับคุณ','Back':'ย้อนกลับ','Retry':'ลองอีกครั้ง','Cancel':'ยกเลิก','Save':'บันทึก','Close':'ปิด','Search':'ค้นหา','Loading...':'กำลังโหลด...','No results found.':'ไม่พบผลลัพธ์','No results':'ไม่พบผลลัพธ์',
+    'All':'ทั้งหมด','Watching':'กำลังดู','Completed':'ดูจบแล้ว','Plan to watch':'วางแผนจะดู','On hold':'พักไว้ก่อน','Dropped':'เลิกติดตาม','Reading':'กำลังอ่าน','Plan to read':'วางแผนจะอ่าน','Continue first':'รายการค้างไว้ก่อน','Progress':'ความคืบหน้า','Status':'สถานะ','Episodes':'ตอน','Chapters':'บท','Seasons':'ซีซัน','Year':'ปี','Score':'คะแนน','Runtime':'ระยะเวลา','Trailer':'ตัวอย่าง','Cast':'นักแสดง','Director':'ผู้กำกับ','Artist':'ศิลปิน','Album':'อัลบั้ม',
+    'Your Watchlist':'รายการที่บันทึกของคุณ','My Watchlist':'รายการที่บันทึก','Your Library':'คลังของคุณ','No items yet.':'ยังไม่มีรายการ','Something went wrong.':'เกิดข้อผิดพลาด กรุณาลองใหม่',
+    'Could not load results. Check your connection and retry.':'โหลดผลการค้นหาไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง',
+    'Retry search':'ค้นหาอีกครั้ง',
+    'Couldn\'t load titles right now — check your connection and try searching directly.':'โหลดรายการไม่ได้ กรุณาตรวจสอบการเชื่อมต่อแล้วลองค้นหาอีกครั้ง',
+    'No matching titles.':'ไม่พบรายการที่ตรงกัน',
+    'No recommendations yet.':'ยังไม่มีรายการแนะนำ',
+    'View details':'ดูรายละเอียด',
+    'Search by title, artist, or genre':'ค้นหาชื่อเรื่อง ศิลปิน หรือประเภท',
+    'Nothing here yet':'ยังไม่มีรายการที่นี่',
+    'Continue watching':'ดูต่อ',
+    'Recently updated':'อัปเดตล่าสุด',
+    'Personalized for you':'คัดสรรสำหรับคุณ',
+    'Movies & Series':'ภาพยนตร์และซีรีส์',
+    'Discover more':'ค้นพบเพิ่มเติม',
+    'Surprise Me':'สุ่มให้ฉัน',
+    'Surprise me!':'สุ่มให้ฉัน!',
+    'Sign out':'ออกจากระบบ',
+    'Log out':'ออกจากระบบ',
+    'Account':'บัญชี',
+    'Settings':'ตั้งค่า',
+    'Language':'ภาษา',
+    'Want to watch / read':'อยากดู / อ่าน',
+    'In progress':'กำลังติดตาม',
+    'Paused':'พักไว้ก่อน',
+    'Finished':'จบแล้ว',
+    'Not started':'ยังไม่เริ่ม',
+    'Currently watching':'กำลังดู',
+    'Currently reading':'กำลังอ่าน',
+    'Watched':'ดูแล้ว',
+    'Read':'อ่านแล้ว',
+    'Mark as complete':'ทำเครื่องหมายว่าเสร็จแล้ว',
+    'Mark as completed':'ทำเครื่องหมายว่าจบแล้ว',
+    'Remove from watchlist':'นำออกจากรายการที่บันทึก',
+    'Add to watchlist':'เพิ่มในรายการที่บันทึก',
+    'Clear all':'ล้างทั้งหมด',
+    'Apply':'ใช้ตัวกรอง',
+    'Reset':'รีเซ็ต',
+    'Filters':'ตัวกรอง',
+    'All categories':'ทุกหมวดหมู่',
+    'All statuses':'ทุกสถานะ',
+    'Sort by':'เรียงตาม',
+    'Recently added':'เพิ่มล่าสุด',
+    'Recently saved':'บันทึกล่าสุด',
+    'Alphabetical':'เรียงตามตัวอักษร',
+    'A–Z':'ก–ฮ / A–Z',
+    'Z–A':'ฮ–ก / Z–A',
+    'Date added':'วันที่เพิ่ม',
+    'Empty watchlist':'รายการที่บันทึกยังว่าง',
+    'Your watchlist is empty':'รายการที่บันทึกยังว่าง',
+    'Add some titles to get started.':'เพิ่มเรื่องที่สนใจเพื่อเริ่มต้น',
+    'No titles match your filters.':'ไม่มีรายการตรงกับตัวกรอง',
+    'No matches found':'ไม่พบรายการที่ตรงกัน',
+    'No saved titles yet.':'ยังไม่มีเรื่องที่บันทึก',
+    'Manage your list':'จัดการรายการ',
+    'Your progress':'ความคืบหน้าของคุณ',
+    'My collection':'คอลเลกชันของฉัน',
+    'Liked titles':'รายการที่ถูกใจ',
+    'Disliked titles':'รายการที่ไม่ถูกใจ',
+    'Liked titles only':'เฉพาะรายการที่ถูกใจ',
+    'Save to Watchlist':'บันทึกไว้ดูภายหลัง',
+    'Watchlist status':'สถานะรายการที่บันทึก',
+    'Search your vault':'ค้นหาในคลังของคุณ',
+    'Search watchlist':'ค้นหารายการที่บันทึก',
+    'Quick View':'ดูรายละเอียดด่วน',
+    'Your Taste Connection':'ความเชื่อมโยงกับรสนิยมของคุณ',
+    'Why this fits your taste':'เหตุผลที่ตรงกับรสนิยมของคุณ',
+    'Similar titles':'เรื่องที่คล้ายกัน',
+    'More like this':'เรื่องที่คล้ายกัน',
+    'Show more':'แสดงเพิ่มเติม',
+    'Show less':'แสดงน้อยลง',
+    'Open details':'เปิดรายละเอียด',
+    'Hide':'ซ่อน',
+    'Copy':'คัดลอก',
+    'Copied!':'คัดลอกแล้ว!',
+    'Download':'ดาวน์โหลด',
+    'Import':'นำเข้า',
+    'Export':'ส่งออก'
+  };
+  const originalNodes=new WeakMap();
+  const originalAttributes=new WeakMap();
+  const translatableAttrs=['placeholder','title','aria-label'];
+  function safeStorageGet(){try{return localStorage.getItem(STORAGE_KEY)}catch(_){return null}}
+  function safeStorageSet(value){try{localStorage.setItem(STORAGE_KEY,value)}catch(_){}}
+  const browserThai=/^th(?:-|$)/i.test(navigator.language||'');
+  let locale=window.nexusUILanguage||safeStorageGet();if(locale!=='th'&&locale!=='en')locale=browserThai?'th':'en';
+  window.nexusUILanguage=locale;
+  function translateString(text){
+    if(!text)return text;
+    const exact=Object.prototype.hasOwnProperty.call(th,text)?th[text]:null;if(exact)return exact;
+    const trimmed=text.trim();if(th[trimmed])return text.replace(trimmed,th[trimmed]);
+    const count=/^(\\d+) titles?$/.exec(trimmed);
+    if(count)return text.replace(trimmed,`${count[1]} เรื่อง`);
+    const match=/^Search (anime|movies|series|kdramas|manga|music)\\.\\.\\.$/i.exec(trimmed);
+    if(match)return th['Search '+match[1].toLowerCase()+'...']||text;
+    return text;
+  }
+  function updateTextNode(node){
+    if(!node||node.nodeType!==3||!node.parentElement)return;
+    if(node.parentElement.closest('script,style,textarea,code,pre,[data-n103-no-translate],.p-title,.ticket-title,.w-title,.n102-featured h3,.n102-featured p,.detail-title,.detail-overview,.nexus-music-track-title,.nexus-music-artist,.pool-item h3,.pool-item h4,.watchlist-card h3,.recommendation-card h3'))return;
+    let source=originalNodes.get(node);
+    if(source===undefined){source=node.nodeValue;originalNodes.set(node,source)}
+    else if(node.nodeValue!==source && node.nodeValue!==translateString(source)){
+      source=node.nodeValue;originalNodes.set(node,source);
+    }
+    const next=locale==='th'?translateString(source):source;
+    if(node.nodeValue!==next)node.nodeValue=next;
+  }
+  function updateAttrs(el){
+    if(!el||el.nodeType!==1||el.matches('script,style,textarea,code,pre,[data-n103-no-translate]'))return;
+    if(el.closest('.p-title,.ticket-title,.w-title,.n102-featured h3,.n102-featured p,.detail-title,.detail-overview'))return;
+    let sources=originalAttributes.get(el);if(!sources){sources={};originalAttributes.set(el,sources)}
+    for(const attr of translatableAttrs){
+      if(!el.hasAttribute(attr))continue;
+      const value=el.getAttribute(attr);
+      if(!(attr in sources)|| (value!==sources[attr]&&value!==translateString(sources[attr])))sources[attr]=value;
+      const next=locale==='th'?translateString(sources[attr]):sources[attr];
+      if(value!==next)el.setAttribute(attr,next);
+    }
+  }
+  function visit(root){
+    if(!root)return;
+    if(root.nodeType===3){updateTextNode(root);return}
+    if(root.nodeType!==1&&root.nodeType!==9&&root.nodeType!==11)return;
+    if(root.nodeType===1)updateAttrs(root);
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT|NodeFilter.SHOW_TEXT);
+    while(walker.nextNode()){
+      if(walker.currentNode.nodeType===3)updateTextNode(walker.currentNode);
+      else updateAttrs(walker.currentNode);
+    }
+  }
+  function updateUI(){
+    document.documentElement.lang=locale;
+    document.documentElement.dataset.nexusLanguage=locale;
+    document.querySelectorAll('[data-n103-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.n103Lang===locale)));
+    visit(document.body);
+    // Existing search logic updates its placeholder when switching media type.
+    const search=document.getElementById('searchBox');if(search)updateAttrs(search);
+  }
+  function setLanguage(next,fromStorage=false){
+    if(next!=='th'&&next!=='en')return;
+    if(next===locale)return;
+    locale=next;window.nexusUILanguage=next;if(!fromStorage)safeStorageSet(next);updateUI();
+    window.dispatchEvent(new CustomEvent('nexus:languagechange',{detail:{language:next}}));
+    // Re-run the existing search path so localized TMDB titles/overviews are fetched.
+    // Reusing the input event preserves existing debounce, loading and race guards.
+    const input=document.getElementById('searchBox');
+    if(input){input.dispatchEvent(new Event('input',{bubbles:true}));}
+  }
+  window.nexusSetLanguage=setLanguage;
+  window.addEventListener('storage',event=>{
+    if(event.key===STORAGE_KEY&&(event.newValue==='th'||event.newValue==='en')&&event.newValue!==locale){
+      setLanguage(event.newValue,true);
+    }
+  });
+  document.querySelectorAll('[data-n103-lang]').forEach(b=>b.addEventListener('click',()=>setLanguage(b.dataset.n103Lang)));
+  // Third-party API results and user-entered titles remain unchanged unless a known UI phrase matches.
+  const observer=new MutationObserver(records=>{
+    // Batch newly inserted roots; nested roots need translating only once.
+    const added=new Set();
+    for(const r of records){
+      if(r.type==='characterData')updateTextNode(r.target);
+      else if(r.type==='attributes')updateAttrs(r.target);
+      else for(const node of r.addedNodes)added.add(node);
+    }
+    const roots=[...added];
+    for(const node of roots){
+      if(node.nodeType===1 && roots.some(other=>other!==node&&other.nodeType===1&&other.contains(node)))continue;
+      visit(node);
+    }
+  });
+  observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:translatableAttrs});
+  updateUI();
+})();
 
-<style>.nexus-music-player-status #nexusPreviewAudit{min-height:38px}</style>
+</script>
+</body>
+</html>
