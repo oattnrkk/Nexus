@@ -19,7 +19,9 @@
      attributes in the script below) — some environments don't fully honor a
      per-iframe referrerpolicy alone, so this sets the same policy page-wide. -->
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<title>NEXUS — Movies, Series, Anime &amp; Music</title>
+<title>NEXUS — Find your next favorite</title>
+<meta name="description" content="Find your next movie, series or anime. Get three picks for your taste, check Netflix Thailand availability via TMDB, and keep your Watchlist in one place.">
+<meta name="nexus-version" content="17.1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1357,6 +1359,22 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
  .n102-mobile-menu{min-height:44px}
 }
 </style>
+<style id="nexus171-customer-flow">
+/* NEXUS 17.1: three clear starting points and progressive disclosure. */
+.n171-start{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:850px;margin:26px auto 24px;text-align:left}
+.n171-start-card{font:inherit;display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px;border:1px solid var(--line-strong);border-radius:16px;background:var(--bg-alt);color:var(--text);text-decoration:none;cursor:pointer;min-width:0;transition:border-color .2s,transform .2s}
+.n171-start-card>span{color:var(--gold);font-size:20px}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px;line-height:1.6;color:var(--text-dim)}
+.n171-start-primary{border-color:rgba(223,184,119,.5);background:linear-gradient(135deg,rgba(223,184,119,.12),var(--bg-alt))}
+.n171-start-card:hover{border-color:var(--gold);transform:translateY(-2px)}.n171-start-card:focus-visible,.n171-more-categories summary:focus-visible,.n171-data-tools summary:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.n171-start-card:disabled{opacity:.6;cursor:wait}
+.n171-more-categories{position:relative;align-self:center}.n171-more-categories summary{padding:12px;cursor:pointer;color:var(--text-dim);font-size:12px}.n171-more-categories>div{display:flex;gap:6px;flex-wrap:wrap;padding:8px}
+.n171-guide{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px;margin:0 0 16px;border:1px solid rgba(223,184,119,.3);border-radius:12px;background:rgba(223,184,119,.05)}
+.n171-guide[hidden]{display:none}.n171-guide p{flex:1 1 260px;margin:0;font-size:13px;line-height:1.7}
+.n171-data-tools{margin:20px 0;color:var(--text-dim)}.n171-data-tools>summary{font-size:13px;cursor:pointer;padding:14px 0}
+#n116SurpriseNetflixWrap[hidden]{display:none!important}
+@media(max-width:650px){.n171-start{grid-template-columns:1fr;gap:8px;margin:20px 0}.n171-start-card{padding:14px;gap:5px}.n171-start-card>span{display:none}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px}.n171-more-categories summary{min-height:44px;box-sizing:border-box}.n171-more-categories>div{justify-content:center}}
+@media(prefers-reduced-motion:reduce){.n171-start-card{transition:none}.n171-start-card:hover{transform:none}}
+</style>
 </head>
 <body>
 <button class="n102-mobile-menu" id="n102MenuToggle" type="button" aria-expanded="false" aria-controls="n102Sidebar">☰ <span>Menu</span></button>
@@ -1375,7 +1393,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
   </nav>
   <div class="n102-nav-caption n102-nav-caption-lower">YOUR SPACE</div>
   <nav class="n102-menu" aria-label="Personal collection">
-    <a class="n102-nav-link" href="#ratingsSection">♡ <span>My Vault</span></a>
+    <a class="n102-nav-link" href="#ratingsSection">♡ <span>My taste</span></a>
     <a class="n102-nav-link" href="#watchlistSection">◷ <span>Watchlist</span></a>
     <a class="n102-nav-link" href="#analyticsSection">◈ <span>Taste insights</span></a>
   </nav>
@@ -1387,7 +1405,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 <div class="auth-bar">
   <div class="auth-status-wrap">
     <span class="status-dot"></span>
-    <span id="authStatus">Running in Local Mode (Offline)</span>
+    <span id="authStatus">Saved on this device</span>
   </div>
   <div class="n103-language" role="group" aria-label="Language / ภาษา">
     <span class="n103-language-label" data-n103-label>Language</span>
@@ -1437,21 +1455,28 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 <div class="hero" id="top">
   <p class="eyebrow">YOUR PERSONAL DISCOVERY SPACE</p>
   <h1 class="title">NEXUS</h1>
-  <p class="tagline">A universe of stories. Curated by your curiosity.</p>
+  <p class="tagline">What should you watch tonight? Start with three picks.</p>
+  <div class="n171-start" aria-label="Start discovering">
+    <button type="button" class="n171-start-card n171-start-primary" id="n171Tonight"><span aria-hidden="true">✦</span><strong>Pick 3 for me</strong><small>Three choices, with reasons. No account needed.</small></button>
+    <button type="button" class="n171-start-card" id="n171Similar"><span aria-hidden="true">♡</span><strong>More like my favorites</strong><small>Choose up to three favorites to get started.</small></button>
+    <a class="n171-start-card" href="#watchlistSection"><span aria-hidden="true">◷</span><strong>Choose from my Watchlist</strong><small>Turn something saved into something watched.</small></a>
+  </div>
   <div class="n10-hero-hairline" aria-hidden="true"><span></span><b>EXPLORE THE UNEXPECTED</b><span></span></div>
   <div class="toggle-row" id="typeToggle">
     <button class="seg-btn" data-mode="movie" aria-pressed="false">Movies</button>
     <button class="seg-btn active" data-mode="anime" aria-pressed="true">Anime</button>
     <button class="seg-btn" data-mode="series" aria-pressed="false">TV Series</button>
     <button class="seg-btn" data-mode="kdrama" aria-pressed="false">K-Dramas</button>
-    <button class="seg-btn" data-mode="manga" aria-pressed="false">Manga</button>
-    <button class="seg-btn" data-mode="music" aria-pressed="false">Music</button>
+    <details class="n171-more-categories"><summary>More categories</summary><div>
+      <button class="seg-btn" data-mode="manga" aria-pressed="false">Manga</button>
+      <button class="seg-btn" data-mode="music" aria-pressed="false">Music</button>
+    </div></details>
   </div>
 </div>
 
 <nav class="nexus-jump" aria-label="Page sections">
   <a href="#searchSection">Discover</a>
-  <a href="#ratingsSection">My Vault</a>
+  <a href="#watchlistSection">Watchlist</a>
   <a href="#analyticsSection">Taste insights</a>
   <a href="#nexusDataTools">Backup &amp; restore</a>
 </nav>
@@ -1468,6 +1493,170 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
   <p class="n102-rail-note">Your picks, not a streaming service. Discover, save and keep track.</p>
 </aside>
 <div class="wrap">
+
+  <section class="block" id="searchSection">
+    <div class="block-head">
+      <div class="n10-section-kicker">01 / THE DISCOVERY ROOM</div><h2>Find something <em>extraordinary.</em></h2><p class="n10-section-lede">One search. Endless stories, sounds, and worlds.</p>
+      <span class="count" id="poolCount"></span>
+    </div>
+    
+    <div id="n171Guide" class="n171-guide" hidden>
+      <p id="n171GuideText" role="status" aria-live="polite"></p>
+      <button type="button" id="n171GuideFind" class="nexus-tool-btn" disabled>Find similar titles</button>
+      <button type="button" id="n171GuideClose" class="nexus-tool-btn">Close guide</button>
+    </div>
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchBox" placeholder="Search anime..." aria-label="Search titles" autocomplete="off">
+      <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
+      <div class="search-spinner" id="searchSpinner"></div>
+      <button type="button" class="cmdk-hint n14-visually-hidden" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
+      <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
+    </div>
+    <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
+      <div class="n102-featured-art" id="n102FeaturedArt"></div>
+      <div class="n102-featured-shade"></div>
+      <div class="n102-featured-copy">
+        <span class="n102-featured-kicker">✦ FROM YOUR DISCOVERIES</span>
+        <h3 id="n102FeaturedTitle"></h3>
+        <p id="n102FeaturedMeta"></p>
+        <button id="n102FeaturedDetails" type="button" class="n102-featured-button">View details ↗</button>
+      </div>
+    </section>
+    <details class="nexus-refine" id="nexusRefinePanel">
+      <summary><span class="nexus-refine-label">⚙ Refine results</span><span class="nexus-refine-description">Genre · Rating · Year · Sort</span><span class="nexus-refine-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="nexus-refine-body">
+    <div class="nexus-discovery-controls" role="group" aria-label="Refine discovery results">
+      <label>Genre <select id="nexusDiscoverGenre"><option value="all">All genres</option></select></label>
+      <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
+      <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
+      <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
+      <label id="n109DiscoverNetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n109DiscoverNetflixOnly" aria-describedby="n109DiscoverNetflixStatus"> <span data-n109-netflix-label>Netflix TH · TMDB</span></label>
+      <label class="nexus-discovery-toggle"><input type="checkbox" id="nexusDiscoverHideDisliked" checked> Hide disliked</label>
+      <button type="button" id="nexusDiscoverReset" class="nexus-tool-btn">Reset filters</button>
+    </div>
+    <p id="n109DiscoverNetflixStatus" role="status" aria-live="polite" hidden class="n109-netflix-status"></p>
+    <div class="nexus-discovery-presets n14-visually-hidden" role="group" aria-label="Quick discovery filters">
+      <button type="button" data-nexus-preset="top" class="nexus-tool-btn">★ Top rated</button>
+      <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
+      <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
+    </div>
+      </div>
+    </details>
+    <div class="pool-grid" id="poolGrid">
+      <div class="empty-note">Start typing above to search.</div>
+    </div>
+    <div style="text-align:center; margin-top:8px;">
+      <button class="btn-ghost" id="loadMoreBtn" style="display:none;">Load more</button>
+    </div>
+    <div class="selected-strip" id="selectedStrip"></div>
+    <div class="cta-row">
+      <button class="btn-primary" id="findBtn" disabled>Find similar titles</button>
+      <button class="btn-ghost" id="surpriseBtn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        <span>Surprise me</span>
+      </button>
+      <label id="n116SurpriseNetflixWrap" hidden style="display:none;align-items:center;gap:8px;min-height:48px;cursor:pointer;flex-wrap:wrap;">
+        <input id="n116SurpriseNetflixOnly" type="checkbox" style="width:20px;height:20px;accent-color:var(--gold);">
+        <span>Netflix TH only · checked via TMDB</span>
+      </label>
+      <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
+      <button class="btn-ghost" id="clearBtn">Clear picks</button>
+      <span class="helper-text" id="capHint"></span>
+    </div>
+    <div class="year-filter-row" id="yearFilterWrap" style="margin-top:18px; max-width:340px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
+        <span class="helper-text" style="color:var(--text-dim);">Only show titles from</span>
+        <span class="helper-text" id="yearFilterLabel" style="color:var(--gold); font-weight:600;">2015 onward</span>
+      </div>
+      <input type="range" id="yearFilterSlider" min="1990" max="2030" step="1" value="2015" class="year-slider">
+    </div>
+  </section>
+
+
+<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
+  <div class="nexus-home-top"><div><div class="nexus-eyebrow">02 / YOUR COLLECTION</div><h2 id="nexusHomeTitle">Curated <em>for you.</em></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
+  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
+  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
+    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">Watchlist →</a></div>
+    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
+  </div>
+  <details class="nexus-home-more">
+    <summary>Explore your taste profile <span aria-hidden="true">↗</span></summary>
+  <div class="nexus-home-lower">
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
+    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
+  </div>
+  </details>
+  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
+</section>
+
+  <details class="n171-data-tools"><summary>Backup &amp; restore</summary>
+  <section class="nexus-tools" id="nexusDataTools" aria-label="Taste profile backup tools">
+    <span class="nexus-tools-title">✦ Your taste, your data</span>
+    <button type="button" class="nexus-tool-btn" id="nexusExportBtn">↓ Export backup</button>
+    <button type="button" class="nexus-tool-btn" id="nexusReviewConflictBtn" style="display:none">Resolve sync conflict</button>
+    <button type="button" class="nexus-tool-btn" id="nexusRecoveryBtn" title="Download local and cloud copies captured before the last merge">↓ Sync recovery</button>
+    <button type="button" class="nexus-tool-btn" id="nexusImportBtn">↑ Restore backup</button>
+    <input type="file" id="nexusImportFile" accept="application/json,.json" hidden aria-label="Choose NEXUS backup file">
+    <span class="nexus-tools-note">Your backup stays on your device. Restore replaces local preferences; if signed in, your restored profile will also be synced to your account.</span><span id="nexusBackupStatus" class="nexus-backup-status" role="status" aria-live="polite"></span>
+  </section>
+
+  </details>
+
+  <section class="block" id="ratingsSection" style="display:none;">
+    <div class="block-head">
+      <h2>My taste</h2>
+      <span class="count" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;"><span id="ratingsCount"></span><button type="button" id="vaultWrappedBtn" class="filter-reset-btn" style="text-decoration:none;">⬇ Vault Wrapped</button><button type="button" id="vaultViewAllToggle" class="filter-reset-btn" style="text-decoration:none;">View all categories</button></span>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
+      <input type="text" id="vaultSearchBox" class="search-input" placeholder="Filter your vault by title..." aria-label="Filter your vault by title" autocomplete="off" style="flex:1; min-width:200px; margin-bottom:0;">
+      <select class="filter-select" id="vaultSortOrder">
+        <option value="default">Sort: Recently Added</option>
+        <option value="title">Sort: Title A-Z</option>
+        <option value="year-new">Sort: Newest First</option>
+        <option value="year-old">Sort: Oldest First</option>
+      </select>
+    </div>
+    
+    <div style="position:relative; background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 28px; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(223,184,119,0.5), transparent);"></div>
+      <h3 style="font-size:13px; color:var(--gold); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Liked Profile</h3>
+      <div id="topTenContainer"></div>
+      <div id="likedGridsContainer"></div>
+
+      <hr style="border:none; border-top:1px solid var(--line); margin: 36px 0 28px;">
+
+      <h3 style="font-size:13px; color:var(--rose); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><line x1="8" y1="8" x2="16" y2="16"></line></svg>Disliked / Banned Pool</h3>
+      <div id="dislikedGridsContainer"></div>
+    </div>
+  </section>
+
+  <section class="block" id="resultsSection" style="display:none;">
+    <div class="block-head">
+      <h2>Your recommendations</h2>
+      <span class="count" id="resultsCount"></span>
+    </div>
+    <div class="filter-row" id="filterRow" style="display:none;">
+      <label id="n108NetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n108NetflixOnly"> <span data-n108-netflix-label>Netflix TH · TMDB</span></label>
+      <select class="filter-select" id="genreFilter"><option value="all">All genres</option></select>
+      <select class="filter-select" id="scoreFilter">
+        <option value="0">Any score</option>
+        <option value="7">★7+</option>
+        <option value="8">★8+</option>
+      </select>
+      <select class="filter-select" id="sortOrder">
+        <option value="match">Sort by: Match %</option>
+        <option value="score">Sort by: Top Rated</option>
+        <option value="year">Sort by: Newest</option>
+      </select>
+    </div>
+    <p id="n108NetflixStatus" role="status" aria-live="polite" hidden style="font-size:12px;color:var(--muted);margin:10px 0"></p>
+    <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
+    <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
+    <div class="filmstrip" id="filmstripWrap" style="display:none;">
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+  </section>
 
   <section class="block" id="analyticsSection" style="display:none;">
     <div class="block-head">
@@ -1515,165 +1704,9 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
     </div>
   </section>
 
-  <section class="block" id="searchSection">
-    <div class="block-head">
-      <div class="n10-section-kicker">01 / THE DISCOVERY ROOM</div><h2>Find something <em>extraordinary.</em></h2><p class="n10-section-lede">One search. Endless stories, sounds, and worlds.</p>
-      <span class="count" id="poolCount"></span>
-    </div>
-    
-    <div class="search-wrap">
-      <input type="text" class="search-input" id="searchBox" placeholder="Search anime..." aria-label="Search titles" autocomplete="off">
-      <button type="button" id="nexusSearchClear" class="nexus-search-clear" aria-label="Clear search" title="Clear search" hidden>×</button>
-      <div class="search-spinner" id="searchSpinner"></div>
-      <button type="button" class="cmdk-hint n14-visually-hidden" id="cmdkHintBtn" title="Open command palette" aria-label="Open command palette">⌘K</button>
-      <div class="search-suggestions" id="searchSuggestions" role="listbox" aria-label="Search suggestions"></div>
-    </div>
-    <section class="n102-featured" id="n102Featured" aria-label="Featured discovery" hidden>
-      <div class="n102-featured-art" id="n102FeaturedArt"></div>
-      <div class="n102-featured-shade"></div>
-      <div class="n102-featured-copy">
-        <span class="n102-featured-kicker">✦ FROM YOUR DISCOVERIES</span>
-        <h3 id="n102FeaturedTitle"></h3>
-        <p id="n102FeaturedMeta"></p>
-        <button id="n102FeaturedDetails" type="button" class="n102-featured-button">View details ↗</button>
-      </div>
-    </section>
-    <details class="nexus-refine" id="nexusRefinePanel">
-      <summary><span class="nexus-refine-label">⚙ Refine results</span><span class="nexus-refine-description">Genre · Rating · Year · Sort</span><span class="nexus-refine-chevron" aria-hidden="true">⌄</span></summary>
-      <div class="nexus-refine-body">
-    <div class="nexus-discovery-controls" role="group" aria-label="Refine discovery results">
-      <label>Genre <select id="nexusDiscoverGenre"><option value="all">All genres</option></select></label>
-      <label>Rating <select id="nexusDiscoverScore"><option value="0">Any rating</option><option value="7">7+</option><option value="8">8+</option><option value="9">9+</option></select></label>
-      <label>Release <select id="nexusDiscoverYear"><option value="all">Any year</option><option value="2020">2020 onward</option><option value="2010">2010 onward</option><option value="2000">2000 onward</option></select></label>
-      <label>Sort <select id="nexusDiscoverSort"><option value="default">Default order</option><option value="taste">Best for your taste</option><option value="rating">Highest rated</option><option value="newest">Newest</option><option value="title">Title A–Z</option></select></label>
-      <label id="n109DiscoverNetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n109DiscoverNetflixOnly" aria-describedby="n109DiscoverNetflixStatus"> <span data-n109-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
-      <label class="nexus-discovery-toggle"><input type="checkbox" id="nexusDiscoverHideDisliked" checked> Hide disliked</label>
-      <button type="button" id="nexusDiscoverReset" class="nexus-tool-btn">Reset filters</button>
-    </div>
-    <p id="n109DiscoverNetflixStatus" role="status" aria-live="polite" hidden class="n109-netflix-status"></p>
-    <div class="nexus-discovery-presets n14-visually-hidden" role="group" aria-label="Quick discovery filters">
-      <button type="button" data-nexus-preset="top" class="nexus-tool-btn">★ Top rated</button>
-      <button type="button" data-nexus-preset="recent" class="nexus-tool-btn">✦ Recent releases</button>
-      <button type="button" data-nexus-preset="fresh" class="nexus-tool-btn">♡ Fresh picks</button>
-    </div>
-      </div>
-    </details>
-    <div class="pool-grid" id="poolGrid">
-      <div class="empty-note">Start typing above to search.</div>
-    </div>
-    <div style="text-align:center; margin-top:8px;">
-      <button class="btn-ghost" id="loadMoreBtn" style="display:none;">Load more</button>
-    </div>
-    <div class="selected-strip" id="selectedStrip"></div>
-    <div class="cta-row">
-      <button class="btn-primary" id="findBtn" disabled>Find similar titles</button>
-      <button class="btn-ghost" id="surpriseBtn">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-        <span>Surprise me</span>
-      </button>
-      <label id="n116SurpriseNetflixWrap" hidden style="display:none;align-items:center;gap:8px;min-height:48px;cursor:pointer;flex-wrap:wrap;">
-        <input id="n116SurpriseNetflixOnly" type="checkbox" style="width:20px;height:20px;accent-color:var(--gold);">
-        <span>Netflix ไทยเท่านั้น · Surprise Me</span>
-      </label>
-      <span id="n116SurpriseNetflixStatus" role="status" aria-live="polite" aria-atomic="true" style="font-size:12px;max-width:100%;line-height:1.5;overflow-wrap:anywhere;"></span>
-      <button class="btn-ghost" id="clearBtn">Clear picks</button>
-      <span class="helper-text" id="capHint"></span>
-    </div>
-    <div class="year-filter-row" id="yearFilterWrap" style="margin-top:18px; max-width:340px;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;">
-        <span class="helper-text" style="color:var(--text-dim);">Only show titles from</span>
-        <span class="helper-text" id="yearFilterLabel" style="color:var(--gold); font-weight:600;">2015 onward</span>
-      </div>
-      <input type="range" id="yearFilterSlider" min="1990" max="2030" step="1" value="2015" class="year-slider">
-    </div>
-  </section>
-
-
-<section class="nexus-home" id="nexusForYou" aria-labelledby="nexusHomeTitle">
-  <div class="nexus-home-top"><div><div class="nexus-eyebrow">02 / YOUR COLLECTION</div><h2 id="nexusHomeTitle">Curated <em>for you.</em></h2><p id="nexusHomeIntro">Your next discovery starts with your taste.</p></div><button type="button" class="nexus-home-action" id="nexusStartDiscover">Explore now →</button></div>
-  <div class="nexus-home-metrics" id="nexusHomeMetrics" aria-live="polite"></div>
-  <div class="nexus-journey" aria-labelledby="nexusJourneyTitle">
-    <div class="nexus-journey-head"><div><div class="nexus-eyebrow">PICK UP WHERE YOU LEFT OFF</div><h3 id="nexusJourneyTitle">Continue your journey</h3></div><a href="#watchlistSection" class="nexus-journey-link" id="nexusJourneyAll">My List →</a></div>
-    <div id="nexusJourneyCards" class="nexus-journey-grid" aria-live="polite"></div>
-  </div>
-  <details class="nexus-home-more">
-    <summary>Explore your taste profile <span aria-hidden="true">↗</span></summary>
-  <div class="nexus-home-lower">
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">YOUR TASTE DNA</div><h3>Taste snapshot</h3><div id="nexusTasteSnapshot"></div></div>
-    <div class="nexus-home-panel"><div class="nexus-eyebrow">CURATED FROM YOUR SAVED TITLES</div><h3>Personal picks</h3><div id="nexusPersonalPicks"></div></div>
-  </div>
-  </details>
-  <div class="nexus-home-insight" id="nexusHomeInsight" role="status"></div><div id="nexusSyncStatus" class="nexus-home-insight" aria-live="polite">Preferences are stored on this device.</div>
-</section>
-
-  <section class="nexus-tools" id="nexusDataTools" aria-label="Taste profile backup tools">
-    <span class="nexus-tools-title">✦ Your taste, your data</span>
-    <button type="button" class="nexus-tool-btn" id="nexusExportBtn">↓ Export backup</button>
-    <button type="button" class="nexus-tool-btn" id="nexusReviewConflictBtn" style="display:none">Resolve sync conflict</button>
-    <button type="button" class="nexus-tool-btn" id="nexusRecoveryBtn" title="Download local and cloud copies captured before the last merge">↓ Sync recovery</button>
-    <button type="button" class="nexus-tool-btn" id="nexusImportBtn">↑ Restore backup</button>
-    <input type="file" id="nexusImportFile" accept="application/json,.json" hidden aria-label="Choose NEXUS backup file">
-    <span class="nexus-tools-note">Your backup stays on your device. Restore replaces local preferences; if signed in, your restored profile will also be synced to your account.</span><span id="nexusBackupStatus" class="nexus-backup-status" role="status" aria-live="polite"></span>
-  </section>
-
-  <section class="block" id="ratingsSection" style="display:none;">
-    <div class="block-head">
-      <h2>Your Luxury Vault</h2>
-      <span class="count" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;"><span id="ratingsCount"></span><button type="button" id="vaultWrappedBtn" class="filter-reset-btn" style="text-decoration:none;">⬇ Vault Wrapped</button><button type="button" id="vaultViewAllToggle" class="filter-reset-btn" style="text-decoration:none;">View all categories</button></span>
-    </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
-      <input type="text" id="vaultSearchBox" class="search-input" placeholder="Filter your vault by title..." aria-label="Filter your vault by title" autocomplete="off" style="flex:1; min-width:200px; margin-bottom:0;">
-      <select class="filter-select" id="vaultSortOrder">
-        <option value="default">Sort: Recently Added</option>
-        <option value="title">Sort: Title A-Z</option>
-        <option value="year-new">Sort: Newest First</option>
-        <option value="year-old">Sort: Oldest First</option>
-      </select>
-    </div>
-    
-    <div style="position:relative; background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 28px; overflow:hidden;">
-      <div style="position:absolute; top:0; left:0; right:0; height:1px; background: linear-gradient(90deg, transparent, rgba(223,184,119,0.5), transparent);"></div>
-      <h3 style="font-size:13px; color:var(--gold); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>Liked Profile</h3>
-      <div id="topTenContainer"></div>
-      <div id="likedGridsContainer"></div>
-
-      <hr style="border:none; border-top:1px solid var(--line); margin: 36px 0 28px;">
-
-      <h3 style="font-size:13px; color:var(--rose); margin:0 0 4px; text-transform:uppercase; letter-spacing:0.12em; font-weight:600; display:flex; align-items:center; gap:8px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><line x1="8" y1="8" x2="16" y2="16"></line></svg>Disliked / Banned Pool</h3>
-      <div id="dislikedGridsContainer"></div>
-    </div>
-  </section>
-
-  <section class="block" id="resultsSection" style="display:none;">
-    <div class="block-head">
-      <h2>Your reel</h2>
-      <span class="count" id="resultsCount"></span>
-    </div>
-    <div class="filter-row" id="filterRow" style="display:none;">
-      <label id="n108NetflixWrap" class="n108-netflix-wrap" hidden><input type="checkbox" id="n108NetflixOnly"> <span data-n108-netflix-label>Netflix ไทย (ซีรีส์ + ภาพยนตร์)</span></label>
-      <select class="filter-select" id="genreFilter"><option value="all">All genres</option></select>
-      <select class="filter-select" id="scoreFilter">
-        <option value="0">Any score</option>
-        <option value="7">★7+</option>
-        <option value="8">★8+</option>
-      </select>
-      <select class="filter-select" id="sortOrder">
-        <option value="match">Sort by: Match %</option>
-        <option value="score">Sort by: Top Rated</option>
-        <option value="year">Sort by: Newest</option>
-      </select>
-    </div>
-    <p id="n108NetflixStatus" role="status" aria-live="polite" hidden style="font-size:12px;color:var(--muted);margin:10px 0"></p>
-    <div id="progressWrap" aria-live="polite" aria-atomic="true" role="status"></div>
-    <div class="nexus-music-player-status" aria-label="Music preview player"><div id="nexusPreviewDiagnostics" class="nexus-preview-diagnostics" role="status" aria-live="polite">Music preview diagnostics will appear here when you press Play.</div><div id="nexusPreviewProgress" class="nexus-preview-progress" hidden aria-label="Music preview playback progress"><input id="nexusPreviewSeek" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek music preview" disabled><span>0:00 / —</span><label class="nexus-preview-volume-label" for="nexusPreviewVolume">Volume</label><input id="nexusPreviewVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Music preview volume"><button id="nexusPreviewMute" type="button" aria-pressed="false" aria-label="Mute music preview">🔊</button></div><button id="nexusPreviewHelp" type="button" class="nexus-tool-btn">Preview help</button><button id="nexusPreviewAudit" type="button" class="nexus-tool-btn" aria-label="Show music preview availability for last search">Preview availability</button></div>
-    <div class="filmstrip" id="filmstripWrap" style="display:none;">
-      <div class="results-grid" id="resultsGrid"></div>
-    </div>
-  </section>
-
   <section class="block" id="watchlistSection" style="display:none;">
     <div class="block-head">
-      <h2>My list</h2>
+      <h2>Watchlist</h2>
       <span class="count" id="watchlistCount"></span>
     </div>
     <section class="nexus-airing-dashboard" aria-label="Saved anime airing dashboard">
@@ -2200,6 +2233,8 @@ async function getLocalizedWatchProviders(id, type) {
   });
 }
 
+// NEXUS 17.1: TMDB-backed Netflix Thailand checks for all screen categories.
+function n171SupportsNetflix(category){return ['anime','movie','series','kdrama'].includes(category);}
 // NEXUS 10.8: Strict Netflix Thailand anime availability. A missing or ambiguous
 // match is UNKNOWN, not "not on Netflix". Never use AniList externalLinks as proof.
 const n108NetflixProviderId=8; // TMDB Netflix provider; only flatrate availability for TH counts.
@@ -2276,12 +2311,24 @@ async function n111FindStrictAnimeTv(item,names){
   return n113FindAnimeTmdb(item,names,'tv');
 }
 async function n111NetflixThailandStatus(item){
-  if(!item||item.provider!=='anime')return n111NetflixStates.UNKNOWN;
-  const key='v115:'+item.uid+':'+(item.animeFormat||'UNKNOWN')+':'+(item.year||'')+':'+n111NetflixCandidates(item).map(n110NormalizeName).join('|');
+  if(!item||!n171SupportsNetflix(item.provider))return n111NetflixStates.UNKNOWN;
+  const key='v171:'+item.uid+':'+(item.animeFormat||'UNKNOWN')+':'+(item.year||'')+':'+n111NetflixCandidates(item).map(n110NormalizeName).join('|');
   const old=n111NetflixStatusCache.get(key);
   if(old&&Date.now()-old.time<(old.unknown?n111NetflixUnknownTTL:n111NetflixCacheTTL))return old.promise;
   const promise=(async()=>{
     const names=n111NetflixCandidates(item);
+    if(item.provider!=='anime'){
+      const kind=item.provider==='movie'?'movie':'tv';
+      const id=Number(item.id);
+      if(!Number.isSafeInteger(id)||id<=0)return n111NetflixStates.UNKNOWN;
+      try{
+        const data=await queuedFetch(`${TMDB_BASE}/${kind}/${id}/watch/providers?api_key=${TMDB_KEY}`);
+        const th=data?.results?.TH;
+        if(!th)return n111NetflixStates.UNKNOWN;
+        return Array.isArray(th.flatrate)&&th.flatrate.some(p=>Number(p.provider_id)===n108NetflixProviderId)
+          ?n111NetflixStates.CONFIRMED:n111NetflixStates.NOT_LISTED;
+      }catch(_){return n111NetflixStates.UNKNOWN;}
+    }
     if(!item.animeFormat||!['MOVIE','TV','TV_SHORT','ONA','OVA','SPECIAL'].includes(item.animeFormat))return n111NetflixStates.UNKNOWN;
     const movie=item.animeFormat==='MOVIE';
     const kind=movie?'movie':'tv';
@@ -2322,20 +2369,20 @@ document.getElementById('n108NetflixOnly')?.addEventListener('change',()=>{
 function n108UpdateVisibility(){
   const wrap=document.getElementById('n108NetflixWrap');
   if(!wrap)return;
-  wrap.hidden=mode!=='anime';
-  if(mode!=='anime'&&n108NetflixCheckbox()){n108NetflixCheckbox().checked=false;++n108FilterVersion;const status=document.getElementById('n108NetflixStatus');if(status)status.hidden=true;}
+  wrap.hidden=!n171SupportsNetflix(mode);
+  if(!n171SupportsNetflix(mode)&&n108NetflixCheckbox()){n108NetflixCheckbox().checked=false;++n108FilterVersion;const status=document.getElementById('n108NetflixStatus');if(status)status.hidden=true;}
 }
 async function n108RefreshNetflixResults(){
   const version=++n108FilterVersion;
   n108UpdateVisibility();
   const check=n108NetflixCheckbox();
-  if(!check?.checked||mode!=='anime'){
+  if(!check?.checked||!n171SupportsNetflix(mode)){
     renderResults(applyFilters(lastRanked),lastTotalPicks);
     return;
   }
   const status=document.getElementById('n108NetflixStatus');
   if(status){status.hidden=false;status.textContent='กำลังตรวจสอบ Netflix ประเทศไทย…';}
-  const selected=lastRanked.filter(r=>r.item.provider==='anime');
+  const selected=lastRanked.filter(r=>r.item.provider===mode);
   if(!selected.length){renderResults([],lastTotalPicks);if(status)status.textContent=n111StatusText(0,0,0,0);return;}
   // Never leave unverified recommendations visible while Netflix verification runs.
   renderResults([],lastTotalPicks);
@@ -2345,9 +2392,9 @@ async function n108RefreshNetflixResults(){
   let completed=0;
   async function checkWorker(){while(next<selected.length){
     const i=next++;
-    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
     try{availability[i]=await n111NetflixThailandStatus(selected[i].item);}catch(_){availability[i]=n111NetflixStates.UNKNOWN;}
-    if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+    if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
     const checked=++completed;
     // Update visible matches incrementally, avoiding a render after every API request.
     if((checked%4===0||checked===selected.length)&&status){
@@ -2358,7 +2405,7 @@ async function n108RefreshNetflixResults(){
     }
   }}
   await Promise.all(Array.from({length:Math.min(4,selected.length)},()=>checkWorker()));
-  if(version!==n108FilterVersion||!check.checked||mode!=='anime')return;
+  if(version!==n108FilterVersion||!check.checked||!n171SupportsNetflix(mode))return;
   const eligible=selected.filter((_,i)=>availability[i]===n111NetflixStates.CONFIRMED);
   const notListed=availability.filter(x=>x===n111NetflixStates.NOT_LISTED).length;
   if(status){status.hidden=false;status.textContent=n111StatusText(selected.length,selected.length,eligible.length,notListed)+(window.nexusUILanguage==='th'?' · อ้างอิง TMDB ไม่ใช่ Netflix โดยตรง':' · TMDB data, not direct Netflix verification');}
@@ -2713,7 +2760,7 @@ async function computeRecommendations(){
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
       }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
-    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&mode==="anime") await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
+    setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&n171SupportsNetflix(mode)) await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
   } catch(e) { setProgress(""); resultsGrid.innerHTML = `<div class="error-note">Processing failed. Click primary action to retry.</div>`; }
 }
 
@@ -3842,7 +3889,7 @@ function nexusRestoreDiscovery(state){
   document.getElementById("nexusDiscoverYear").value=state?.year || "all";
   document.getElementById("nexusDiscoverSort").value=state?.sort || "default";
   document.getElementById("nexusDiscoverHideDisliked").checked=state?.hide ?? true;
-  document.getElementById("n109DiscoverNetflixOnly").checked=mode==="anime"&&!!state?.netflix;
+  document.getElementById("n109DiscoverNetflixOnly").checked=n171SupportsNetflix(mode)&&!!state?.netflix;
   nexusRefreshSearchClear();
 }
 function executeModeChange(newMode) {
@@ -3866,6 +3913,17 @@ function executeModeChange(newMode) {
   else if (mode === "music") ph = "tracks or songs";
   searchBox.placeholder = `Search ${ph}...`; 
   nexusRestoreDiscovery(nexusDiscoveryByMode.get(mode));
+  ++n108FilterVersion;
+  const netflixEnabled=n109NetflixOnly();
+  n116SurpriseNetflixBox.checked=netflixEnabled;
+  n108NetflixCheckbox().checked=netflixEnabled;
+  n116SurpriseNetflixStatus.textContent='';
+  n116SyncSurpriseNetflix();
+  n109SyncDiscoverControl();
+  n108UpdateVisibility();
+  const moreCategories=document.querySelector('.n171-more-categories');
+  if(moreCategories&&['manga','music'].includes(mode))moreCategories.open=true;
+  renderSelectedStrip();
   hideSuggestions();
   stopPreview(); 
   // The year-cutoff filter only applies to movie/series/anime/etc metadata
@@ -4117,12 +4175,12 @@ let nexusDiscoverPopular = true;
 // NEXUS 10.9: Discovery Netflix-TH filter. No unverified titles pass through.
 let n109AcceptedIds=new Set();
 let n109CheckVersion=0;
-const n109NetflixOnly=()=>mode==='anime'&&!!document.getElementById('n109DiscoverNetflixOnly')?.checked;
+const n109NetflixOnly=()=>n171SupportsNetflix(mode)&&!!document.getElementById('n109DiscoverNetflixOnly')?.checked;
 function n109SyncDiscoverControl(){
   const wrap=document.getElementById('n109DiscoverNetflixWrap');
   const status=document.getElementById('n109DiscoverNetflixStatus');
-  if(wrap)wrap.hidden=mode!=='anime';
-  if(status&&mode!=='anime')status.hidden=true;
+  if(wrap)wrap.hidden=!n171SupportsNetflix(mode);
+  if(status&&!n171SupportsNetflix(mode))status.hidden=true;
 }
 function n109StartDiscoveryCheck(){
   const version=++n109CheckVersion;
@@ -4134,7 +4192,7 @@ function n109StartDiscoveryCheck(){
     nexusReapplyDiscovery();
     return;
   }
-  const candidates=nexusDiscoverRawItems.filter(i=>i?.provider==='anime');
+  const candidates=nexusDiscoverRawItems.filter(i=>i?.provider===mode);
   if(status){status.hidden=false;status.textContent=(window.nexusUILanguage==='th'?'กำลังตรวจสอบ Netflix ประเทศไทย…':'Checking Netflix availability in Thailand…');}
   nexusReapplyDiscovery(); // immediately hide all unverified titles
   (async()=>{
@@ -4355,7 +4413,9 @@ function renderSearchResults(items, isPopular, isLoadMore = false, isSurprise = 
     const note = document.createElement("div"); note.className = "empty-note nexus-discovery-empty";
     const msg = document.createElement("p");
     const filteredOut = nexusDiscoverRawItems.length > 0;
-    msg.textContent = filteredOut
+    msg.textContent = n109NetflixOnly()
+      ? "Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter."
+      : filteredOut
       ? "No titles match your current filters. Reset them to see all loaded results."
       : searchBox.value.trim()
         ? "No matches found. Try a shorter title, or browse popular picks."
@@ -4459,8 +4519,27 @@ function renderSelectedStrip(){
     chip.querySelector(".star-btn").addEventListener("click", (e) => { e.stopPropagation(); toggleMasterpiece(item); });
     chip.querySelector(".close-btn").addEventListener("click", () => toggleSelect(item)); selectedStrip.appendChild(chip);
   });
-  findBtn.disabled = selected.size === 0;
+  findBtn.disabled = ![...selected.values()].some(item=>item.provider===mode);
+  n171UpdateGuide();
 }
+
+function n171UpdateGuide(){
+  const text=document.getElementById('n171GuideText');
+  if(!text)return;
+  const count=[...selected.values()].filter(item=>item.provider===mode).length;
+  text.textContent=window.nexusUILanguage==='th'
+    ?`เลือกเรื่องที่ชอบในหมวดนี้ 1–3 เรื่อง แล้วกดค้นหาเรื่องคล้ายกัน · เลือกแล้ว ${count} เรื่อง`
+    :`Choose 1–3 favorites in this category, then find similar titles · ${count} selected`;
+  document.getElementById('n171GuideFind').disabled=count===0;
+}
+document.getElementById('n171Similar').addEventListener('click',()=>{
+  document.getElementById('n171Guide').hidden=false;n171UpdateGuide();
+  document.getElementById('searchSection').scrollIntoView({behavior:'smooth',block:'start'});
+  searchBox.focus({preventScroll:true});
+});
+document.getElementById('n171GuideClose').addEventListener('click',()=>{document.getElementById('n171Guide').hidden=true;});
+document.getElementById('n171GuideFind').addEventListener('click',()=>findBtn.click());
+window.addEventListener('nexus:languagechange',n171UpdateGuide);
 
 function toggleMasterpiece(item) { if (selected.has(item.uid)) { selected.get(item.uid).isMasterpiece = !selected.get(item.uid).isMasterpiece; renderSelectedStrip(); saveState(); renderAnalytics(); resultsSection.style.display = "none"; } }
 
@@ -4482,7 +4561,7 @@ clearBtn.addEventListener("click", ()=>{ selected.clear(); document.querySelecto
 // Existing per-surface change handlers remain responsible for re-rendering.
 let n14NetflixSyncing=false;
 function n14SyncNetflixPreference(event){
-  if(n14NetflixSyncing||mode!=='anime')return;
+  if(n14NetflixSyncing||!n171SupportsNetflix(mode))return;
   const ids=['n109DiscoverNetflixOnly','n108NetflixOnly','n116SurpriseNetflixOnly'];
   if(!ids.includes(event.target?.id))return;
   n14NetflixSyncing=true;
@@ -4503,12 +4582,12 @@ const n116SurpriseNetflixBox=document.getElementById('n116SurpriseNetflixOnly');
 const n116SurpriseNetflixWrap=document.getElementById('n116SurpriseNetflixWrap');
 const n116SurpriseNetflixStatus=document.getElementById('n116SurpriseNetflixStatus');
 function n116SyncSurpriseNetflix(){
-  const anime=mode==='anime';
+  const anime=n171SupportsNetflix(mode);
   n116SurpriseNetflixWrap.hidden=!anime;
   n116SurpriseNetflixWrap.style.display=anime?'inline-flex':'none';
   if(!anime)n116SurpriseNetflixStatus.textContent='';
 }
-function n116SurpriseNetflixEnabled(requestedMode){return requestedMode==='anime'&&n116SurpriseNetflixBox.checked;}
+function n116SurpriseNetflixEnabled(requestedMode){return n171SupportsNetflix(requestedMode)&&n116SurpriseNetflixBox.checked;}
 // Check one bounded batch at a time; process all results before choosing
 // nine so timing of TMDB responses does not bias which titles get picked.
 async function n116FilterSurpriseNetflix(scored,requestVersion,requestedMode,progress){
@@ -4549,12 +4628,16 @@ function restoreSurpriseButton(){
   surpriseBtn.removeAttribute("aria-busy");
   surpriseBtn.innerHTML = SURPRISE_BUTTON_IDLE_HTML;
   surpriseBtn.removeAttribute("aria-label");
+  const quickButton=document.getElementById('n171Tonight');
+  quickButton.disabled=false;quickButton.removeAttribute('aria-busy');
 }
 
 n116SurpriseNetflixBox.addEventListener('change',()=>{++surpriseRequestVersion;n116SurpriseNetflixStatus.textContent='';restoreSurpriseButton();});
-document.addEventListener('click',event=>{if(event.target.closest?.('[data-mode], .nav-item, .n102-nav-item, .mode-tab'))queueMicrotask(n116SyncSurpriseNetflix);});
+
 n116SyncSurpriseNetflix();
-surpriseBtn.addEventListener("click", async ()=>{
+surpriseBtn.addEventListener("click",()=>n171RunSurprise(SURPRISE_PICK_COUNT));
+document.getElementById('n171Tonight').addEventListener('click',()=>n171RunSurprise(3));
+async function n171RunSurprise(pickCount=SURPRISE_PICK_COUNT){
   if (surpriseBtn.disabled) return;
   surpriseBtn.disabled = true;
   surpriseBtn.setAttribute("aria-busy", "true");
@@ -4567,7 +4650,9 @@ surpriseBtn.addEventListener("click", async ()=>{
   document.getElementById("nexusDiscoverYear").value = "all";
   document.getElementById("nexusDiscoverSort").value = "default";
   document.getElementById("nexusDiscoverHideDisliked").checked = true;
-  const pickCount = SURPRISE_PICK_COUNT;
+  const quickButton=document.getElementById('n171Tonight');
+  quickButton.disabled=true;quickButton.setAttribute('aria-busy','true');
+  document.getElementById('searchSection').scrollIntoView({behavior:'smooth',block:'start'});
   const requestedMode = mode;
   const netflixSurprise=n116SurpriseNetflixEnabled(requestedMode);
   n116SurpriseNetflixStatus.textContent=netflixSurprise?"กำลังตรวจสอบ Netflix ประเทศไทย…":"";
@@ -4589,7 +4674,7 @@ surpriseBtn.addEventListener("click", async ()=>{
       const requestIsCurrent=()=>requestVersion===surpriseRequestVersion&&requestedMode===mode&&n116SurpriseNetflixEnabled(requestedMode);
       let verified=await n116FilterSurpriseNetflix(scored,requestVersion,requestedMode);
       if(!requestIsCurrent())return;
-      if(verified.length<pickCount){
+      if(requestedMode==='anime'&&verified.length<pickCount){
         const alreadyScored=new Set(scored.map(s=>s.item.uid));
         await n12ExpandAnimeSurprisePool(pool,new Set(),requestIsCurrent,async(items,batchNumber)=>{
           if(!requestIsCurrent()||verified.length>=pickCount)return;
@@ -4602,8 +4687,8 @@ surpriseBtn.addEventListener("click", async ()=>{
             verified=[...new Map([...verified,...checked].map(s=>[s.item.uid,s])).values()];
           }
           n116SurpriseNetflixStatus.textContent=(window.nexusUILanguage==='th'
-            ?`กำลังค้นหาเพิ่มเติม ชุด ${batchNumber} · ยืนยันแล้ว ${verified.length}/9 เรื่อง`
-            :`Searching more anime, batch ${batchNumber} · ${verified.length}/9 verified`);
+            ?`กำลังค้นหาเพิ่มเติม ชุด ${batchNumber} · ยืนยันแล้ว ${verified.length}/${pickCount} เรื่อง`
+            :`Searching more anime, batch ${batchNumber} · ${verified.length}/${pickCount} verified`);
           return verified.length<pickCount;
         });
         if(!requestIsCurrent())return;
@@ -4627,7 +4712,7 @@ surpriseBtn.addEventListener("click", async ()=>{
     }
     surpriseRecentByMode.set(requestedMode, [...recent, ...picked.map(s => s.item.uid)].slice(-Math.max(SURPRISE_RECENT_LIMIT, pickCount * 2)));
     if (!picked.length) {
-      if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ไม่พบอนิเมะที่ยืนยัน Netflix ไทยได้จากข้อมูล TMDB ที่ตรวจสอบ':'No Netflix Thailand anime verified in the checked TMDB data';
+      if(netflixSurprise)n116SurpriseNetflixStatus.textContent=window.nexusUILanguage==='th'?'ยังยืนยันรายการ Netflix ไทยไม่ได้จากข้อมูลที่ตรวจ ไม่ได้หมายความว่าไม่มีให้ดู':'No titles verified in the checked TMDB data. This does not mean they are unavailable.';
       poolGrid.innerHTML = '<div class="error-note" role="status">No matching surprise picks right now. Try another category or adjust your filters.</div>';
       poolCount.textContent = "0 surprise picks";
       poolCount.setAttribute("role", "status");
@@ -4644,8 +4729,8 @@ surpriseBtn.addEventListener("click", async ()=>{
     indexItems(picked.map(s => s.item));
     poolCount.textContent = `${picked.length} surprise picks`;
     if(netflixSurprise)n116SurpriseNetflixStatus.textContent=picked.length===pickCount
-      ?(window.nexusUILanguage==='th'?'Netflix ไทย: พบครบ 9 เรื่องจากข้อมูล TMDB':'Netflix TH: 9/9 verified in TMDB')
-      :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/9 เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/9 verified; no unverified filler`);
+      ?(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยัน ${picked.length}/${pickCount} เรื่องผ่าน TMDB · ควรตรวจอีกครั้งก่อนดู`:`Netflix TH: ${picked.length}/${pickCount} checked via TMDB · Availability can change`)
+      :(window.nexusUILanguage==='th'?`Netflix ไทย: ยืนยันได้ ${picked.length}/${pickCount} เรื่อง (ไม่เติมเรื่องที่ยังยืนยันไม่ได้)`:`Netflix TH: ${picked.length}/${pickCount} verified; no unverified filler`);
     poolCount.setAttribute("role", "status");
     poolCount.setAttribute("aria-live", "polite");
   }catch(e){
@@ -4663,7 +4748,7 @@ surpriseBtn.addEventListener("click", async ()=>{
     restoreSurpriseButton();
     }
   }
-});
+}
 
 // The slider's upper bound used to be hardcoded (2026, in 3 separate places:
 // the HTML max attribute, this percentage calc, and loadYearFilterPref's
@@ -4716,7 +4801,7 @@ function renderResults(ranked, totalPicks){
     // nothing here" — previously both cases just left a blank grid with a
     // "0 matches" count and no way to tell which one happened or how to
     // recover, indistinguishable from something being broken.
-    const filtersActive = activeGenre !== "all" || activeMinScore > 0 || (mode==="anime"&&!!n108NetflixCheckbox()?.checked);
+    const filtersActive = activeGenre !== "all" || activeMinScore > 0 || (n171SupportsNetflix(mode)&&!!n108NetflixCheckbox()?.checked);
     resultsGrid.innerHTML = filtersActive
       ? `<div class="empty-note">No matches with the current filters. <button type="button" class="filter-reset-btn" id="resetFiltersBtn">Reset filters</button></div>`
       : `<div class="empty-note">No matches found.</div>`;
@@ -7835,8 +7920,27 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
   'use strict';
   const STORAGE_KEY='nexus-ui-language-v1';
   const th={
+    'Saved on this device':'บันทึกบนเครื่องนี้',
+    'What should you watch tonight? Start with three picks.':'คืนนี้ดูอะไรดี? เริ่มจาก 3 เรื่องที่เลือกให้คุณ',
+    'Start discovering':'เริ่มค้นหาเรื่องที่อยากดู',
+    'Pick 3 for me':'เลือกให้ 3 เรื่อง',
+    'Three choices, with reasons. No account needed.':'3 ตัวเลือก พร้อมเหตุผล เริ่มได้โดยไม่ต้องสมัคร',
+    'More like my favorites':'หาเรื่องคล้ายที่ชอบ',
+    'Choose up to three favorites to get started.':'เริ่มจากเลือกเรื่องโปรดสัก 3 เรื่อง',
+    'Choose from my Watchlist':'เลือกจากรายการที่บันทึก',
+    'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
+    'More categories':'หมวดอื่น ๆ',
+    'Close guide':'ปิดคำแนะนำ',
+    'Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter.':'แสดงเฉพาะเรื่องที่ TMDB ยืนยัน Netflix ไทย ตรวจสถานะการตรวจสอบหรือปิดตัวกรอง Netflix เพื่อดูเรื่องอื่น',
+    'My taste':'รสนิยมของฉัน',
+    'Your recommendations':'เรื่องที่แนะนำสำหรับคุณ',
+    'Watchlist →':'รายการที่บันทึก →',
+    'Netflix TH · TMDB':'Netflix ไทย · ข้อมูล TMDB',
+    'Netflix TH only · checked via TMDB':'เฉพาะ Netflix ไทย · ตรวจผ่าน TMDB',
+    'Explore something new':'ลองค้นพบเรื่องใหม่',
+
     'EXPLORE':'สำรวจ','YOUR SPACE':'พื้นที่ของคุณ','Home':'หน้าแรก','Movies':'ภาพยนตร์','TV Series':'ซีรีส์','Anime':'อนิเมะ','K-Dramas':'ซีรีส์เกาหลี','Manga':'มังงะ','Music':'เพลง','My Vault':'คลังของฉัน','Watchlist':'รายการที่บันทึก','Taste insights':'วิเคราะห์รสนิยม','Discover something new.':'ค้นพบสิ่งใหม่ที่คุณชอบ','Menu':'เมนู',
-    'Language':'ภาษา','Sign in with Google':'เข้าสู่ระบบด้วย Google','Running in Local Mode (Offline)':'โหมดออฟไลน์ (เฉพาะเครื่อง)','PREPARING TASTE PROFILE':'กำลังเตรียมข้อมูลรสนิยม',
+    'Language':'ภาษา','Sign in with Google':'เข้าสู่ระบบด้วย Google','Saved on this device':'บันทึกบนเครื่องนี้','PREPARING TASTE PROFILE':'กำลังเตรียมข้อมูลรสนิยม',
     'YOUR PERSONAL DISCOVERY SPACE':'พื้นที่ค้นพบความบันเทิงสำหรับคุณ','A universe of stories. Curated by your curiosity.':'โลกแห่งเรื่องราวที่คัดสรรจากความสนใจของคุณ','EXPLORE THE UNEXPECTED':'เปิดประสบการณ์ใหม่','Discover':'ค้นพบ','Backup & restore':'สำรองและกู้คืนข้อมูล',
     'Your space':'พื้นที่ของคุณ','Curated for your taste':'คัดสรรตามรสนิยม','Continue exploring':'ติดตามต่อ','View list ↗':'ดูรายการ ↗','Save titles to your Watchlist to see them here.':'บันทึกเรื่องที่สนใจไว้ในรายการ แล้วจะเห็นที่นี่','Quick access':'ทางลัด','For you':'สำหรับคุณ','Liked & disliked':'ถูกใจและไม่ถูกใจ','Taste profile':'โปรไฟล์รสนิยม','Your picks, not a streaming service. Discover, save and keep track.':'ค้นหา บันทึก และติดตามความบันเทิงที่คุณสนใจ',
     'Your Taste Insights':'วิเคราะห์รสนิยมของคุณ','Show details':'แสดงรายละเอียด','Hide details':'ซ่อนรายละเอียด','⬇ Download Wrapped Card':'⬇ ดาวน์โหลดการ์ดสรุป','✦ View Taste Map':'✦ ดูแผนที่รสนิยม','🎬 Pair two favorites':'🎬 จับคู่เรื่องโปรด','Top Genres / Artists':'แนวเรื่อง / ศิลปินยอดนิยม','Mood / Vibe':'อารมณ์ / บรรยากาศ','Core Tropes & Archetypes':'รูปแบบเรื่องที่ชอบ','Genres You Avoid':'แนวเรื่องที่ไม่ชอบ','Top Cast & Crew':'นักแสดงและทีมงานที่ชอบ','Favorite Eras':'ยุคที่ชอบ','Match Signal Weights':'น้ำหนักการจับคู่',
@@ -7938,6 +8042,9 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     if(!text)return text;
     const exact=Object.prototype.hasOwnProperty.call(th,text)?th[text]:null;if(exact)return exact;
     const trimmed=text.trim();if(th[trimmed])return text.replace(trimmed,th[trimmed]);
+    if(trimmed.startsWith('Because you like '))return text.replace(trimmed,'เพราะคุณชอบ '+trimmed.slice(17));
+    const surpriseCount=/^(\d+) surprise picks$/.exec(trimmed);
+    if(surpriseCount)return `${surpriseCount[1]} เรื่องที่เลือกให้คุณ`;
     const count=/^(\\d+) titles?$/.exec(trimmed);
     if(count)return text.replace(trimmed,`${count[1]} เรื่อง`);
     const match=/^Search (anime|movies|series|kdramas|manga|music)\\.\\.\\.$/i.exec(trimmed);
