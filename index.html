@@ -787,7 +787,7 @@ function renderNexusPersonalDashboard(liked, queued, genres){
   };
   if(!progressing.length){
     const empty=document.createElement("p");empty.className="nexus-personal-empty";
-    empty.textContent="Nothing in progress yet. Mark a saved title as In Progress in My List to see it here.";
+    empty.textContent="Nothing in progress yet. Mark a saved title as In Progress in Watchlist to see it here.";
     journey.append(empty);
   }else progressing.forEach(item=>{
     const card=createTitle(item, String(item.provider||"Title").toUpperCase()+" · In progress", "nexus-journey-card");
@@ -815,7 +815,7 @@ function renderNexusPersonalDashboard(liked, queued, genres){
     .sort((a,b)=>b.match.score-a.match.score).slice(0,3);
   if(!candidates.length){
     const note=document.createElement("p");note.className="nexus-personal-empty";
-    note.textContent="Save titles to My List to see personalized picks here.";picks.append(note);
+    note.textContent="Save titles to Watchlist to see personalized picks here.";picks.append(note);
   }else candidates.forEach(({item,match})=>{
     const reason=match.score>0?match.reason:"Saved for later · Ready when you are";
     picks.append(createTitle(item,reason,"nexus-personal-pick"));
@@ -1371,6 +1371,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 .n171-guide{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:16px;margin:0 0 16px;border:1px solid rgba(223,184,119,.3);border-radius:12px;background:rgba(223,184,119,.05)}
 .n171-guide[hidden]{display:none}.n171-guide p{flex:1 1 260px;margin:0;font-size:13px;line-height:1.7}
 .n171-data-tools{margin:20px 0;color:var(--text-dim)}.n171-data-tools>summary{font-size:13px;cursor:pointer;padding:14px 0}
+#watchlistSection.n171-list-empty .nexus-airing-dashboard,#watchlistSection.n171-list-empty .nexus-list-overview,#watchlistSection.n171-list-empty .nexus-manga-dashboard,#watchlistSection.n171-list-empty .nexus-vault-controls,#watchlistSection.n171-list-empty #nexusVaultEmptyReset,#watchlistSection.n171-list-empty #nexusVaultFilterStatus{display:none!important}
 #n116SurpriseNetflixWrap[hidden]{display:none!important}
 @media(max-width:650px){.n171-start{grid-template-columns:1fr;gap:8px;margin:20px 0}.n171-start-card{padding:14px;gap:5px}.n171-start-card>span{display:none}.n171-start-card strong{font-size:14px}.n171-start-card small{font-size:12px}.n171-more-categories summary{min-height:44px;box-sizing:border-box}.n171-more-categories>div{justify-content:center}}
 @media(prefers-reduced-motion:reduce){.n171-start-card{transition:none}.n171-start-card:hover{transform:none}}
@@ -1716,7 +1717,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
       <div class="nexus-airing-dashboard-status" id="nexusAiringStatus" role="status" aria-live="polite">Select “Check airings” to see the next broadcasts.</div>
       <div id="nexusAiringCards" class="nexus-airing-dashboard-grid"></div>
     </section>
-    <div class="nexus-list-overview" id="nexusListOverview" aria-label="My List progress"></div>
+    <div class="nexus-list-overview" id="nexusListOverview" aria-label="Watchlist progress"></div>
     <div id="nexusMangaDashboard" class="nexus-manga-dashboard" aria-live="polite"></div>
     <div class="nexus-vault-controls" role="search" aria-label="Filter saved titles">
       <input id="nexusVaultSearch" type="search" placeholder="Find a saved title or artist…" aria-label="Search saved titles" autocomplete="off">
@@ -1733,6 +1734,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
     <div id="nexusVaultEmpty" class="nexus-vault-empty" hidden>
       <p id="nexusVaultEmptyText">No saved titles match your filters.</p>
       <button type="button" id="nexusVaultEmptyReset" class="nexus-tool-btn">Reset filters</button>
+      <a href="#searchSection" id="n171WatchlistDiscover" class="nexus-tool-btn">Discover your first title →</a>
     </div>
     <p id="nexusVaultFilterStatus" class="nexus-vault-empty" role="status" aria-live="polite"></p>
     <div class="results-grid" id="watchlistGrid"></div>
@@ -7344,7 +7346,11 @@ document.getElementById("nexusAiringWindow")?.addEventListener("change",()=>{nex
 function renderWatchlist(){
   nexusPurgeOrphanProgress();
   indexItems([...watchlist.values()]);
-  watchlistCount.textContent = watchlist.size ? `${watchlist.size} title${watchlist.size===1?'':'s'}` : ""; watchlistSection.style.display = watchlist.size ? "block" : "none"; watchlistGrid.innerHTML = "";
+  watchlistCount.textContent = watchlist.size ? `${watchlist.size} title${watchlist.size===1?'':'s'}` : "";
+  watchlistSection.style.display = "block";
+  watchlistSection.classList.toggle('n171-list-empty',watchlist.size===0);
+  document.getElementById('n171WatchlistDiscover').hidden=watchlist.size!==0;
+  watchlistGrid.innerHTML = "";
   const vaultQuery = (document.getElementById("nexusVaultSearch")?.value || "").trim().toLocaleLowerCase();
   const vaultCategory = document.getElementById("nexusVaultCategory")?.value || "all";
   const vaultSort = document.getElementById("nexusVaultSort")?.value || "title";
@@ -7931,6 +7937,7 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'Turn something saved into something watched.':'หยิบเรื่องที่เก็บไว้มาเริ่มดู',
     'More categories':'หมวดอื่น ๆ',
     'Close guide':'ปิดคำแนะนำ',
+    'Discover your first title →':'ค้นหาเรื่องแรกที่อยากดู →',
     'Only Netflix Thailand titles confirmed by TMDB appear here. Check the verification status or turn off the Netflix filter.':'แสดงเฉพาะเรื่องที่ TMDB ยืนยัน Netflix ไทย ตรวจสถานะการตรวจสอบหรือปิดตัวกรอง Netflix เพื่อดูเรื่องอื่น',
     'My taste':'รสนิยมของฉัน',
     'Your recommendations':'เรื่องที่แนะนำสำหรับคุณ',
