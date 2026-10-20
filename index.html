@@ -5480,7 +5480,16 @@ async function openDetailModal(uid, onBack){
   if(["series","kdrama"].includes(item.provider)&&Number.isSafeInteger(extras.tmdb?.episodes)&&extras.tmdb.episodes>0){item.episodes=extras.tmdb.episodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
   if(item.provider === "manga" && Number.isSafeInteger(extras.manga?.chapters) && extras.manga.chapters>0){item.chapters=extras.manga.chapters;const saved=watchlist.get(item.uid);if(saved)saved.chapters=item.chapters;}
   const animeEpisodes=n172AnimeEpisodes(item,extras);
-  if(item.provider === "anime" && animeEpisodes){item.episodes=animeEpisodes;const saved=watchlist.get(item.uid);if(saved)saved.episodes=item.episodes;}
+  if(item.provider === "anime" && animeEpisodes){
+    item.episodes=animeEpisodes;
+    const saved=watchlist.get(item.uid);
+    if(saved&&saved.episodes!==animeEpisodes){
+      saved.episodes=animeEpisodes;
+      // Cache confirmed title metadata locally; opening details does not write a cloud profile.
+      idbSet('rm-watchlist',[...watchlist.values()]).catch(()=>{});
+      renderWatchlist();
+    }
+  }
   const backBtnHtml = onBack ? `<button type="button" class="detail-back-btn" id="detailBackBtn">← Back to Taste Map</button>` : "";
   detailModalBody.innerHTML = backBtnHtml + buildDetailModalHtml(item, extras);
   nexusWireQuickSelect(item);
