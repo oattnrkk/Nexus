@@ -84,5 +84,18 @@ c.raw=raw;
  c.queuedFetch=async()=>{queries.push(1);return {data:null,errors:[{message:'Invalid field'}]}};
  let gql=false;try{await c.anilistQuery('invalid',{})}catch{gql=true}
  check('GraphQL errors never become a successful empty catalog',gql&&queries.length===1);
+ // Hold real recommendation work at an await, then switch categories or supersede it.
+ let releaseSeed;const progress=[];
+ Object.assign(c,{mode:'anime',selected:new Map([[tv.uid,tv]]),votedLikes:new Map(),votedDislikes:new Map(),watchlist:new Map(),
+   findBtn:{disabled:false,setAttribute(k,v){this[k]=v},removeAttribute(k){delete this[k]}},
+   filterRow:{style:{}},renderSkeletons(){},setProgress:text=>progress.push(text),n171UpdateGuide(){},
+   ensureTags:()=>new Promise(resolve=>releaseSeed=resolve),ensureCollaborators:async()=>{},});
+ run('let n172RecommendationVersion=0;');run(fn('computeRecommendations'));
+ const stale=c.computeRecommendations();c.mode='movie';releaseSeed();await stale;
+ check('Recommendation mode change stops stale progress writes',progress.length===1);
+ c.mode='anime';const old=c.computeRecommendations(),releaseOld=releaseSeed;
+ const latest=c.computeRecommendations(),releaseNew=releaseSeed;releaseOld();await old;
+ check('Older recommendation request cannot unlock the newest request',c.findBtn.disabled&&c.findBtn['aria-busy']==='true');
+ c.mode='movie';releaseNew();await latest;
  console.log('TOTAL',passed.length);
 })().catch(e=>{console.error(e);process.exitCode=1});
