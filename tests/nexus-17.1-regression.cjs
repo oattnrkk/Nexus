@@ -5,7 +5,7 @@ function test(name,condition){assert(condition,name);passed.push(name);console.l
 function fn(name){const match=new RegExp(`^(?:async )?function ${name}\\([^]*?^}`, 'm').exec(html);assert(match,`Missing ${name}`);return match[0]}
 function element(){return {hidden:false,checked:false,disabled:false,style:{},textContent:'',innerHTML:'',value:'',setAttribute(k,v){this[k]=v},removeAttribute(k){delete this[k]},addEventListener(){},scrollIntoView(){}}}
 const ids={};const el=id=>ids[id]||(ids[id]=element());
-const sandbox={TMDB_BASE:"https://api.themoviedb.org/3",TMDB_KEY:"test",console,Date,Map,Set,Number,Math,Promise,Array,JSON,String,Error,window:{nexusUILanguage:'en',addEventListener(){}},document:{getElementById:el,addEventListener(){}},votedDislikes:new Map(),mode:'movie'};
+const sandbox={n172IsTmdbAnime:()=>false,n172TmdbAnimeKind:()=> 'tv',TMDB_BASE:"https://api.themoviedb.org/3",TMDB_KEY:"test",console,Date,Map,Set,Number,Math,Promise,Array,JSON,String,Error,window:{nexusUILanguage:'en',addEventListener(){}},document:{getElementById:el,addEventListener(){}},votedDislikes:new Map(),mode:'movie'};
 vm.createContext(sandbox);
 const run=s=>vm.runInContext(s,sandbox);
 let syntax=0;
