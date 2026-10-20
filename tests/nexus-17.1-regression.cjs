@@ -5,7 +5,7 @@ function test(name,condition){assert(condition,name);passed.push(name);console.l
 function fn(name){const match=new RegExp(`^(?:async )?function ${name}\\([^]*?^}`, 'm').exec(html);assert(match,`Missing ${name}`);return match[0]}
 function element(){return {hidden:false,checked:false,disabled:false,style:{},textContent:'',innerHTML:'',value:'',setAttribute(k,v){this[k]=v},removeAttribute(k){delete this[k]},addEventListener(){},scrollIntoView(){}}}
 const ids={};const el=id=>ids[id]||(ids[id]=element());
-const sandbox={n172IsTmdbAnime:()=>false,n172TmdbAnimeKind:()=> 'tv',TMDB_BASE:"https://api.themoviedb.org/3",TMDB_KEY:"test",console,Date,Map,Set,Number,Math,Promise,Array,JSON,String,Error,window:{nexusUILanguage:'en',addEventListener(){}},document:{getElementById:el,addEventListener(){}},votedDislikes:new Map(),mode:'movie'};
+const sandbox={n172IsTmdbAnime:()=>false,n172TmdbAnimeKind:()=> 'tv',TMDB_BASE:"https://api.themoviedb.org/3",TMDB_KEY:"test",console,Date,Map,Set,Number,Math,Promise,Array,JSON,String,Error,window:{nexusUILanguage:'en',addEventListener(){}},document:{getElementById:el,addEventListener(){}},votedDislikes:new Map(),votedLikes:new Map(),selected:new Map(),watchlist:new Map(),nexusGetListStatus:()=> 'planned',n173KnownCheckbox:el('n173IncludeKnown'),mode:'movie'};
 vm.createContext(sandbox);
 const run=s=>vm.runInContext(s,sandbox);
 let syntax=0;
@@ -62,6 +62,7 @@ sandbox.queuedFetch=async url=>{calls.push(url);if(url.includes('/12/'))return {
     renderSearchResults:items=>sandbox.rendered=items,indexItems(){},
     mode:'movie',netflixEnabled:false,testPool:Array.from({length:16},(_,i)=>({uid:'movie:'+i,provider:'movie',title:'Film '+i,verified:i<2,reject:i===15})),
   });
+  run(html.slice(html.indexOf('function n173SameTitle'),html.indexOf('function n172IsTmdbAnime')));
   run(fn('n171RunSurprise'));
   await run('n171RunSurprise(3)');
   test('Quick picks return three titles',sandbox.rendered.length===3);
