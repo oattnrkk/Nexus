@@ -31,7 +31,7 @@ check('Specific theme is explained',explanation.includes('Shared themes')&&expla
 check('Generic animation overlap is omitted',!explanation.includes('Shared genres'));
 check('Catalog-only explanation does not invent overlap',c.whyText({}).includes('Related title from the source catalog'));
 const button={dataset:{uid:b.uid},setAttribute(k,v){this[k]=v}};buttons.push(button);c.titleIndex.set(b.uid,b);
-c.n173SyncSaveButtons();check('Unsaved result exposes save action',button.textContent==='Save for later'&&button['aria-pressed']==='false');
+c.n173SyncSaveButtons();check('Unsaved result exposes save action',button.textContent==='Save'&&button['aria-pressed']==='false');
 c.watchlist.set(b.uid,b);c.n173SyncSaveButtons();check('Saved result exposes removal action',button.textContent==='Saved'&&button['aria-pressed']==='true'&&button['aria-label'].startsWith('Remove '));
 c.votedDislikes.set(a.uid,a);c.n173SyncSaveButtons();check('Existing save can still be removed after cross-source dislike',!button.disabled);
 c.watchlist.delete(b.uid);c.n173SyncSaveButtons();check('Cross-source dislike disables new save',button.disabled);
