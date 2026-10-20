@@ -1361,7 +1361,7 @@ html[lang="th"] .hero .title,html[lang="th"] .n102-brand{font-family:"Work Sans"
 </style>
 <style id="nexus171-customer-flow">
 .n172-catalog-notice{padding:12px 15px;border:1px solid rgba(223,184,119,.3);border-radius:12px;color:var(--gold);font-size:12px;line-height:1.7}.n172-catalog-notice[hidden]{display:none!important}
-@media(max-width:650px){.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
+@media(max-width:650px){.n102-rail{display:none}.auth-status-wrap{flex:1 1 100%;font-size:10px}.auth-bar{padding-right:12px;row-gap:8px}.n103-language{margin-left:0}.n103-lang-btn,.google-btn{min-height:44px}.toggle-row{flex-wrap:wrap}.toggle-row>.seg-btn{flex:1 1 calc(50% - 8px)}.n171-more-categories{flex:1 1 100%}.nexus-search-select{min-height:44px}.nexus-discovery-empty .nexus-tool-btn{margin:4px}}
 /* NEXUS 17.1: three clear starting points and progressive disclosure. */
 .auth-bar{left:auto!important;right:auto!important;margin-left:var(--n102-left);margin-right:var(--n102-right);width:auto!important}
 .wrap>footer{margin-left:0!important;margin-right:0!important}
@@ -2599,7 +2599,13 @@ function nexusRecommendationExplanation(r){
   if(r.watchlistGenres?.length)parts.push("watchlist interest: "+r.watchlistGenres.join(", "));
   return parts.length?parts.join(" · "):"Related to your liked titles";
 }
+let n172RecommendationVersion=0;
 async function computeRecommendations(){
+  const requestVersion=++n172RecommendationVersion,requestedMode=mode;
+  const isCurrent=()=>requestVersion===n172RecommendationVersion&&requestedMode===mode;
+  findBtn.disabled=true;findBtn.setAttribute('aria-busy','true');
+  document.getElementById('n171GuideFind').disabled=true;
+  setProgress('Finding titles that fit your favorites…');
   filterRow.style.display = "none"; renderSkeletons();
   const corePicks = [...selected.values()].filter(i => i.provider === mode); const expandedLikes = [...votedLikes.values()].filter(i => i.provider === mode);
   const allInputs = [...new Map([...corePicks, ...expandedLikes].map(i=>[i.uid,i])).values()];
@@ -2611,6 +2617,7 @@ async function computeRecommendations(){
     // one wait for the previous one to finish.
     await Promise.all(allInputs.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Seed enrichment unavailable",item.uid);} }));
 
+    if(!isCurrent())return;
     const likedTagMap = new Map(); const likedGenreMap = new Map(); const likedCollaboratorMap = new Map(); let totalGenreWeights = 0;
     allInputs.forEach(item => {
       const weightMultiplier = item.isMasterpiece ? 3 : 1;
@@ -2630,9 +2637,10 @@ async function computeRecommendations(){
     await Promise.all(allInputs.map(async (item) => {
       const isMP = item.isMasterpiece; const inputWeight = isMP ? 2 : 1; totalPicksWeight += inputWeight;
       let recs=[];
-      try{recs=await getRecommendationsFor(item);await resolveOngoingFlags(recs.map(r=>r.item));}
+      try{recs=await getRecommendationsFor(item);if(!isCurrent())return;await resolveOngoingFlags(recs.map(r=>r.item));}
       catch(e){console.warn("Recommendation source unavailable",item.uid,e);}
 
+      if(!isCurrent())return;
       completedInputs++;
       setProgress(`Analyzing connections for "${item.title}" (${completedInputs}/${allInputs.length})...`);
       recs.forEach(r=>{
@@ -2642,6 +2650,7 @@ async function computeRecommendations(){
         const c = candidates.get(r.item.uid); c.weight += (r.weight * inputWeight); c.sources += inputWeight; c.sourceTitles.push(item.title); if(isMP) c.derivedFromMasterpiece = true;
       });
     }));
+    if(!isCurrent())return;
     const dislikedGenres = new Set(); const dislikedTags = new Set(); const dislikedCollaborators = new Set(); const dislikedArtists = new Set();
     const dislikedItems = [...votedDislikes.values()].filter(item => item.provider === mode);
     dislikedItems.forEach(item => {
@@ -2654,6 +2663,7 @@ async function computeRecommendations(){
       // before, so only their (already-present) genres worked as a negative
       // signal. Same independent-per-item fetch pattern as allInputs above.
       await Promise.all(dislikedItems.map(async item => { try{await ensureTags(item);await ensureCollaborators(item);}catch(e){console.warn("Dislike enrichment unavailable",item.uid);} }));
+      if(!isCurrent())return;
       dislikedItems.forEach(item => {
         (item.tags || []).forEach(t => dislikedTags.add(t.name));
         (item.collaborators || []).forEach(c => dislikedCollaborators.add(c));
@@ -2776,6 +2786,7 @@ async function computeRecommendations(){
     // movie/series/kdrama) to pick a bounded shortlist — fetching keywords and
     // credits for every raw candidate (could be 50-100+) would be too expensive.
     let ranked = [...candidates.values()];
+    if(!isCurrent())return;
     ranked.forEach(scoreCandidate);
     ranked.sort((a,b)=> b.matchScore - a.matchScore || b.sources - a.sources || b.weight - a.weight);
     ranked = ranked.slice(0, 24);
@@ -2787,12 +2798,14 @@ async function computeRecommendations(){
     // too slow), and skipped in music mode where overview text isn't the taste
     // signal. Populates semanticScores, which scoreCandidate prefers over the
     // TF-IDF keyword cosine when present.
-    if (mode !== "music") {
-      setProgress("Loading semantic matching model...");
+    if (mode !== "music" && embeddingsAvailable === true) {
+      setProgress("Refining your recommendations…");
       await getEmbedPipeline();
+      if(!isCurrent())return;
       if (embeddingsAvailable) {
         setProgress("Computing semantic similarity...");
         const likedVectors = await Promise.all(allInputs.map(item => embedText(item.overview)));
+        if(!isCurrent())return;
         const likedWeights = allInputs.map(item => item.isMasterpiece ? 3 : 1);
         const likedEmbeddingVec = averageVectors(likedVectors, likedWeights);
         // Disliked items get equal weight (no masterpiece-style boost concept
@@ -2800,6 +2813,7 @@ async function computeRecommendations(){
         // user actively rejected".
         const dislikedVectors = await Promise.all(dislikedItems.map(item => embedText(item.overview)));
         const dislikedEmbeddingVec = averageVectors(dislikedVectors, dislikedItems.map(() => 1));
+        if(!isCurrent())return;
         if (likedEmbeddingVec || dislikedEmbeddingVec) {
           await Promise.all(ranked.map(async c => {
             const vec = await embedText(c.item.overview);
@@ -2811,12 +2825,14 @@ async function computeRecommendations(){
       }
     }
 
+    if(!isCurrent())return;
     // Pass 2: now that the shortlist is small (≤24), fetch real keywords and
     // collaborators for any movie/series/kdrama candidates and re-score/re-sort
     // with the full signal set — bringing them to the same matching depth
     // anime/manga already had.
     setProgress("Refining matches with detailed tag & credit data...");
     await Promise.all(ranked.map(async c => { try{await ensureTags(c.item);await ensureCollaborators(c.item);}catch(e){console.warn("Candidate enrichment unavailable",c.item.uid);} }));
+    if(!isCurrent())return;
     ranked.forEach(scoreCandidate);
     ranked.sort((a,b)=> b.matchScore - a.matchScore || b.sources - a.sources || b.weight - a.weight);
 
@@ -2827,8 +2843,16 @@ async function computeRecommendations(){
       else if (c.item.provider === "anime") { const tmdbId = await resolveTmdbTvIdForAnime(c.item.title, c.item.year !== "—" ? c.item.year : null); c.item.streams = tmdbId ? await getLocalizedWatchProviders(tmdbId, "tv") : (c.item.streams || []); }
       }catch(e){console.warn("Streaming providers unavailable",c.item.uid);}
     }));
+    if(!isCurrent())return;
     setProgress(""); lastRanked = ranked; lastTotalPicks = totalPicksWeight; populateFilters(ranked); n108UpdateVisibility(); if(n108NetflixCheckbox()?.checked&&n171SupportsNetflix(mode)) await n108RefreshNetflixResults(); else renderResults(applyFilters(ranked), totalPicksWeight);
-  } catch(e) { setProgress(""); resultsGrid.innerHTML = `<div class="error-note">Processing failed. Click primary action to retry.</div>`; }
+  } catch(e) { if(isCurrent()){setProgress("");resultsGrid.innerHTML='<div class="error-note">Processing failed. Click primary action to retry.</div>';} }
+  finally{
+    if(requestVersion===n172RecommendationVersion){
+      findBtn.removeAttribute('aria-busy');
+      findBtn.disabled=![...selected.values()].some(item=>item.provider===mode);
+      n171UpdateGuide();
+    }
+  }
 }
 
 // ---------------- DATA PROVIDERS ----------------
@@ -3986,6 +4010,7 @@ function executeModeChange(newMode) {
   searchSpinner.classList.remove("active");
   // Invalidate in-flight Surprise Me fetches when changing the active category.
   surpriseRequestVersion++;
+  ++n172RecommendationVersion;findBtn.removeAttribute('aria-busy');setProgress('');
   // A cancelled shuffle's finally block is deliberately ignored. Restore
   // the button here so switching categories cannot leave it disabled.
   restoreSurpriseButton();
@@ -8043,6 +8068,8 @@ document.getElementById("nexusImportFile")?.addEventListener("change", async (ev
     'Not available from this source':'แหล่งข้อมูลนี้ไม่มีข้อมูลยืนยัน',
     'The catalog is temporarily unavailable. Your saved titles are still available.':'แค็ตตาล็อกยังไม่พร้อมใช้งานชั่วคราว คุณยังเปิดรายการที่บันทึกไว้ได้',
     'Try loading again':'ลองโหลดอีกครั้ง',
+    'Finding titles that fit your favorites…':'กำลังหาเรื่องที่เข้ากับเรื่องโปรดของคุณ…',
+    'Refining your recommendations…':'กำลังปรับคำแนะนำให้ตรงรสนิยม…',
     'Open Watchlist':'เปิดรายการที่บันทึก',
     'Discover your first title →':'ค้นหาเรื่องแรกที่อยากดู →',
     'Start by liking a few titles. Your personal taste insights will appear here.':'กดถูกใจเรื่องที่ชอบ เพื่อให้เราเริ่มเรียนรู้รสนิยมของคุณ',
